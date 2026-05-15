@@ -2,7 +2,8 @@
 *Última actualización: 15 Mayo 2026*
 
 ## Estado del Proyecto
-- **Web:** pendiente de deploy
+- **Web en vivo:** complexia.es
+- **Repositorio:** github.com/dsm0033/complexia-web
 - **Stack:** Next.js 16 + Tailwind CSS v4 + Vercel
 - **Objetivo:** Web corporativa que genera leads para la consultoría ComplexIA
 
@@ -19,9 +20,9 @@
 | F1-05 | Design tokens — paleta verde personalizada | 🔴 | ✅ |
 | F1-06 | Stack actualizado (Next.js 16, React 19, Tailwind v4) | 🔴 | ✅ |
 | F1-07 | Accesibilidad WCAG 2.1 AA base | 🟡 | ✅ |
-| F1-08 | Repositorio GitHub | 🔴 | 📋 |
-| F1-09 | Deploy en Vercel | 🔴 | 📋 |
-| F1-10 | Dominio conectado | 🔴 | 📋 |
+| F1-08 | Repositorio GitHub (github.com/dsm0033/complexia-web) | 🔴 | ✅ |
+| F1-09 | Deploy en Vercel | 🔴 | ✅ |
+| F1-10 | Dominio complexia.es conectado con SSL | 🔴 | ✅ |
 | F1-11 | Favicon personalizado con logo ComplexIA | 🟡 | 📋 |
 | F1-12 | og-image 1200×630px | 🟡 | 📋 |
 | F1-13 | SEO completo (Open Graph, canonical, robots, metadata) | 🟡 | 📋 |

@@ -12,12 +12,14 @@ Guía de trabajo para Claude en este proyecto.
 
 ## Stack y versiones
 
-- **Next.js 14** con **App Router** (no Pages Router)
+- **Next.js 16** con **App Router** (no Pages Router)
+- **React 19**
 - **JavaScript / JSX** — no TypeScript en este proyecto
-- **Tailwind CSS v3** con paleta verde personalizada
+- **Tailwind CSS v4** — configuración en `@theme` dentro de `globals.css` (sin `tailwind.config.js`)
 - **Heroicons v2** para iconos (`@heroicons/react`)
 - **Resend** para el envío de emails desde el formulario de contacto
 - **Inter** como única fuente (cargada con `next/font/google`)
+- **ESLint 9** con flat config (`eslint.config.mjs`)
 
 ---
 

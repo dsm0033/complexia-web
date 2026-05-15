@@ -50,17 +50,20 @@
 
 ---
 
-## 📋 SPRINT 2 — "Presencia Online"
-**Fecha prevista:** Semana del 19 Mayo 2026
+## ✅ SPRINT 2 — "Presencia Online"
+**Fecha:** 15 Mayo 2026
 **Objetivo:** Repositorio en GitHub + deploy en Vercel + dominio
+**Estado:** COMPLETADO
 
 | Tarea | Estado |
 |---|---|
-| Repositorio GitHub creado | 📋 |
-| .gitignore correcto | 📋 |
-| Primer commit y push | 📋 |
-| Deploy en Vercel | 📋 |
-| Dominio conectado | 📋 |
+| Repositorio GitHub creado (github.com/dsm0033/complexia-web) | ✅ |
+| .gitignore correcto | ✅ |
+| Primer commit y push | ✅ |
+| Deploy en Vercel | ✅ |
+| Dominio complexia.es conectado (DNS en SERED) | ✅ |
+| www.complexia.es con redirección 307 | ✅ |
+| SSL automático generado por Vercel | ✅ |
 | Favicon personalizado | 📋 |
 | og-image 1200×630px | 📋 |
 | SEO: metadata completa, Open Graph, canonical | 📋 |
