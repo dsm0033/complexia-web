@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ComplexIA — Web Corporativa
 
-## Getting Started
+Plataforma web de **ComplexIA**, consultoría de inteligencia artificial para PYMEs españolas. Ayuda a pequeñas y medianas empresas a dar el salto digital con soluciones de IA accesibles, personalizadas y orientadas a resultados.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Lenguaje | JavaScript / JSX |
+| Estilos | Tailwind CSS v3 con paleta verde personalizada |
+| Iconos | Heroicons v2 |
+| Email | Resend (formulario de contacto) |
+| Font | Inter (Google Fonts vía `next/font`) |
+| Deploy | Vercel (previsto) |
+
+---
+
+## Arquitectura de carpetas
+
+```
+complexia-web/
+├── app/                        # Rutas (Next.js App Router)
+│   ├── layout.jsx              # Root layout global
+│   ├── page.jsx                # Landing page (one-page scroll)
+│   ├── blog/
+│   │   ├── page.jsx            # Índice del blog
+│   │   └── [slug]/page.jsx     # Artículo individual
+│   ├── servicios/
+│   │   └── [slug]/page.jsx     # Página de detalle de servicio
+│   ├── casos/
+│   │   └── [slug]/page.jsx     # Caso de éxito detallado
+│   └── api/
+│       └── contacto/route.js   # Endpoint de envío de email (Resend)
+│
+├── components/
+│   ├── ui/                     # Primitivos reutilizables (Navbar, Footer, Button…)
+│   └── sections/               # Secciones de la landing (Hero, Servicios, Contacto…)
+│
+├── content/                    # Contenido estático en JSON/MDX
+│   ├── blog/
+│   ├── servicios/
+│   └── casos/
+│
+├── lib/
+│   ├── tokens.js               # Design tokens (paleta verde HSL)
+│   └── mail.js                 # Wrapper Resend
+│
+└── public/
+    └── images/                 # Assets estáticos
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Secciones de la landing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Sección | ID | Estado |
+|---|---|---|
+| Navbar | — | Hecho |
+| Hero + stats | `#hero` | Hecho |
+| Servicios | `#servicios` | Pendiente |
+| Metodología | `#metodologia` | Pendiente |
+| Casos de éxito | `#casos` | Pendiente |
+| Nosotros | `#nosotros` | Pendiente |
+| Contacto | `#contacto` | Pendiente |
+| Footer | — | Pendiente |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Páginas adicionales previstas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/blog` — Artículos sobre IA para PYMEs
+- `/servicios/[slug]` — Detalle de cada servicio ofrecido
+- `/casos/[slug]` — Casos de éxito con métricas reales
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Sistema de diseño
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Paleta monocromática verde personalizada (H=145 S=46.7%) definida en `lib/tokens.js` y registrada en `tailwind.config.js`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Token | Uso principal |
+|---|---|
+| `green-700` | Botones primarios, enlaces activos |
+| `green-800` | Hover de botones, texto secundario |
+| `green-900` | Stats bar, fondos oscuros |
+| `green-950` | Títulos principales |
+| `green-100` | Fondos suaves, pills |
+| `green-50` | Fondo de secciones alternadas |
+
+---
+
+## Comandos
+
+```bash
+# Instalar dependencias
+npm install
+
+# Servidor de desarrollo
+npm run dev
+
+# Build de producción
+npm run build
+
+# Arrancar producción local
+npm run start
+
+# Lint
+npm run lint
+```
+
+---
+
+## Formulario de contacto
+
+El formulario en `#contacto` envía un email mediante **Resend** a través de `app/api/contacto/route.js`. Requiere la variable de entorno:
+
+```
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+```
+
+Crear un archivo `.env.local` en la raíz de `complexia-web/` con esa clave antes de usar el formulario en local.
