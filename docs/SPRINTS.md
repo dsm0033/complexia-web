@@ -1,5 +1,5 @@
 # SPRINTS — COMPLEXIA
-*Última actualización: 15 Mayo 2026*
+*Última actualización: 16 Mayo 2026*
 
 ## Metodología
 - Sprints de 1-2 semanas
@@ -61,7 +61,7 @@
 | .gitignore correcto | ✅ |
 | Primer commit y push | ✅ |
 | Deploy en Vercel | ✅ |
-| Dominio complexia.es conectado (DNS en SERED) | ✅ |
+| Dominio complexia.es conectado (nameservers de Vercel) | ✅ |
 | www.complexia.es con redirección 307 | ✅ |
 | SSL automático generado por Vercel | ✅ |
 | Favicon personalizado | 📋 |
@@ -70,30 +70,39 @@
 
 ---
 
-## 📋 SPRINT 3 — "Landing Completa"
+## ✅ SPRINT 3 — "Landing Completa"
+**Fecha:** 16 Mayo 2026
 **Objetivo:** Todas las secciones de la landing construidas
+**Estado:** COMPLETADO (email pendiente de configuración externa)
 
 | Tarea | Estado |
 |---|---|
-| Sección Servicios (#servicios) | 📋 |
-| Sección Metodología (#metodologia) | 📋 |
-| Sección Casos de éxito (#casos) | 📋 |
-| Sección Nosotros (#nosotros) | 📋 |
-| Sección Contacto (#contacto) con formulario | 📋 |
+| Sección Servicios (#servicios) | ✅ |
+| Sección Metodología (#metodologia) | ✅ |
+| Sección Casos de éxito (#casos) — caso La Impecable | ✅ |
+| Sección Nosotros (#nosotros) | ❌ Descartada por el usuario |
+| Sección Contacto (#contacto) — formulario completo | ✅ |
+| lib/mail.js — sendContactEmail() con Resend | ✅ |
+| app/api/contacto/route.js — endpoint POST con validación | ✅ |
+| Resend instalado como dependencia | ✅ |
 | Footer | 📋 |
 
 ---
 
-## 📋 SPRINT 4 — "Formulario y Email"
-**Objetivo:** Formulario de contacto operativo con Resend
+## 🔄 SPRINT 4 — "Email y Despliegue"
+**Objetivo:** Email operativo + documento de despliegue SERED+Vercel replicable
+**Estado:** EN PROGRESO — bloqueado por SERED
 
 | Tarea | Estado |
 |---|---|
-| lib/mail.js — wrapper Resend | 📋 |
-| app/api/contacto/route.js — endpoint POST | 📋 |
-| Componente Contacto.jsx — formulario con validación | 📋 |
-| Variable RESEND_API_KEY en Vercel | 📋 |
-| Test de envío en producción | 📋 |
+| Ticket a SERED para asociar complexia.es a cPanel | 📋 Pendiente (abrir antes de la próxima sesión) |
+| Crear buzón contacto@complexia.es en SERED | 📋 Bloqueado |
+| Añadir MX records en Vercel DNS (ya hecho: MX + A mail) | ✅ |
+| Verificar dominio complexia.es en Resend | 📋 Bloqueado |
+| RESEND_API_KEY en variables de entorno Vercel | 📋 Pendiente |
+| Test de envío en producción | 📋 Pendiente |
+| Documento de despliegue SERED+Vercel replicable | 📋 Próxima sesión |
+| Footer | 📋 Próxima sesión |
 
 ---
 

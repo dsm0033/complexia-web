@@ -1,10 +1,10 @@
 # PRODUCT BACKLOG — COMPLEXIA
-*Última actualización: 15 Mayo 2026*
+*Última actualización: 16 Mayo 2026*
 
 ## Estado del Proyecto
 - **Web en vivo:** complexia.es
 - **Repositorio:** github.com/dsm0033/complexia-web
-- **Stack:** Next.js 16 + Tailwind CSS v4 + Vercel
+- **Stack:** Next.js 16 + React 19 + Tailwind CSS v4 + Vercel
 - **Objetivo:** Web corporativa que genera leads para la consultoría ComplexIA
 
 ---
@@ -22,7 +22,7 @@
 | F1-07 | Accesibilidad WCAG 2.1 AA base | 🟡 | ✅ |
 | F1-08 | Repositorio GitHub (github.com/dsm0033/complexia-web) | 🔴 | ✅ |
 | F1-09 | Deploy en Vercel | 🔴 | ✅ |
-| F1-10 | Dominio complexia.es conectado con SSL | 🔴 | ✅ |
+| F1-10 | Dominio complexia.es conectado con SSL (nameservers Vercel) | 🔴 | ✅ |
 | F1-11 | Favicon personalizado con logo ComplexIA | 🟡 | 📋 |
 | F1-12 | og-image 1200×630px | 🟡 | 📋 |
 | F1-13 | SEO completo (Open Graph, canonical, robots, metadata) | 🟡 | 📋 |
@@ -33,11 +33,11 @@
 
 | ID | Tarea | Prioridad | Estado |
 |---|---|---|---|
-| F2-01 | Sección Servicios (#servicios) | 🔴 | 📋 |
-| F2-02 | Sección Metodología (#metodologia) | 🟡 | 📋 |
-| F2-03 | Sección Casos de éxito (#casos) — preview | 🟡 | 📋 |
-| F2-04 | Sección Nosotros (#nosotros) | 🟡 | 📋 |
-| F2-05 | Sección Contacto (#contacto) con formulario | 🔴 | 📋 |
+| F2-01 | Sección Servicios (#servicios) | 🔴 | ✅ |
+| F2-02 | Sección Metodología (#metodologia) | 🟡 | ✅ |
+| F2-03 | Sección Casos de éxito (#casos) — caso La Impecable | 🟡 | ✅ |
+| F2-04 | Sección Nosotros (#nosotros) | 🟡 | ❌ Descartada |
+| F2-05 | Sección Contacto (#contacto) con formulario | 🔴 | ✅ |
 | F2-06 | Footer con links, redes sociales y aviso legal | 🟡 | 📋 |
 | F2-07 | Animaciones de scroll suaves (sin Framer Motion) | 🟢 | 📋 |
 
@@ -47,12 +47,15 @@
 
 | ID | Tarea | Prioridad | Estado |
 |---|---|---|---|
-| F3-01 | lib/mail.js — función sendContactEmail() con Resend | 🔴 | 📋 |
-| F3-02 | app/api/contacto/route.js — endpoint POST | 🔴 | 📋 |
-| F3-03 | Componente Contacto.jsx — formulario con validación | 🔴 | 📋 |
-| F3-04 | RESEND_API_KEY en variables de entorno Vercel | 🔴 | 📋 |
-| F3-05 | Email de confirmación al lead | 🟡 | 📋 |
-| F3-06 | Protección anti-spam (honeypot o rate limiting) | 🟡 | 📋 |
+| F3-01 | lib/mail.js — función sendContactEmail() con Resend | 🔴 | ✅ |
+| F3-02 | app/api/contacto/route.js — endpoint POST | 🔴 | ✅ |
+| F3-03 | Componente Contacto.jsx — formulario con validación | 🔴 | ✅ |
+| F3-04 | Buzón contacto@complexia.es en SERED | 🔴 | 📋 Bloqueado — ticket a SERED |
+| F3-05 | Dominio complexia.es verificado en Resend | 🔴 | 📋 Bloqueado |
+| F3-06 | RESEND_API_KEY en variables de entorno Vercel | 🔴 | 📋 Pendiente |
+| F3-07 | Test de envío en producción | 🔴 | 📋 Pendiente |
+| F3-08 | Email de confirmación al lead | 🟡 | 📋 |
+| F3-09 | Protección anti-spam (honeypot o rate limiting) | 🟡 | 📋 |
 
 ---
 
@@ -85,9 +88,10 @@
 
 | ID | Tarea | Prioridad | Estado |
 |---|---|---|---|
-| FX-01 | Lighthouse score > 90 en todas las categorías | 🟡 | 📋 |
-| FX-02 | Accesibilidad WCAG 2.1 AAA completa | 🟢 | 📋 |
-| FX-03 | Tests E2E del formulario de contacto | 🟢 | 📋 |
+| FX-01 | Documento de despliegue SERED+Vercel replicable | 🔴 | 📋 Próxima sesión |
+| FX-02 | Lighthouse score > 90 en todas las categorías | 🟡 | 📋 |
+| FX-03 | Accesibilidad WCAG 2.1 AAA completa | 🟢 | 📋 |
+| FX-04 | Tests E2E del formulario de contacto | 🟢 | 📋 |
 
 ---
 
@@ -100,3 +104,4 @@
 - ✅ Completado
 - 🔄 En progreso
 - 📋 Pendiente
+- ❌ Descartado
