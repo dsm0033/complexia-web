@@ -1,5 +1,9 @@
 import Navbar from '@/components/ui/Navbar';
 import Hero from '@/components/sections/Hero';
+import Servicios from '@/components/sections/Servicios';
+import Metodologia from '@/components/sections/Metodologia';
+import Casos from '@/components/sections/Casos';
+import Contacto from '@/components/sections/Contacto';
 
 export default function Home() {
   return (
@@ -7,6 +11,10 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <Hero />
+        <Servicios />
+        <Metodologia />
+        <Casos />
+        <Contacto />
       </main>
     </>
   );
