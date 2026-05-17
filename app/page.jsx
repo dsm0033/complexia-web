@@ -1,4 +1,5 @@
 import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
 import Hero from '@/components/sections/Hero';
 import Servicios from '@/components/sections/Servicios';
 import Metodologia from '@/components/sections/Metodologia';
@@ -16,6 +17,7 @@ export default function Home() {
         <Casos />
         <Contacto />
       </main>
+      <Footer />
     </>
   );
 }

@@ -1,5 +1,5 @@
 # PRODUCT BACKLOG — COMPLEXIA
-*Última actualización: 16 Mayo 2026*
+*Última actualización: 17 Mayo 2026*
 
 ## Estado del Proyecto
 - **Web en vivo:** complexia.es
@@ -38,7 +38,7 @@
 | F2-03 | Sección Casos de éxito (#casos) — caso La Impecable | 🟡 | ✅ |
 | F2-04 | Sección Nosotros (#nosotros) | 🟡 | ❌ Descartada |
 | F2-05 | Sección Contacto (#contacto) con formulario | 🔴 | ✅ |
-| F2-06 | Footer con links, redes sociales y aviso legal | 🟡 | 📋 |
+| F2-06 | Footer con navegación, contacto y enlaces legales | 🟡 | ✅ |
 | F2-07 | Animaciones de scroll suaves (sin Framer Motion) | 🟢 | 📋 |
 
 ---
@@ -76,11 +76,15 @@
 
 | ID | Tarea | Prioridad | Estado |
 |---|---|---|---|
-| F5-01 | /aviso-legal | 🔴 | 📋 |
-| F5-02 | /privacidad | 🔴 | 📋 |
-| F5-03 | /cookies | 🟡 | 📋 |
-| F5-04 | Banner de cookies | 🟡 | 📋 |
-| F5-05 | Google Analytics (GA4) | 🟢 | 📋 |
+| F5-01 | Ruta /legal/aviso-legal — placeholder "En redacción" | 🔴 | ✅ |
+| F5-02 | Ruta /legal/privacidad — placeholder "En redacción" | 🔴 | ✅ |
+| F5-03 | Ruta /legal/cookies — placeholder "En redacción" | 🟡 | ✅ |
+| F5-04 | Redactar texto real de aviso legal (LSSI art. 10) | 🔴 | 📋 |
+| F5-05 | Redactar texto real de política de privacidad (RGPD/LOPDGDD) | 🔴 | 📋 |
+| F5-06 | Redactar texto real de política de cookies | 🟡 | 📋 |
+| F5-07 | Checkbox de consentimiento RGPD en formulario de contacto | 🔴 | 📋 |
+| F5-08 | Integrar analytics (Vercel Analytics o GA4) | 🟡 | 📋 |
+| F5-09 | Banner de consentimiento de cookies (bloquea analytics hasta aceptar) | 🟡 | 📋 |
 
 ---
 
