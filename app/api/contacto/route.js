@@ -2,10 +2,14 @@ import { NextResponse } from 'next/server';
 import { sendContactEmail } from '@/lib/mail';
 
 export async function POST(request) {
-  const { nombre, email, empresa, mensaje } = await request.json();
+  const { nombre, email, empresa, mensaje, consentimiento } = await request.json();
 
   if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
     return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
+  }
+
+  if (consentimiento !== true) {
+    return NextResponse.json({ error: 'Debes aceptar la política de privacidad.' }, { status: 400 });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

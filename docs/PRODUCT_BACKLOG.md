@@ -82,7 +82,7 @@
 | F5-04 | Redactar texto real de aviso legal (LSSI art. 10) | 🔴 | 📋 |
 | F5-05 | Redactar texto real de política de privacidad (RGPD/LOPDGDD) | 🔴 | 📋 |
 | F5-06 | Redactar texto real de política de cookies | 🟡 | 📋 |
-| F5-07 | Checkbox de consentimiento RGPD en formulario de contacto | 🔴 | 📋 |
+| F5-07 | Checkbox de consentimiento RGPD en formulario de contacto | 🔴 | ✅ |
 | F5-08 | Integrar analytics (Vercel Analytics o GA4) | 🟡 | 📋 |
 | F5-09 | Banner de consentimiento de cookies (bloquea analytics hasta aceptar) | 🟡 | 📋 |
 

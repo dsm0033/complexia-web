@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid';
 
-const INITIAL = { nombre: '', email: '', empresa: '', mensaje: '' };
+const INITIAL = { nombre: '', email: '', empresa: '', mensaje: '', consentimiento: false };
 
 export default function Contacto() {
   const [form, setForm] = useState(INITIAL);
@@ -11,7 +11,8 @@ export default function Contacto() {
   const [errorMsg, setErrorMsg] = useState('');
 
   function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, type, value, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   }
 
   async function handleSubmit(e) {
@@ -177,6 +178,30 @@ export default function Contacto() {
                   />
                 </div>
 
+                <div className="flex items-start gap-3">
+                  <input
+                    id="consentimiento"
+                    name="consentimiento"
+                    type="checkbox"
+                    required
+                    checked={form.consentimiento}
+                    onChange={handleChange}
+                    className="mt-1 h-4 w-4 shrink-0 rounded border-green-300 text-green-700 focus:ring-2 focus:ring-green-700/30"
+                  />
+                  <label htmlFor="consentimiento" className="text-xs leading-relaxed text-green-800">
+                    He leído y acepto la{' '}
+                    <a
+                      href="/legal/privacidad"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-green-700 underline underline-offset-2 hover:text-green-800 transition-colors"
+                    >
+                      política de privacidad
+                    </a>
+                    . <span aria-hidden="true">*</span>
+                  </label>
+                </div>
+
                 {estado === 'error' && (
                   <p role="alert" className="text-sm font-medium text-red-600">
                     {errorMsg}
@@ -185,15 +210,11 @@ export default function Contacto() {
 
                 <button
                   type="submit"
-                  disabled={estado === 'loading'}
+                  disabled={estado === 'loading' || !form.consentimiento}
                   className="w-full rounded-lg bg-green-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
                 >
                   {estado === 'loading' ? 'Enviando…' : 'Enviar mensaje'}
                 </button>
-
-                <p className="text-xs text-green-700">
-                  Al enviar aceptas nuestra política de privacidad. No spam, nunca.
-                </p>
               </form>
             )}
           </div>
