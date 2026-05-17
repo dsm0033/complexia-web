@@ -9,7 +9,7 @@
 | Estilos | Tailwind CSS v4 | Sin CSS-in-JS, @theme en globals.css |
 | Iconos | Heroicons v2 | `@heroicons/react` |
 | Email | Resend | Formulario de contacto |
-| Fuente | Inter | `next/font/google` |
+| Fuente | Instrument Sans | `next/font/google` (pesos 400/500/600/700) |
 | Hosting | Vercel | CI/CD desde GitHub (branch main) |
 | Lenguaje | JavaScript / JSX | Sin TypeScript |
 
@@ -110,7 +110,8 @@ complexia-web/
 | `green-50` | hsl(145, 46.7%, 97%) | Fondos de secciones alternas |
 
 ### Tipografía
-- **Inter** — única fuente, cargada con `next/font/google` como variable CSS `--font-inter`
+- **Instrument Sans** — única fuente, cargada con `next/font/google` como variable CSS `--font-instrument-sans`
+- Pesos disponibles: 400, 500, 600, 700
 - Configurada en `@theme` como `--font-sans`
 
 ### Espaciado y layout
