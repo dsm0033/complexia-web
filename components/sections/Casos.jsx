@@ -1,4 +1,4 @@
-import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon, ArrowTopRightOnSquareIcon, CheckCircleIcon } from '@heroicons/react/20/solid';
 
 const funcionalidades = [
   'Recepción digital del vehículo con checklist interactivo',
@@ -74,14 +74,25 @@ export default function Casos() {
                 ))}
               </dl>
 
-              {/* CTA */}
-              <a
-                href="#contacto"
-                className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-green-700 hover:text-green-800 transition-colors"
-              >
-                Hablemos de tu proyecto
-                <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
-              </a>
+              {/* CTAs */}
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <a
+                  href="#contacto"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-700 hover:text-green-800 transition-colors"
+                >
+                  Hablemos de tu proyecto
+                  <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+                </a>
+                <a
+                  href="https://laimpecable.es"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-700 hover:text-green-800 transition-colors"
+                >
+                  Ver la web
+                  <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
             </div>
 
             {/* Columna derecha — funcionalidades */}
