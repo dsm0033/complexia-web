@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid';
+import { EnvelopeIcon } from '@heroicons/react/20/solid';
 
 const INITIAL = { nombre: '', email: '', empresa: '', mensaje: '', consentimiento: false };
 
@@ -65,22 +65,8 @@ export default function Contacto() {
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-widest text-green-700">Email</dt>
                   <dd>
-                    <a href="mailto:hola@complexia.es" className="text-base font-medium text-green-950 hover:text-green-700 transition-colors">
-                      hola@complexia.es
-                    </a>
-                  </dd>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100">
-                  <PhoneIcon className="h-5 w-5 text-green-700" aria-hidden="true" />
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-widest text-green-700">Teléfono</dt>
-                  <dd>
-                    <a href="tel:+34600000000" className="text-base font-medium text-green-950 hover:text-green-700 transition-colors">
-                      +34 600 000 000
+                    <a href="mailto:contacto@complexia.es" className="text-base font-medium text-green-950 hover:text-green-700 transition-colors">
+                      contacto@complexia.es
                     </a>
                   </dd>
                 </div>
