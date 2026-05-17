@@ -1,5 +1,5 @@
 # ARQUITECTURA TÉCNICA — COMPLEXIA
-*Última actualización: 15 Mayo 2026*
+*Última actualización: 17 Mayo 2026*
 
 ## Stack
 
@@ -20,44 +20,50 @@
 ```
 complexia-web/
 ├── app/                        # Rutas (App Router)
-│   ├── layout.jsx              # Root layout: fuente, metadata, skip-link
-│   ├── page.jsx                # Landing — importa secciones en orden
+│   ├── layout.jsx              # ✅ Root layout: fuente, metadata, skip-link
+│   ├── page.jsx                # ✅ Landing — importa secciones en orden
 │   ├── blog/
-│   │   ├── page.jsx            # Índice del blog
-│   │   └── [slug]/page.jsx     # Artículo individual
+│   │   ├── page.jsx            # 📋 Índice del blog
+│   │   └── [slug]/page.jsx     # 📋 Artículo individual
 │   ├── servicios/
-│   │   └── [slug]/page.jsx     # Detalle de servicio
+│   │   └── [slug]/page.jsx     # 📋 Detalle de servicio
 │   ├── casos/
-│   │   └── [slug]/page.jsx     # Caso de éxito detallado
+│   │   └── [slug]/page.jsx     # 📋 Caso de éxito detallado
+│   ├── legal/                  # ✅ Páginas legales (placeholders "En redacción")
+│   │   ├── layout.jsx          # Wrapper con Navbar + Footer
+│   │   ├── aviso-legal/page.jsx
+│   │   ├── privacidad/page.jsx
+│   │   └── cookies/page.jsx
 │   └── api/
-│       └── contacto/route.js   # POST: recibe formulario, envía email con Resend
+│       └── contacto/route.js   # ✅ POST: valida + consentimiento RGPD + Resend
 │
 ├── components/
 │   ├── ui/                     # Primitivos reutilizables en toda la app
 │   │   ├── Navbar.jsx          # ✅ Sticky, responsive, 'use client'
-│   │   ├── Footer.jsx          # Pendiente
-│   │   └── Button.jsx          # Pendiente — variantes: primary / ghost
+│   │   ├── Footer.jsx          # ✅ 3 columnas (marca · navegación · legal)
+│   │   └── Button.jsx          # 📋 Pendiente — variantes: primary / ghost
 │   └── sections/               # Secciones de la landing únicamente
 │       ├── Hero.jsx            # ✅ H1 + subtitle + CTAs + stats bar
-│       ├── Servicios.jsx       # Pendiente
-│       ├── Metodologia.jsx     # Pendiente
-│       ├── Casos.jsx           # Pendiente (preview — detalle en /casos/[slug])
-│       ├── Nosotros.jsx        # Pendiente
-│       └── Contacto.jsx        # Pendiente — formulario + POST a /api/contacto
+│       ├── Servicios.jsx       # ✅ Grid 2 cols, 4 servicios
+│       ├── Metodologia.jsx     # ✅ Pasos de la consultoría
+│       ├── Casos.jsx           # ✅ Caso La Impecable + enlace al dominio
+│       └── Contacto.jsx        # ✅ Formulario + consentimiento RGPD
 │
 ├── content/                    # Datos estáticos en JSON (sin CMS)
-│   ├── servicios.json          # Pendiente
-│   └── casos.json              # Pendiente
+│   ├── servicios.json          # 📋 Pendiente
+│   └── casos.json              # 📋 Pendiente
 │
 ├── lib/
-│   ├── tokens.js               # Design tokens — paleta verde en HSL
-│   └── mail.js                 # Pendiente — sendContactEmail() con Resend
+│   ├── tokens.js               # ✅ Design tokens — paleta verde en HSL
+│   └── mail.js                 # ✅ sendContactEmail() con Resend
 │
 ├── docs/                       # Documentación del proyecto
 │   ├── SPRINTS.md
 │   ├── PRODUCT_BACKLOG.md
 │   ├── ARQUITECTURA.md         # Este archivo
-│   └── como-esta-hecha-la-web.md
+│   ├── como-esta-hecha-la-web.md
+│   └── brand/                  # Guía visual de marca (uso interno)
+│       └── Logo-ComplexIA.png
 │
 └── public/
     └── images/
@@ -70,11 +76,14 @@ complexia-web/
 | Ruta | Acceso | Descripción |
 |---|---|---|
 | / | Público | Landing page (scroll único) |
-| /servicios/[slug] | Público | Detalle de servicio |
-| /casos/[slug] | Público | Caso de éxito detallado |
-| /blog | Público | Índice del blog |
-| /blog/[slug] | Público | Artículo individual |
-| /api/contacto | API interna | POST: recibe formulario y envía email |
+| /servicios/[slug] | Público | Detalle de servicio (pendiente) |
+| /casos/[slug] | Público | Caso de éxito detallado (pendiente) |
+| /blog | Público | Índice del blog (pendiente) |
+| /blog/[slug] | Público | Artículo individual (pendiente) |
+| /legal/aviso-legal | Público | Aviso legal (placeholder "En redacción") |
+| /legal/privacidad | Público | Política de privacidad (placeholder) |
+| /legal/cookies | Público | Política de cookies (placeholder) |
+| /api/contacto | API interna | POST: valida + consentimiento RGPD + envía email |
 
 ---
 
@@ -83,15 +92,16 @@ complexia-web/
 ```
 <Navbar />            ✅ hecho
 <main>
-  <Hero />            ✅ hecho — H1, subtítulo, CTAs, stats bar
-  <Servicios />       📋 pendiente — id="servicios"
-  <Metodologia />     📋 pendiente — id="metodologia"
-  <Casos />           📋 pendiente — id="casos"
-  <Nosotros />        📋 pendiente — id="nosotros"
-  <Contacto />        📋 pendiente — id="contacto"
+  <Hero />            ✅ H1, subtítulo, CTAs, stats bar
+  <Servicios />       ✅ id="servicios"
+  <Metodologia />     ✅ id="metodologia"
+  <Casos />           ✅ id="casos" — caso La Impecable con enlace al dominio
+  <Contacto />        ✅ id="contacto" — formulario + consentimiento RGPD
 </main>
-<Footer />            📋 pendiente
+<Footer />            ✅ marca + navegación + información legal
 ```
+
+> La sección Nosotros fue descartada. Queda un enlace muerto a `#nosotros` en `Navbar.jsx` pendiente de limpiar.
 
 ---
 
@@ -125,16 +135,19 @@ complexia-web/
 ```
 Usuario rellena Contacto.jsx ('use client')
       ↓
-fetch POST /api/contacto
+Marca el checkbox de consentimiento RGPD (botón Enviar deshabilitado si no)
       ↓
-app/api/contacto/route.js — valida campos
+fetch POST /api/contacto  (incluye consentimiento: true)
+      ↓
+app/api/contacto/route.js — valida campos + rechaza 400 si consentimiento !== true
       ↓
 lib/mail.js — sendContactEmail() con Resend SDK
       ↓
 Email llega a la bandeja de ComplexIA
 ```
 
-Variable de entorno necesaria: `RESEND_API_KEY` (en `.env.local` para local, en Vercel para producción)
+Variable de entorno necesaria: `RESEND_API_KEY` (en `.env.local` para local, en Vercel para producción).
+La política de privacidad enlazada desde el checkbox vive en `/legal/privacidad` (placeholder hasta redactar el texto definitivo).
 
 ---
 

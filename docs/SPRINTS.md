@@ -1,5 +1,5 @@
 # SPRINTS — COMPLEXIA
-*Última actualización: 16 Mayo 2026*
+*Última actualización: 17 Mayo 2026*
 
 ## Metodología
 - Sprints de 1-2 semanas
@@ -85,7 +85,7 @@
 | lib/mail.js — sendContactEmail() con Resend | ✅ |
 | app/api/contacto/route.js — endpoint POST con validación | ✅ |
 | Resend instalado como dependencia | ✅ |
-| Footer | 📋 |
+| Footer | ✅ (Sprint 4.1) |
 
 ---
 
@@ -102,7 +102,29 @@
 | RESEND_API_KEY en variables de entorno Vercel | 📋 Pendiente |
 | Test de envío en producción | 📋 Pendiente |
 | Documento de despliegue SERED+Vercel replicable | 📋 Próxima sesión |
-| Footer | 📋 Próxima sesión |
+
+---
+
+## ✅ SPRINT 4.1 — "Marca, Footer y RGPD"
+**Fecha:** 17 Mayo 2026
+**Objetivo:** Cerrar la identidad de marca, dar la web su Footer y dejar el formulario conforme a RGPD.
+**Estado:** COMPLETADO
+
+| Tarea | Estado |
+|---|---|
+| Tipografía cambiada Inter → Instrument Sans (pesos 400/500/600/700) | ✅ |
+| Guía visual de marca guardada en `docs/brand/Logo-ComplexIA.png` | ✅ |
+| Enlace al dominio real `laimpecable.es` desde el caso de éxito | ✅ |
+| Footer en `components/ui/Footer.jsx` (marca + navegación + legal) | ✅ |
+| Rutas `/legal/aviso-legal`, `/legal/privacidad`, `/legal/cookies` (placeholders) | ✅ |
+| Layout compartido para `/legal/*` con Navbar + Footer | ✅ |
+| Checkbox de consentimiento RGPD obligatorio en el formulario de contacto | ✅ |
+| Validación servidor: 400 si `consentimiento !== true` | ✅ |
+| Email unificado a `contacto@complexia.es` en sección Contacto | ✅ |
+| Teléfono placeholder `+34 600 000 000` eliminado | ✅ |
+| Limpieza: `package-lock.json` huérfano de la raíz + dev server fantasma | ✅ |
+| Decisión pendiente: tipografía oficial Satoshi vs Instrument Sans | 📋 |
+| Enlace muerto a `#nosotros` en Navbar | 📋 |
 
 ---
 
