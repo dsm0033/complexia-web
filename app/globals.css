@@ -14,7 +14,7 @@
   --color-green-900: hsl(145, 46.7%, 15%);
   --color-green-950: hsl(145, 46.7%, 10%);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui;
 }
 
 :root {

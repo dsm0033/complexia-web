@@ -18,7 +18,7 @@ Guía de trabajo para Claude en este proyecto.
 - **Tailwind CSS v4** — configuración en `@theme` dentro de `globals.css` (sin `tailwind.config.js`)
 - **Heroicons v2** para iconos (`@heroicons/react`)
 - **Resend** para el envío de emails desde el formulario de contacto
-- **Inter** como única fuente (cargada con `next/font/google`)
+- **Instrument Sans** como única fuente (cargada con `next/font/google`, pesos 400/500/600/700)
 - **ESLint 9** con flat config (`eslint.config.mjs`)
 
 ---
