@@ -23,7 +23,7 @@
 | F1-08 | Repositorio GitHub (github.com/dsm0033/complexia-web) | 🔴 | ✅ |
 | F1-09 | Deploy en Vercel | 🔴 | ✅ |
 | F1-10 | Dominio complexia.es conectado con SSL (nameservers Vercel) | 🔴 | ✅ |
-| F1-11 | Favicon personalizado con logo ComplexIA | 🟡 | 📋 |
+| F1-11 | Favicon personalizado con logo ComplexIA | 🟡 | ✅ |
 | F1-12 | og-image 1200×630px | 🟡 | 📋 |
 | F1-13 | SEO completo (Open Graph, canonical, robots, metadata) | 🟡 | 📋 |
 
