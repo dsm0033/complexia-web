@@ -151,6 +151,16 @@
 
 ---
 
+## ✏️ Cambios sueltos — 19 Mayo 2026 (tarde)
+
+Microcambios fuera de sprint:
+
+| Cambio | Estado |
+|---|---|
+| Añadido ítem **"Análisis de facturas con IA y registro automático en contabilidad"** al bloque "Qué incluye la solución" del caso La Impecable en `components/sections/Casos.jsx` (refleja una funcionalidad recién terminada en el SaaS La Impecable). | ✅ |
+
+---
+
 ## 📋 SPRINT 5 — "Páginas Interiores"
 **Objetivo:** Blog, servicios detalle y casos de éxito
 
