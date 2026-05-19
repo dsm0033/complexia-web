@@ -1,5 +1,5 @@
 # ARQUITECTURA TÉCNICA — COMPLEXIA
-*Última actualización: 17 Mayo 2026*
+*Última actualización: 19 Mayo 2026*
 
 ## Stack
 
@@ -20,8 +20,10 @@
 ```
 complexia-web/
 ├── app/                        # Rutas (App Router)
-│   ├── layout.jsx              # ✅ Root layout: fuente, metadata, skip-link
+│   ├── layout.jsx              # ✅ Root layout: fuente, metadata SEO + OG, skip-link
 │   ├── page.jsx                # ✅ Landing — importa secciones en orden
+│   ├── icon.svg                # ✅ Favicon (isotipo en green-700)
+│   ├── opengraph-image.jsx     # ✅ OG image 1200×630 con next/og + Satori
 │   ├── blog/
 │   │   ├── page.jsx            # 📋 Índice del blog
 │   │   └── [slug]/page.jsx     # 📋 Artículo individual
@@ -39,11 +41,12 @@ complexia-web/
 │
 ├── components/
 │   ├── ui/                     # Primitivos reutilizables en toda la app
-│   │   ├── Navbar.jsx          # ✅ Sticky, responsive, 'use client'
-│   │   ├── Footer.jsx          # ✅ 3 columnas (marca · navegación · legal)
+│   │   ├── Navbar.jsx          # ✅ Sticky, responsive, 'use client'. Logo: Isotipo + wordmark
+│   │   ├── Footer.jsx          # ✅ 3 columnas (marca · navegación · legal). Logo: Isotipo + wordmark
+│   │   ├── Isotipo.jsx         # ✅ SVG inline del logo, fill="currentColor"
 │   │   └── Button.jsx          # 📋 Pendiente — variantes: primary / ghost
 │   └── sections/               # Secciones de la landing únicamente
-│       ├── Hero.jsx            # ✅ H1 + subtitle + CTAs + stats bar
+│       ├── Hero.jsx            # ✅ H1 + CTAs + stats + isotipo decorativo de fondo (xl+)
 │       ├── Servicios.jsx       # ✅ Grid 2 cols, 4 servicios
 │       ├── Metodologia.jsx     # ✅ Pasos de la consultoría
 │       ├── Casos.jsx           # ✅ Caso La Impecable + enlace al dominio
@@ -62,8 +65,12 @@ complexia-web/
 │   ├── PRODUCT_BACKLOG.md
 │   ├── ARQUITECTURA.md         # Este archivo
 │   ├── como-esta-hecha-la-web.md
-│   └── brand/                  # Guía visual de marca (uso interno)
-│       └── Logo-ComplexIA.png
+│   └── brand/                  # Activos e historial visual de marca (uso interno)
+│       ├── Logo-ComplexIA.png         # Guía visual original
+│       ├── isotipo.svg                # Versión final del isotipo
+│       ├── wordmark-tagline.png       # Mockup wordmark (Gemini)
+│       ├── prompts-graficos.md        # Prompts para regenerar activos
+│       └── iteraciones/               # PNGs intermedios descartados
 │
 └── public/
     └── images/
@@ -127,6 +134,29 @@ complexia-web/
 ### Espaciado y layout
 - Contenedor: `max-w-7xl mx-auto`
 - Padding horizontal: `px-4 sm:px-6 lg:px-8`
+
+### Identidad de marca (isotipo + wordmark)
+
+| Sitio | Cómo se renderiza |
+|---|---|
+| Favicon (pestaña navegador) | `app/icon.svg` — SVG monocromo en `#2E7B4D` |
+| Navbar | `<Isotipo>` `h-9` en `text-green-700` + wordmark texto "ComplexIA" envuelto en un único `<span>` |
+| Footer | `<Isotipo>` `h-9` en `text-green-400` + wordmark texto sobre `bg-green-950` |
+| Hero | `<Isotipo>` `h-[450px]` en `text-green-100` como decoración de fondo a la derecha (solo `xl+`) |
+
+El componente `components/ui/Isotipo.jsx` usa `fill="currentColor"` para que el color se controle desde el padre con clases Tailwind (`text-green-*`).
+
+El wordmark se mantiene como **texto puro** (no SVG) para conservar SEO y accesibilidad — Google indexa "ComplexIA" como string.
+
+---
+
+## Open Graph image (compartir en redes)
+
+`app/opengraph-image.jsx` la genera dinámicamente con **next/og** (motor Satori):
+
+- Tamaño 1200×630, fondo `green-950`, wordmark a la izquierda con "IA" destacado en `#88CCA5`, tagline en mayúsculas espaciadas.
+- Las fuentes se cargan desde Google Fonts en **TTF** — Satori no soporta WOFF2, así que `fetch` al CSS de Google **sin User-Agent moderno** para que devuelva TTF.
+- `app/layout.jsx` define `metadataBase: new URL('https://complexia.es')` y un bloque `openGraph` con `siteName`, `locale: es_ES`. Next.js asocia automáticamente la imagen generada.
 
 ---
 

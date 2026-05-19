@@ -1,5 +1,5 @@
 # SPRINTS — COMPLEXIA
-*Última actualización: 17 Mayo 2026*
+*Última actualización: 19 Mayo 2026*
 
 ## Metodología
 - Sprints de 1-2 semanas
@@ -125,6 +125,29 @@
 | Limpieza: `package-lock.json` huérfano de la raíz + dev server fantasma | ✅ |
 | Decisión pendiente: tipografía oficial Satoshi vs Instrument Sans | 📋 |
 | Enlace muerto a `#nosotros` en Navbar | 📋 |
+
+---
+
+## ✅ SPRINT 4.2 — "Identidad gráfica y SEO base"
+**Fecha:** 18-19 Mayo 2026
+**Objetivo:** Convertir la identidad visual de la marca en activos integrados en la web y dejar la base de SEO/Open Graph lista.
+**Estado:** COMPLETADO
+
+| Tarea | Estado |
+|---|---|
+| Favicon SVG con isotipo (`app/icon.svg` en green-700) | ✅ |
+| Componente `Isotipo.jsx` reutilizable con `fill="currentColor"` | ✅ |
+| Isotipo integrado en Navbar (`text-green-700`) | ✅ |
+| Isotipo integrado en Footer (`text-green-400` sobre fondo green-950) | ✅ |
+| Isotipo decorativo gigante de fondo en Hero (`text-green-100`, sólo `xl+`) | ✅ |
+| Wordmark "ComplexIA" pegado (span único) en Navbar y Footer | ✅ |
+| Open Graph image 1200×630 con `next/og` y Satori | ✅ |
+| Metadata SEO enriquecida (metadataBase, title, description, openGraph, locale) | ✅ |
+| Activos archivados en `docs/brand/` (isotipo final + iteraciones + wordmark mockup) | ✅ |
+| Prompts para regenerar activos (`docs/brand/prompts-graficos.md`) | ✅ |
+| Apple touch icon 180×180 | 📋 Pendiente |
+| Wordmark SVG completo (no necesario; el wordmark vive como texto por SEO) | ❌ Descartado |
+| Canonical y robots metadata | 📋 Pendiente (F1-13) |
 
 ---
 

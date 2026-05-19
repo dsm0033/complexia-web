@@ -28,8 +28,10 @@ Guía de trabajo para Claude en este proyecto.
 ```
 complexia-web/
 ├── app/                        # App Router de Next.js
-│   ├── layout.jsx              # Root layout: fuente, metadata, globals.css
+│   ├── layout.jsx              # Root layout: fuente, metadata SEO + OG, globals.css
 │   ├── page.jsx                # Landing page — importa secciones en orden
+│   ├── icon.svg                # Favicon (isotipo en green-700)
+│   ├── opengraph-image.jsx     # OG image 1200×630 generada con next/og
 │   ├── blog/
 │   │   ├── page.jsx
 │   │   └── [slug]/page.jsx
@@ -47,11 +49,12 @@ complexia-web/
 │
 ├── components/
 │   ├── ui/                     # Primitivos reutilizables en TODA la app
-│   │   ├── Navbar.jsx          # Sticky, responsive, 'use client'
-│   │   ├── Footer.jsx          # 3 columnas (marca + email · navegación · legal)
+│   │   ├── Navbar.jsx          # Sticky, responsive, 'use client'. Logo: Isotipo + wordmark
+│   │   ├── Footer.jsx          # 3 columnas. Logo: Isotipo + wordmark sobre green-950
+│   │   ├── Isotipo.jsx         # SVG inline del logo, fill="currentColor" (Tailwind-friendly)
 │   │   └── Button.jsx          # Por construir — variantes: primary / ghost
 │   └── sections/               # Secciones de la landing únicamente
-│       ├── Hero.jsx            # H1 + subtitle + CTAs + stats bar
+│       ├── Hero.jsx            # H1 + subtitle + CTAs + stats bar + isotipo decorativo de fondo
 │       ├── Servicios.jsx       # Grid 2 columnas, 4 servicios
 │       ├── Metodologia.jsx     # Pasos de la consultoría
 │       ├── Casos.jsx           # Caso destacado La Impecable + enlace al dominio
@@ -71,8 +74,12 @@ complexia-web/
 │   ├── SPRINTS.md
 │   ├── PRODUCT_BACKLOG.md
 │   ├── como-esta-hecha-la-web.md
-│   └── brand/                  # Guía visual de marca (uso interno)
-│       └── Logo-ComplexIA.png
+│   └── brand/                  # Activos e historial visual de marca (uso interno)
+│       ├── Logo-ComplexIA.png         # Guía visual de marca original
+│       ├── isotipo.svg                # Versión final del isotipo
+│       ├── wordmark-tagline.png       # Mockup del wordmark (referencia)
+│       ├── prompts-graficos.md        # Prompts para generar más activos
+│       └── iteraciones/               # PNGs intermedios descartados
 │
 └── public/
     └── images/
@@ -141,6 +148,18 @@ El archivo `app/page.jsx` importa las secciones en este orden:
 - `/legal/aviso-legal`, `/legal/privacidad`, `/legal/cookies` existen como **placeholders "En redacción"**.
 - Comparten `app/legal/layout.jsx`, que envuelve cada página con Navbar y Footer.
 - Los textos legales reales y el banner de cookies (con bloqueo de analytics hasta consentimiento) están en el backlog (FASE 5).
+
+---
+
+## Identidad de marca y SEO
+
+- **Isotipo**: el monograma "C" del logo vive en dos sitios:
+  - `app/icon.svg` — favicon (Next.js lo sirve en `/icon.svg` automáticamente).
+  - `components/ui/Isotipo.jsx` — componente React con el mismo `path` y `fill="currentColor"`. Se usa en Navbar (`text-green-700`), Footer (`text-green-400`) y como decoración gigante de fondo en el Hero (`text-green-100`).
+- **Wordmark**: sigue siendo texto puro (`Complex<span>IA</span>`), no SVG, para conservar SEO y accesibilidad. El `<span>` envuelve "Complex" + "IA" para que el `gap` del `inline-flex` no los separe.
+- **Open Graph image**: `app/opengraph-image.jsx` la genera dinámicamente con `next/og` (motor Satori) cargando Instrument Sans desde Google Fonts en formato TTF. Importante: **Satori no soporta WOFF2** — hay que pedir TTF al CSS de Google sin User-Agent moderno.
+- **Metadata SEO**: `app/layout.jsx` define `metadataBase`, `title`, `description` y el bloque `openGraph` con `siteName`, `locale: es_ES`. La imagen OG se asocia automáticamente.
+- **Activos archivados**: `docs/brand/` contiene la guía visual original, iteraciones descartadas y los prompts para regenerar.
 
 ---
 
