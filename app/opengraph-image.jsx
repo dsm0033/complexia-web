@@ -5,17 +5,13 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 async function loadGoogleFont(family, weight) {
+  // Sin User-Agent moderno: Google Fonts devuelve TTF (Satori no soporta WOFF2)
   const cssUrl = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, '+')}:wght@${weight}`;
-  const css = await fetch(cssUrl, {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    },
-  }).then((r) => r.text());
+  const css = await fetch(cssUrl).then((r) => r.text());
 
-  const latin = css.match(/\/\*\s*latin\s*\*\/[\s\S]*?src:\s*url\(([^)]+)\)/);
-  if (!latin) throw new Error(`No latin font URL for ${family} @${weight}`);
-  return fetch(latin[1]).then((r) => r.arrayBuffer());
+  const ttf = css.match(/src:\s*url\(([^)]+)\)\s*format\(['"]?(truetype|opentype)['"]?\)/);
+  if (!ttf) throw new Error(`No TTF/OTF URL for ${family} @${weight}`);
+  return fetch(ttf[1]).then((r) => r.arrayBuffer());
 }
 
 export default async function OpengraphImage() {
@@ -53,11 +49,12 @@ export default async function OpengraphImage() {
         <div
           style={{
             marginTop: 40,
-            fontSize: 32,
+            fontSize: 26,
             fontWeight: 400,
             color: '#88CCA5',
             textTransform: 'uppercase',
             letterSpacing: '0.22em',
+            whiteSpace: 'nowrap',
           }}
         >
           Inteligencia aplicada. Resultados reales.
