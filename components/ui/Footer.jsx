@@ -1,4 +1,5 @@
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import Isotipo from './Isotipo';
 
 const navegacion = [
   { label: 'Inicio', href: '/' },
@@ -22,7 +23,8 @@ export default function Footer() {
 
           {/* Columna 1 — Marca + contacto */}
           <div>
-            <p className="text-xl font-bold tracking-tight text-white">
+            <p className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-white">
+              <Isotipo className="h-9 w-9 text-green-400" />
               Complex<span className="text-green-400">IA</span>
             </p>
             <p className="mt-4 text-sm leading-relaxed text-green-300">

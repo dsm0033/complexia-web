@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import Isotipo from './Isotipo';
 
 const links = [
   { label: 'Servicios', href: '#servicios' },
@@ -19,7 +20,8 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <a href="/" className="text-xl font-bold tracking-tight text-green-950">
+          <a href="/" className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-green-950" aria-label="ComplexIA — inicio">
+            <Isotipo className="h-9 w-9 text-green-700" />
             Complex<span className="text-green-700">IA</span>
           </a>
 
