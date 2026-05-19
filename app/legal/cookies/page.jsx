@@ -1,19 +1,159 @@
 export const metadata = {
   title: 'Política de cookies — ComplexIA',
-  description: 'Información sobre el uso de cookies en ComplexIA.',
+  description: 'Información sobre el uso de cookies y tecnologías similares en complexia.es, conforme a la LSSI-CE y la guía de la AEPD.',
 };
 
 export default function Cookies() {
   return (
-    <article>
-      <h1 className="text-4xl font-extrabold tracking-tight text-green-950 sm:text-5xl">
-        Política de cookies
-      </h1>
-      <p className="mt-8 text-base leading-relaxed text-green-800">
-        Esta página está <strong>en redacción</strong>. Próximamente publicaremos
-        el detalle de las cookies que utiliza la web y la forma de gestionarlas,
-        conforme al artículo 22.2 de la Ley 34/2002 (LSSI-CE) y la guía de la AEPD.
-      </p>
+    <article className="space-y-10 text-green-800">
+      <header>
+        <h1 className="text-4xl font-extrabold tracking-tight text-green-950 sm:text-5xl">
+          Política de cookies
+        </h1>
+        <p className="mt-4 text-sm text-green-600">Última actualización: mayo de 2026</p>
+      </header>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-green-950">1. ¿Qué son las cookies?</h2>
+        <p className="text-base leading-relaxed">
+          Las cookies son pequeños archivos de texto que un sitio web deposita en tu
+          dispositivo cuando lo visitas. Cumplen funciones como recordar tus preferencias
+          o permitir que el sitio funcione correctamente. La normativa española (art. 22.2
+          LSSI-CE) y europea (Directiva ePrivacy) exigen informarte sobre su uso.
+        </p>
+        <p className="text-base leading-relaxed">
+          Esta política se aplica también al{' '}
+          <strong>almacenamiento local (localStorage)</strong>, que funciona de forma
+          análoga a las cookies y está sujeto a las mismas obligaciones informativas.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-green-950">2. Cookies que utilizamos</h2>
+
+        <h3 className="text-base font-semibold text-green-950">2.1 Cookies técnicas (exentas de consentimiento)</h3>
+        <p className="text-base leading-relaxed">
+          Son estrictamente necesarias para el funcionamiento del sitio. Sin ellas no podrías
+          navegar correctamente. Al ser imprescindibles, no requieren tu consentimiento previo.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b-2 border-green-200">
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Nombre</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Tecnología</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Finalidad</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Duración</th>
+                <th className="text-left font-semibold text-green-950 py-2">Titular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-green-100">
+                <td className="py-2 pr-4 align-top font-mono text-xs">complexia-cookie-notice</td>
+                <td className="py-2 pr-4 align-top">localStorage</td>
+                <td className="py-2 pr-4 align-top">Recuerda que ya has visto el aviso de cookies para no mostrarlo de nuevo.</td>
+                <td className="py-2 pr-4 align-top">Permanente (hasta borrar datos del navegador)</td>
+                <td className="py-2 align-top">ComplexIA</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="mt-6 text-base font-semibold text-green-950">2.2 Cookies analíticas</h3>
+        <p className="text-base leading-relaxed">
+          Esta web utiliza <strong>Fathom Analytics</strong>, una herramienta de análisis
+          de tráfico <strong>sin cookies</strong>. Fathom no deposita ningún archivo en tu
+          dispositivo ni utiliza identificadores personales; las estadísticas que genera
+          son completamente anónimas y agregadas.
+        </p>
+        <p className="text-base leading-relaxed">
+          Por este motivo, <strong>no necesitamos tu consentimiento</strong> para activar el
+          análisis de tráfico, y Fathom no aparece en la tabla de cookies. Si quieres saber
+          más sobre cómo funciona, visita{' '}
+          <a
+            href="https://usefathom.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-700 underline"
+          >
+            usefathom.com/privacy
+          </a>
+          .
+        </p>
+
+        <h3 className="mt-6 text-base font-semibold text-green-950">2.3 Cookies publicitarias</h3>
+        <p className="text-base leading-relaxed">
+          Esta web <strong>no utiliza cookies publicitarias</strong> ni de seguimiento con
+          fines comerciales de ningún tipo.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-green-950">3. Cómo gestionar las cookies de tu navegador</h2>
+        <p className="text-base leading-relaxed">
+          Puedes configurar tu navegador para bloquear o eliminar cookies en cualquier momento.
+          Ten en cuenta que bloquear las cookies técnicas puede afectar al funcionamiento del sitio.
+          Aquí tienes las instrucciones de los navegadores más habituales:
+        </p>
+        <ul className="list-disc pl-5 space-y-2 text-base leading-relaxed">
+          <li>
+            <a
+              href="https://support.google.com/chrome/answer/95647"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-700 underline"
+            >
+              Google Chrome
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-700 underline"
+            >
+              Mozilla Firefox
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://support.apple.com/es-es/guide/safari/sfri11471/mac"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-700 underline"
+            >
+              Safari
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-700 underline"
+            >
+              Microsoft Edge
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-green-950">4. Actualizaciones de esta política</h2>
+        <p className="text-base leading-relaxed">
+          Podemos actualizar esta política cuando cambie la legislación aplicable o cuando
+          modifiquemos las tecnologías que utilizamos. La fecha de la última actualización
+          aparece al inicio de esta página. Te recomendamos revisarla periódicamente.
+        </p>
+        <p className="text-base leading-relaxed">
+          Si tienes alguna duda sobre el uso de cookies en este sitio, puedes contactarnos en{' '}
+          <a href="mailto:contacto@complexia.es" className="text-green-700 underline">
+            contacto@complexia.es
+          </a>
+          .
+        </p>
+      </section>
     </article>
   );
 }
