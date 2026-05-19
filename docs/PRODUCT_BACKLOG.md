@@ -24,8 +24,8 @@
 | F1-09 | Deploy en Vercel | 🔴 | ✅ |
 | F1-10 | Dominio complexia.es conectado con SSL (nameservers Vercel) | 🔴 | ✅ |
 | F1-11 | Favicon personalizado con logo ComplexIA | 🟡 | ✅ |
-| F1-12 | og-image 1200×630px | 🟡 | 📋 |
-| F1-13 | SEO completo (Open Graph, canonical, robots, metadata) | 🟡 | 📋 |
+| F1-12 | og-image 1200×630px (generada con next/og en `app/opengraph-image.jsx`) | 🟡 | ✅ |
+| F1-13 | SEO completo (Open Graph, canonical, robots, metadata) | 🟡 | 🔄 OG y metadataBase hechos; falta canonical y robots |
 
 ---
 

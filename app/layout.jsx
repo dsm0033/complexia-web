@@ -8,8 +8,19 @@ const instrumentSans = Instrument_Sans({
 });
 
 export const metadata = {
-  title: 'ComplexIA',
-  description: 'ComplexIA — plataforma de inteligencia artificial',
+  metadataBase: new URL('https://complexia.es'),
+  title: 'ComplexIA — Inteligencia aplicada. Resultados reales.',
+  description:
+    'Consultoría de IA para PYMEs españolas. Diagnóstico, desarrollo a medida, chatbots, pasarelas de pago y acompañamiento. Soluciones accesibles con resultados medibles.',
+  openGraph: {
+    title: 'ComplexIA — Inteligencia aplicada. Resultados reales.',
+    description:
+      'Consultoría de IA para PYMEs. Diagnóstico, desarrollo a medida y acompañamiento, sin tecnicismos y con resultados medibles.',
+    url: 'https://complexia.es',
+    siteName: 'ComplexIA',
+    locale: 'es_ES',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }) {
