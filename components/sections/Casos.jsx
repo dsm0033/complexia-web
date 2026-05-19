@@ -10,6 +10,7 @@ const funcionalidades = [
   'Facturación automática con PDF legal',
   'Gestión de nóminas, SS e IRPF automatizados',
   'Control de vacaciones y solicitudes de empleados',
+  'Análisis de facturas con IA y registro automático en contabilidad',
   'Panel de contabilidad con P&L, gastos y analytics',
 ];
 
