@@ -1,4 +1,5 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import Isotipo from '@/components/ui/Isotipo';
 
 const stats = [
   {
@@ -19,7 +20,16 @@ export default function Hero() {
   return (
     <section className="bg-white" aria-label="Presentación de ComplexIA">
       {/* Main content */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 lg:pt-28 lg:pb-20">
+      <div className="relative overflow-hidden pt-20 pb-16 lg:pt-28 lg:pb-20">
+        {/* Isotipo decorativo de fondo */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 right-20 -translate-y-1/2 hidden xl:block"
+        >
+          <Isotipo className="h-[450px] w-[450px] text-green-100" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
 
           {/* Tag pill */}
@@ -58,6 +68,7 @@ export default function Hero() {
               <ArrowRightIcon className="h-4 w-4" />
             </a>
           </div>
+        </div>
         </div>
       </div>
 

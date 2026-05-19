@@ -25,7 +25,7 @@ export default function Footer() {
           <div>
             <p className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-white">
               <Isotipo className="h-9 w-9 text-green-400" />
-              Complex<span className="text-green-400">IA</span>
+              <span>Complex<span className="text-green-400">IA</span></span>
             </p>
             <p className="mt-4 text-sm leading-relaxed text-green-300">
               Inteligencia aplicada. Resultados reales.

@@ -22,7 +22,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-green-950" aria-label="ComplexIA — inicio">
             <Isotipo className="h-9 w-9 text-green-700" />
-            Complex<span className="text-green-700">IA</span>
+            <span>Complex<span className="text-green-700">IA</span></span>
           </a>
 
           {/* Desktop nav */}
