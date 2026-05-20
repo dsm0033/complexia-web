@@ -164,18 +164,18 @@ Microcambios fuera de sprint:
 ## ✅ SPRINT 4.3 — "Legal y Cookies"
 **Fecha:** 19 Mayo 2026
 **Objetivo:** Textos legales completos conformes a RGPD/LSSI y banner de cookies funcional.
-**Estado:** COMPLETADO (pendiente NIF y script Fathom)
+**Estado:** COMPLETADO (pendiente NIF)
 
 | Tarea | Estado |
 |---|---|
 | Aviso legal completo (LSSI art. 10): datos titular, PI, responsabilidad, jurisdicción | ✅ |
 | Política de privacidad (RGPD art. 13): responsable, base jurídica, encargados, derechos ARCO | ✅ |
-| Política de cookies (LSSI art. 22.2 + guía AEPD 2022): tabla cookies, Fathom cookieless | ✅ |
-| `CookieBanner.jsx`: barra fija inferior, localStorage, enlace a /legal/cookies | ✅ |
+| Política de cookies (LSSI art. 22.2 + guía AEPD 2022): tabla cookies GA4 con consentimiento | ✅ |
+| `CookieBanner.jsx`: barra fija inferior, botones Aceptar/Rechazar, localStorage | ✅ |
 | Banner integrado en root layout (`app/layout.jsx`) | ✅ |
-| Decisión analytics: Fathom Analytics (cookieless, sin consent gate) | ✅ |
+| Decisión analytics: Google Analytics 4 (con consent gate — solo carga si se acepta) | ✅ |
+| `GoogleAnalytics.jsx`: carga GA4 condicionada al consentimiento | ✅ |
 | **NIF del titular** en aviso-legal y privacidad | ⚡ PENDIENTE — PRIORITARIO |
-| **Script Fathom** en root layout (necesita Site ID de usefathom.com) | ⚡ PENDIENTE — PRIORITARIO |
 
 ---
 
