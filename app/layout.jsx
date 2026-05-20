@@ -1,5 +1,6 @@
 import { Instrument_Sans } from 'next/font/google';
 import CookieBanner from '@/components/ui/CookieBanner';
+import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
 import './globals.css';
 
 const instrumentSans = Instrument_Sans({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
         </a>
         {children}
         <CookieBanner />
+        <GoogleAnalytics />
       </body>
     </html>
   );

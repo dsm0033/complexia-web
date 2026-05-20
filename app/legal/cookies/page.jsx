@@ -59,27 +59,51 @@ export default function Cookies() {
           </table>
         </div>
 
-        <h3 className="mt-6 text-base font-semibold text-green-950">2.2 Cookies analíticas</h3>
+        <h3 className="mt-6 text-base font-semibold text-green-950">2.2 Cookies analíticas (requieren consentimiento)</h3>
         <p className="text-base leading-relaxed">
-          Esta web utiliza <strong>Fathom Analytics</strong>, una herramienta de análisis
-          de tráfico <strong>sin cookies</strong>. Fathom no deposita ningún archivo en tu
-          dispositivo ni utiliza identificadores personales; las estadísticas que genera
-          son completamente anónimas y agregadas.
-        </p>
-        <p className="text-base leading-relaxed">
-          Por este motivo, <strong>no necesitamos tu consentimiento</strong> para activar el
-          análisis de tráfico, y Fathom no aparece en la tabla de cookies. Si quieres saber
-          más sobre cómo funciona, visita{' '}
+          Si aceptas las cookies analíticas, esta web utiliza <strong>Google Analytics 4</strong>{' '}
+          (Google LLC) para medir el tráfico de forma agregada. Solo se activan cuando das tu
+          consentimiento explícito en el aviso de cookies; si los rechazas, no se instala
+          ninguna cookie de este tipo. Si quieres saber más, visita{' '}
           <a
-            href="https://usefathom.com/privacy"
+            href="https://policies.google.com/privacy"
             target="_blank"
             rel="noopener noreferrer"
             className="text-green-700 underline"
           >
-            usefathom.com/privacy
+            policies.google.com/privacy
           </a>
           .
         </p>
+        <div className="overflow-x-auto mt-4">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b-2 border-green-200">
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Nombre</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Tecnología</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Finalidad</th>
+                <th className="text-left font-semibold text-green-950 py-2 pr-4">Duración</th>
+                <th className="text-left font-semibold text-green-950 py-2">Titular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-green-100">
+                <td className="py-2 pr-4 align-top font-mono text-xs">_ga</td>
+                <td className="py-2 pr-4 align-top">Cookie</td>
+                <td className="py-2 pr-4 align-top">Distinguir usuarios únicos para estadísticas de visitas.</td>
+                <td className="py-2 pr-4 align-top">2 años</td>
+                <td className="py-2 align-top">Google LLC</td>
+              </tr>
+              <tr className="border-b border-green-100">
+                <td className="py-2 pr-4 align-top font-mono text-xs">_ga_GDHJTV4LZX</td>
+                <td className="py-2 pr-4 align-top">Cookie</td>
+                <td className="py-2 pr-4 align-top">Mantener el estado de sesión para Google Analytics 4.</td>
+                <td className="py-2 pr-4 align-top">2 años</td>
+                <td className="py-2 align-top">Google LLC</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h3 className="mt-6 text-base font-semibold text-green-950">2.3 Cookies publicitarias</h3>
         <p className="text-base leading-relaxed">

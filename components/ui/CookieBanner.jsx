@@ -3,19 +3,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const STORAGE_KEY = 'complexia-cookie-notice';
+const CONSENT_KEY = 'complexia-cookie-consent';
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    if (!localStorage.getItem(CONSENT_KEY)) {
       setVisible(true);
     }
   }, []);
 
-  function dismiss() {
-    localStorage.setItem(STORAGE_KEY, '1');
+  function respond(value) {
+    localStorage.setItem(CONSENT_KEY, value);
+    window.dispatchEvent(new CustomEvent('complexia-consent', { detail: value }));
     setVisible(false);
   }
 
@@ -29,19 +30,28 @@ export default function CookieBanner() {
     >
       <div className="mx-auto max-w-7xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed">
-          Esta web usa cookies técnicas propias y analiza el tráfico de forma anónima con{' '}
-          <strong className="text-white">Fathom Analytics</strong> (sin cookies ni rastreo personal).{' '}
+          Usamos cookies técnicas propias (necesarias) y cookies analíticas de{' '}
+          <strong className="text-white">Google Analytics</strong> para medir el tráfico.
+          Puedes aceptarlas o rechazarlas.{' '}
           <Link href="/legal/cookies" className="underline hover:text-white transition-colors">
             Más información
           </Link>
           .
         </p>
-        <button
-          onClick={dismiss}
-          className="shrink-0 rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 transition-colors"
-        >
-          Entendido
-        </button>
+        <div className="flex shrink-0 gap-2">
+          <button
+            onClick={() => respond('rejected')}
+            className="rounded-md border border-green-600 px-4 py-2 text-sm font-semibold text-green-300 hover:bg-green-900 transition-colors"
+          >
+            Rechazar
+          </button>
+          <button
+            onClick={() => respond('accepted')}
+            className="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 transition-colors"
+          >
+            Aceptar
+          </button>
+        </div>
       </div>
     </div>
   );

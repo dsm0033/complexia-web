@@ -95,7 +95,7 @@ export default function Privacidad() {
             {[
               ['Resend, Inc.', 'Envío del correo electrónico de contacto', 'EE. UU. (SCCs)'],
               ['Vercel, Inc.', 'Alojamiento del sitio web y registros de servidor', 'EE. UU. (SCCs)'],
-              ['Conva Ventures Inc. (Fathom Analytics)', 'Estadísticas de visitas sin cookies ni datos personales', 'Canadá (decisión de adecuación UE)'],
+              ['Google LLC (Google Analytics 4)', 'Estadísticas de visitas agregadas (solo si aceptas cookies analíticas)', 'EE. UU. (SCCs)'],
             ].map(([provider, purpose, country]) => (
               <tr key={provider} className="border-b border-green-100">
                 <td className="py-2 pr-4 align-top font-medium text-green-950">{provider}</td>
@@ -106,9 +106,8 @@ export default function Privacidad() {
           </tbody>
         </table>
         <p className="text-base leading-relaxed">
-          Las transferencias a proveedores estadounidenses (Resend y Vercel) se amparan en
-          cláusulas contractuales tipo (SCCs) aprobadas por la Comisión Europea. Fathom
-          Analytics opera desde Canadá, país que cuenta con decisión de adecuación de la UE.
+          Las transferencias a proveedores estadounidenses (Resend, Vercel y Google LLC) se
+          amparan en cláusulas contractuales tipo (SCCs) aprobadas por la Comisión Europea.
         </p>
       </section>
 
