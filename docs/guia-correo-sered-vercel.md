@@ -63,21 +63,73 @@ Para que los emails que lleguen al buzón aparezcan en tu Gmail:
 
 ---
 
-## 5. Añadir el registro SPF en Vercel DNS
+## 5. Autenticación de correo en Vercel DNS: SPF + DKIM + DMARC
+
+> ⚠️ **La lección más importante de esta guía.** cPanel de SERED autogenera los tres
+> registros de autenticación (SPF, DKIM, DMARC), pero los crea en **su propia zona DNS**.
+> Si el dominio usa los nameservers de Vercel, **esa zona de SERED está MUERTA**: el DNS
+> autoritativo es Vercel. Por tanto los tres registros hay que copiarlos **A MANO a Vercel**.
+> Si no, el correo sale sin autenticar y Gmail/Outlook lo penalizan o lo mandan a spam
+> (desde 2024 es prácticamente obligatorio para dominios que envían correo).
+>
+> Es el mismo fenómeno que afecta a la verificación de dominios (Search Console, etc.):
+> **cualquier registro DNS va SIEMPRE en Vercel, nunca en el panel de SERED.**
+
+Todos los registros se añaden en: Vercel → **Dashboard** → **Domains** → `tudominio.es` → pestaña **DNS Records**.
+
+### 5.1 SPF
 
 SERED usa **MailChannels** como relay de salida. Sin este registro, Gmail rechaza los emails.
 
-1. Vercel → **Dashboard** → **Domains** → `tudominio.es` → pestaña **DNS Records**
-2. Añade este registro:
+| Name | Type | Value |
+|------|------|-------|
+| `@` | `TXT` | `v=spf1 ip4:162.19.86.115 include:relay.mailchannels.net ~all` |
 
-   | Name | Type | Value |
-   |------|------|-------|
-   | `@` | `TXT` | `v=spf1 ip4:162.19.86.115 include:relay.mailchannels.net ~all` |
-
-3. Espera 15-20 minutos a que propague y prueba enviando un email desde Gmail
-
+> La IP es la del servidor real de tu cuenta — verifícala con `nslookup -type=a mail.tudominio.es`.
 > **Importante:** no puede haber dos registros TXT con `v=spf1` en el mismo dominio.
 > Si ya existe uno, edítalo en lugar de crear otro.
+
+### 5.2 DKIM
+
+1. cPanel → **Email Deliverability / Capacidad de entrega** → fila del dominio → **Manage / Administrar**
+2. Copia el registro DKIM (selector `default`): el Name será `default._domainkey` y el
+   Value `v=DKIM1; k=rsa; p=...` (clave pública RSA, muy larga).
+3. Añádelo en Vercel:
+
+| Name | Type | Value |
+|------|------|-------|
+| `default._domainkey` | `TXT` | `v=DKIM1; k=rsa; p=MIIBIjANBgkq...IDAQAB;` |
+
+> Pégalo en **una sola línea**: Vercel parte los TXT largos en trozos de 255 caracteres
+> automáticamente; no tienes que hacer nada.
+
+### 5.3 DMARC
+
+Arranca en **modo monitor** (`p=none`): no bloquea nada, solo recopila informes.
+
+| Name | Type | Value |
+|------|------|-------|
+| `_dmarc` | `TXT` | `v=DMARC1; p=none; rua=mailto:tu@gmail.com` |
+
+> Con el tiempo, cuando confirmes por los informes que el correo legítimo pasa,
+> endurece a `p=quarantine` y finalmente `p=reject`.
+
+### 5.4 Verificar
+
+```bash
+nslookup -type=TXT tudominio.es                        # SPF
+nslookup -type=TXT default._domainkey.tudominio.es     # DKIM
+nslookup -type=TXT _dmarc.tudominio.es                 # DMARC
+```
+
+Prueba de extremo a extremo: envíate un correo a la dirección que da
+[mail-tester.com](https://www.mail-tester.com) y comprueba que SPF, DKIM y DMARC
+salen en verde (objetivo 10/10).
+
+> El panel "Email Deliverability" de cPanel mostrará estos dominios en **ROJO**
+> (*"DNS Errors Occurred"*) porque valida contra su propia zona DNS muerta. Es un
+> **falso negativo**: la fuente de verdad es la resolución DNS pública (`nslookup` /
+> mail-tester), no cPanel.
 
 ---
 
