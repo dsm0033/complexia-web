@@ -19,7 +19,6 @@ export default function Privacidad() {
           <tbody>
             {[
               ['Denominación', 'ComplexIA'],
-              ['NIF', 'PENDIENTE — completar antes de publicar'],
               ['Domicilio', 'Calle Palmilla, 28 · 11540 Sanlúcar de Barrameda · Cádiz'],
               ['Contacto', 'contacto@complexia.es'],
             ].map(([label, value]) => (

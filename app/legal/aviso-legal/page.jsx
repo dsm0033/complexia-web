@@ -24,7 +24,6 @@ export default function AvisoLegal() {
           <tbody>
             {[
               ['Denominación comercial', 'ComplexIA'],
-              ['NIF', 'PENDIENTE — completar antes de publicar'],
               ['Domicilio', 'Calle Palmilla, 28 · 11540 Sanlúcar de Barrameda · Cádiz'],
               ['Correo electrónico', 'contacto@complexia.es'],
               ['Sitio web', 'https://complexia.es'],
