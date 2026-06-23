@@ -1,4 +1,4 @@
-const BASE_URL = 'https://complexia.es';
+const BASE_URL = 'https://www.complexia.es';
 
 export default function sitemap() {
   const lastModified = new Date();
