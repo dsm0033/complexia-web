@@ -2,7 +2,13 @@ import { NextResponse } from 'next/server';
 import { sendContactEmail } from '@/lib/mail';
 
 export async function POST(request) {
-  const { nombre, email, empresa, mensaje, consentimiento } = await request.json();
+  const { nombre, email, empresa, mensaje, consentimiento, website } = await request.json();
+
+  // Honeypot: campo trampa invisible para humanos. Si viene relleno es un bot;
+  // devolvemos un OK falso para no revelarle que lo hemos detectado.
+  if (website) {
+    return NextResponse.json({ ok: true });
+  }
 
   if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
     return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { EnvelopeIcon } from '@heroicons/react/20/solid';
 
-const INITIAL = { nombre: '', email: '', empresa: '', mensaje: '', consentimiento: false };
+const INITIAL = { nombre: '', email: '', empresa: '', mensaje: '', consentimiento: false, website: '' };
 
 export default function Contacto() {
   const [form, setForm] = useState(INITIAL);
@@ -96,6 +96,20 @@ export default function Contacto() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                {/* Honeypot anti-spam: invisible para humanos, los bots lo rellenan */}
+                <div className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden" aria-hidden="true">
+                  <label htmlFor="website">No rellenar este campo</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={form.website}
+                    onChange={handleChange}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="nombre" className="block text-sm font-semibold text-green-950">
