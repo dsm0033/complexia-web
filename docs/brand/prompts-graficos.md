@@ -86,4 +86,4 @@ Premium tech consultancy aesthetic. Flat design only, no gradients, no glow, no 
 | 4 (apple-icon PNG) | **Recraft.ai** o **Midjourney v7** | Cualquiera de los dos da buen resultado raster a 180×180 |
 | 5 (OG image PNG) | **Ideogram** | Es el mejor renderizando texto incrustado en imagen (tagline + wordmark legibles) |
 
-**Si tuviera que elegir UNA sola herramienta para todo:** Recraft.ai — único generador que produce SVG vectorial real, lo que es crítico para los logos. Para la OG image acepta una pérdida ligera de calidad tipográfica frente a Ideogram, pero te ahorra tener cuentas en dos sitios.
+**Si tuviera que elegir UNA sola herramienta para todo:** Recraft.ai — único generador que produce SVG vectorial real, lo que es crítico para los logos. Para la OG image acepta una pérdida ligera de calidad tipográfica frente a Ideogram, pero te ahorra tener cuentas en dos sitios. ES de pago!
