@@ -1,6 +1,7 @@
 export const metadata = {
   title: 'Política de cookies — ComplexIA',
   description: 'Información sobre el uso de cookies y tecnologías similares en complexia.es, conforme a la LSSI-CE y la guía de la AEPD.',
+  alternates: { canonical: '/legal/cookies' },
 };
 
 export default function Cookies() {

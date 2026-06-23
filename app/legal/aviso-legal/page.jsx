@@ -1,6 +1,7 @@
 export const metadata = {
   title: 'Aviso legal — ComplexIA',
   description: 'Información legal sobre el titular del sitio web complexia.es conforme a la Ley 34/2002 (LSSI-CE).',
+  alternates: { canonical: '/legal/aviso-legal' },
 };
 
 export default function AvisoLegal() {

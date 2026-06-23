@@ -1,6 +1,7 @@
 export const metadata = {
   title: 'Política de privacidad — ComplexIA',
   description: 'Política de privacidad y tratamiento de datos personales de ComplexIA conforme al RGPD y la LOPDGDD.',
+  alternates: { canonical: '/legal/privacidad' },
 };
 
 export default function Privacidad() {

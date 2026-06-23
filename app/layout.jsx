@@ -14,6 +14,9 @@ export const metadata = {
   title: 'ComplexIA — Inteligencia aplicada. Resultados reales.',
   description:
     'Consultoría de IA para PYMEs españolas. Diagnóstico, desarrollo a medida, chatbots, pasarelas de pago y acompañamiento. Soluciones accesibles con resultados medibles.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'ComplexIA — Inteligencia aplicada. Resultados reales.',
     description:
