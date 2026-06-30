@@ -1,5 +1,5 @@
 # SPRINTS — COMPLEXIA
-*Última actualización: 19 Mayo 2026*
+*Última actualización: 30 Junio 2026*
 
 ## Metodología
 - Sprints de 1-2 semanas
@@ -190,3 +190,54 @@ Microcambios fuera de sprint:
 | /casos/[slug] — página de caso de éxito detallado | 📋 |
 | /blog — índice de artículos | 📋 |
 | /blog/[slug] — artículo individual | 📋 |
+
+---
+
+## Infraestructura — Cambios relevantes
+
+| Fecha | Cambio |
+|---|---|
+| 30/06/2026 | Proyecto Supabase renombrado de "la-impecable" a **"SaaS ComplexIA"** en el dashboard |
+| 30/06/2026 | URL Supabase: `https://pyjtaactsyertjhphckq.supabase.co` · Región: West EU (Ireland) |
+| 30/06/2026 | Repo convertido de web de consultoría a SaaS multi-tenant. Consultoría conservada como apartado en `/consultoria`. |
+
+---
+
+## 🔄 SPRINT 12 — "SaaS: Migración y Onboarding"
+**Fechas:** 30 Junio 2026 → en curso
+**Objetivo:** Migrar La Impecable a complexia-web como primer tenant + onboarding + Stripe Billing
+**Diseño completo:** `docs/SPRINTS.md` de la-impecable (fuente de verdad del Sprint 12)
+
+### BLOQUE 0 — Slice vertical ✅ COMPLETADO (go/no-go validado)
+
+| Tarea | Estado |
+|---|---|
+| `src/` creado, carpetas movidas, alias `@/` → `./src/*` | ✅ |
+| Dependencias instaladas: Supabase, Lucide, Stripe, Recharts, Zod, Sentry, Vitest v2, Playwright | ✅ |
+| `CLAUDE.md` reescrito como SaaS multi-tenant | ✅ |
+| `AGENTS.md` creado (guardrail Next.js 16) | ✅ |
+| `.env.local` copiado de la-impecable + SITE_URL → complexia.es | ✅ |
+| Migración BD: columna `slug` en `businesses` + tenant `taller-demo` | ✅ aplicada |
+| `src/lib/supabase/client.js` + `server.js` | ✅ |
+| `src/lib/admin-context.js` (con slug en contexto) | ✅ |
+| `src/app/auth/callback/route.js` multi-tenant (sin LIMIT 1) | ✅ |
+| `/app/[slug]/servicios` — ruta pública de prueba | ✅ |
+| **Go/no-go:** 3 slugs verificados (datos reales / vacío / 404) | ✅ |
+
+### BLOQUE 1 — Migración completa de rutas
+
+| Tarea | Estado |
+|---|---|
+| Proxy.js hostname rewriting (`laimpecable.es` → `/app/la-impecable/`) | 📋 |
+| Rutas públicas: `/app/[slug]/`, `/sobre-nosotros`, `/contacto` | 📋 |
+| Portal admin completo bajo `/app/[slug]/admin/` | 📋 |
+| Portal empleado bajo `/app/[slug]/empleado/` | 📋 |
+| Portal cliente bajo `/app/[slug]/cliente/` | 📋 |
+| `/app/[slug]/reservar` con Stripe | 📋 |
+| `/superadmin` migrado | 📋 |
+| Página `/login` con cookie `pending-tenant-slug` | 📋 |
+| Conectar `laimpecable.es` como dominio en Vercel de complexia-web | 📋 |
+
+### BLOQUE 2-4 — Autoprovisionamiento, Wizard, Stripe Billing
+
+Ver detalle completo en `docs/SPRINTS.md` de la-impecable (Sprint 12 Bloques 2-4).
