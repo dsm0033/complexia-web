@@ -18,48 +18,45 @@ import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-// Para usar en server actions: devuelve null si no es admin.
+// Para usar en server actions del admin: devuelve null si no es admin.
+// Incluye slug para revalidatePath y redirect multi-tenant.
 export async function getAdminCtx() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, business_id')
+    .select('role, business_id, businesses(slug)')
     .eq('id', user.id)
     .single()
   if (profile?.role !== 'admin') return null
-  return { supabase, businessId: profile.business_id }
+  return { supabase, businessId: profile.business_id, slug: profile.businesses?.slug ?? null }
 }
 
 // Para usar en server components del admin (page.js / layout.js).
 // Cacheada por request con React cache(): layout y page comparten resultado.
-// Incluye el slug del tenant para construir URLs relativas al tenant.
+// Incluye slug del tenant para construir URLs multi-tenant.
 export const getAdminPageCtx = cache(async () => {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, business_id')
+    .select('role, full_name, business_id, businesses(slug)')
     .eq('id', user.id)
     .single()
-
-  let slug = null
-  if (profile?.business_id) {
-    const { data: business } = await supabase
-      .from('businesses')
-      .select('slug')
-      .eq('id', profile.business_id)
-      .single()
-    slug = business?.slug ?? null
+  return {
+    supabase,
+    user,
+    profile,
+    businessId: profile?.business_id,
+    slug: profile?.businesses?.slug ?? null,
   }
-
-  return { supabase, user, profile, businessId: profile?.business_id, slug }
 })
 
 // RPC con todos los counts del dashboard + badges del sidebar.
-// Cacheada por request. Requiere la RPC get_admin_stats en Supabase.
+// Cacheada por request: layout y page comparten una sola llamada a la BD.
+// Para añadir métricas: edita la migración 20260517030000_admin_stats_rpc.sql.
 export const getAdminStats = cache(async (businessId) => {
   if (!businessId) return {}
   const supabase = await createClient()
