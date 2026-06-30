@@ -6,7 +6,8 @@ import PerfilForm from './_components/PerfilForm'
 
 export const metadata = { title: 'Mi perfil · IMPECABLE' }
 
-export default async function ClientePerfilPage() {
+export default async function ClientePerfilPage({ params }) {
+  const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -20,7 +21,7 @@ export default async function ClientePerfilPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/cliente" className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-3">
+        <Link href={`/app/${slug}/cliente`} className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-3">
           <ArrowLeft size={15} /> Volver
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Mi perfil</h1>

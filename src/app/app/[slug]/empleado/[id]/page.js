@@ -65,6 +65,7 @@ export default async function TrabajoPage({ params }) {
             duration={record.services?.duration_minutes ?? 60}
             status={record.status}
             startedAt={record.started_at ?? null}
+            slug={slug}
           />
         )}
       </div>

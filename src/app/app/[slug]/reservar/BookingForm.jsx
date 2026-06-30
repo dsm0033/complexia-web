@@ -22,7 +22,7 @@ function getMinPrice(service) {
   return vals.length ? Math.min(...vals) : service.price
 }
 
-export default function BookingForm({ services, advanceDays = 60, discountPct = 0, cashDiscountPct = 0, noticeHours = 24, userEmail = null, userName = null, defaultServiceId = null }) {
+export default function BookingForm({ slug, businessId, services, advanceDays = 60, discountPct = 0, cashDiscountPct = 0, noticeHours = 24, userEmail = null, userName = null, defaultServiceId = null }) {
   const [state, action, pending] = useActionState(crearReserva, undefined)
   const [selectedServiceId, setSelectedServiceId] = useState(defaultServiceId)
   const [selectedVehicleType, setSelectedVehicleType] = useState(null)
@@ -52,7 +52,7 @@ export default function BookingForm({ services, advanceDays = 60, discountPct = 
     if (!date) { setSlots([]); setSlotMessage(''); return }
     setSlotsLoading(true)
     setSlotMessage('')
-    const params = new URLSearchParams({ date })
+    const params = new URLSearchParams({ date, slug })
     if (selectedServiceId) params.set('service', selectedServiceId)
     fetch(`/api/slots?${params}`)
       .then(r => r.json())
@@ -74,6 +74,8 @@ export default function BookingForm({ services, advanceDays = 60, discountPct = 
 
   return (
     <form action={action} className="space-y-8">
+      <input type="hidden" name="business_id" value={businessId ?? ''} />
+      <input type="hidden" name="slug" value={slug ?? ''} />
 
       {/* 1. Servicio */}
       <section>

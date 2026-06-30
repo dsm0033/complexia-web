@@ -30,7 +30,7 @@ function SubmitBtn({ label, bloqueado }) {
   )
 }
 
-export function RegistroForm({ action, clientes, servicios, empleados, vacacionesPorEmpleado = {}, initialData, submitLabel }) {
+export function RegistroForm({ action, clientes, servicios, empleados, vacacionesPorEmpleado = {}, initialData, submitLabel, slug }) {
   const [state, formAction] = useActionState(action, null)
   const [isPaid, setIsPaid] = useState(!!initialData?.is_paid)
   const [precio, setPrecio] = useState(initialData?.price ?? '')
@@ -253,7 +253,7 @@ export function RegistroForm({ action, clientes, servicios, empleados, vacacione
 
       <div className="flex items-center gap-4 pt-2">
         <SubmitBtn label={submitLabel} bloqueado={enVacaciones} />
-        <a href="/admin/historial" className="text-sm text-gray-500 hover:text-gray-700">
+        <a href={`/app/${slug}/admin/historial`} className="text-sm text-gray-500 hover:text-gray-700">
           Cancelar
         </a>
       </div>

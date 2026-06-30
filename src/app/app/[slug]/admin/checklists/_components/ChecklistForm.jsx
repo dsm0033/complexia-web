@@ -16,7 +16,7 @@ function SubmitBtn({ label }) {
   )
 }
 
-export function ChecklistForm({ action, initialData, submitLabel }) {
+export function ChecklistForm({ action, initialData, submitLabel, slug }) {
   const [state, formAction] = useActionState(action, null)
   const [items, setItems] = useState(
     initialData?.items?.map((i) => i.text) ?? []
@@ -113,7 +113,7 @@ export function ChecklistForm({ action, initialData, submitLabel }) {
 
       <div className="flex items-center gap-4 pt-2">
         <SubmitBtn label={submitLabel} />
-        <a href="/admin/checklists" className="text-sm text-gray-500 hover:text-gray-700">
+        <a href={`/app/${slug}/admin/checklists`} className="text-sm text-gray-500 hover:text-gray-700">
           Cancelar
         </a>
       </div>

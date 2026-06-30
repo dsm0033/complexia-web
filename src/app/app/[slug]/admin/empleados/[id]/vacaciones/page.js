@@ -8,7 +8,7 @@ import { aprobarSolicitud, rechazarSolicitud, actualizarEntitlement, crearSolici
 export const metadata = { title: 'Vacaciones · Admin IMPECABLE' }
 
 export default async function VacacionesAdminPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const year = new Date().getFullYear()
@@ -53,14 +53,14 @@ export default async function VacacionesAdminPage({ params }) {
       {/* Breadcrumb */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-          <a href="/admin/empleados" className="hover:text-gray-700">Empleados</a>
+          <a href={`/app/${slug}/admin/empleados`} className="hover:text-gray-700">Empleados</a>
           <span>/</span>
-          <a href={`/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
+          <a href={`/app/${slug}/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
           <span>/</span>
           <span>Vacaciones</span>
         </div>
         <div className="flex items-center gap-4">
-          <a href={`/admin/empleados/${id}/editar`}
+          <a href={`/app/${slug}/admin/empleados/${id}/editar`}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             ← Volver
           </a>

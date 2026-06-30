@@ -5,7 +5,7 @@ import { estiloDe } from './estados'
 const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 const MAX_PILLS = 3
 
-export default function AgendaMes({ celdas }) {
+export default function AgendaMes({ celdas, slug }) {
   return (
     <div>
       {/* Cabecera de días de la semana */}
@@ -25,7 +25,7 @@ export default function AgendaMes({ celdas }) {
           return (
             <Link
               key={c.date}
-              href={`/admin/agenda?vista=dia&date=${c.date}`}
+              href={`/app/${slug}/admin/agenda?vista=dia&date=${c.date}`}
               className={`min-h-[104px] border-b border-r border-gray-100 p-1.5 flex flex-col gap-1 transition-colors hover:bg-gray-50
                 ${c.enMes ? '' : 'bg-gray-50/50'}`}
             >

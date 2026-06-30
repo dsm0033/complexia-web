@@ -36,7 +36,7 @@ async function downscaleImage(file) {
   return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' })
 }
 
-export function NuevoGastoClient() {
+export function NuevoGastoClient({ slug }) {
   const [file, setFile]                   = useState(null)
   const [optimizedFile, setOptimizedFile] = useState(null)
   const [loading, setLoading]             = useState(false)
@@ -192,6 +192,7 @@ export function NuevoGastoClient() {
           initialData={ocrData}
           attachedFile={optimizedFile}
           submitLabel="Guardar gasto"
+          cancelHref={`/app/${slug}/admin/contabilidad/gastos`}
         />
       </div>
     </div>

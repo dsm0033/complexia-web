@@ -5,7 +5,8 @@ import { Calendar, ClipboardList, ChevronRight, User } from 'lucide-react'
 
 export const metadata = { title: 'Mi portal · IMPECABLE' }
 
-export default async function ClientePage() {
+export default async function ClientePage({ params }) {
+  const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -87,13 +88,13 @@ export default async function ClientePage() {
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Últimos servicios</h2>
-            <Link href="/cliente/historial" className="text-xs text-dorado hover:underline flex items-center gap-0.5">
+            <Link href={`/app/${slug}/cliente/historial`} className="text-xs text-dorado hover:underline flex items-center gap-0.5">
               Ver todos <ChevronRight size={13} />
             </Link>
           </div>
           <div className="space-y-2">
             {servicios.map((s) => (
-              <Link key={s.id} href="/cliente/historial" className="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm hover:border-dorado transition-colors">
+              <Link key={s.id} href={`/app/${slug}/cliente/historial`} className="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm hover:border-dorado transition-colors">
                 <div>
                   <p className="text-sm font-medium text-gray-900">{s.services?.name ?? 'Servicio'}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
@@ -110,7 +111,7 @@ export default async function ClientePage() {
       {/* Accesos rápidos */}
       <section className="grid grid-cols-2 gap-3">
         <Link
-          href="/cliente/historial"
+          href={`/app/${slug}/cliente/historial`}
           className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2 hover:border-dorado transition-colors shadow-sm"
         >
           <ClipboardList size={20} className="text-dorado" />
@@ -118,7 +119,7 @@ export default async function ClientePage() {
           <p className="text-xs text-gray-400">Todos tus servicios</p>
         </Link>
         <Link
-          href="/cliente/perfil"
+          href={`/app/${slug}/cliente/perfil`}
           className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2 hover:border-dorado transition-colors shadow-sm"
         >
           <User size={20} className="text-dorado" />
@@ -134,7 +135,7 @@ export default async function ClientePage() {
           <p className="text-xs text-gray-400 mt-0.5">Reserva tu próximo servicio online</p>
         </div>
         <Link
-          href="/reservar"
+          href={`/app/${slug}/reservar`}
           className="bg-dorado text-fondo text-sm font-semibold px-4 py-2 rounded-lg hover:bg-dorado-dim transition-colors shrink-0"
         >
           Reservar

@@ -4,7 +4,8 @@ import { crearServicio } from '@/app/actions/services'
 
 export const metadata = { title: 'Nuevo servicio · Admin IMPECABLE' }
 
-export default async function NuevoServicioPage() {
+export default async function NuevoServicioPage({ params }) {
+  const { slug } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const { data: checklists } = await supabase
@@ -22,7 +23,7 @@ export default async function NuevoServicioPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <ServicioForm action={crearServicio} checklists={checklists ?? []} submitLabel="Crear servicio" />
+        <ServicioForm action={crearServicio} checklists={checklists ?? []} submitLabel="Crear servicio" slug={slug} />
       </div>
     </div>
   )

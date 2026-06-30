@@ -9,7 +9,8 @@ import { Users, Wrench, UserCheck, ClipboardList, CalendarDays, Banknote, CheckS
 // 3) Añade su <StatCard /> en el JSX de abajo.
 // Si te saltas el paso 1, el campo será undefined y la tarjeta mostrará 0.
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({ params }) {
+  const { slug } = await params
   const { profile, businessId } = await getAdminPageCtx()
 
   // Misma RPC que usa el layout para los badges — React.cache deduplica
@@ -41,19 +42,19 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard icon={CalendarDays}    label="Reservas este mes"  value={stats.reservasMes}    href="/admin/reservas"  badge={stats.reservasPendientes > 0 ? `${stats.reservasPendientes} pendientes` : null} />
-        <StatCard icon={Users}           label="Clientes"           value={stats.clients}        href="/admin/clientes" />
-        <StatCard icon={Wrench}          label="Servicios activos"  value={stats.services}       href="/admin/servicios" />
-        <StatCard icon={UserCheck}       label="Empleados activos"  value={stats.employees}      href="/admin/empleados" />
-        <StatCard icon={ClipboardList}   label="Servicios este mes" value={stats.serviciosMes}   href="/admin/historial" badge={stats.pendingServices > 0 ? `${stats.pendingServices} pendientes` : null} />
-        <StatCard icon={Banknote}        label="Facturado este mes" value={`${stats.totalFacturado.toFixed(2)} €`} href="/admin/facturas" isText accent />
-        <StatCard icon={TrendingDown}    label="Gastos este mes"    value={`${stats.gastosMes.toFixed(2)} €`}      href="/admin/contabilidad/gastos" isText />
-        <StatCard icon={BarChart2}       label="Beneficio este mes" value={`${beneficioMes.toFixed(2)} €`} href="/admin/contabilidad/analytics" isText negative={beneficioMes < 0} />
-        <StatCard icon={FileSpreadsheet} label="Nóminas"            value={stats.nominasConContrato}   href="/admin/nominas" badge={stats.nominasConContrato > 0 ? `${stats.nominasConContrato} con contrato activo` : 'Sin contratos'} badgeGray />
-        <StatCard icon={CheckSquare}     label="Checklists"         value={stats.checklists}           href="/admin/checklists" />
-        <StatCard icon={Palmtree}        label="Vacaciones"         value={stats.vacacionesPendientes} href="/admin/configuracion/vacaciones" badge={stats.vacacionesPendientes > 0 ? `${stats.vacacionesPendientes} por revisar` : null} />
-        <StatCard icon={Building2}       label="Empresa"            href="/admin/configuracion/empresa"  isLink linkText="Gestionar" />
-        <StatCard icon={Settings}        label="Configuración"      href="/admin/configuracion/reservas" isLink linkText="Gestionar" />
+        <StatCard icon={CalendarDays}    label="Reservas este mes"  value={stats.reservasMes}    href={`/app/${slug}/admin/reservas`}  badge={stats.reservasPendientes > 0 ? `${stats.reservasPendientes} pendientes` : null} />
+        <StatCard icon={Users}           label="Clientes"           value={stats.clients}        href={`/app/${slug}/admin/clientes`} />
+        <StatCard icon={Wrench}          label="Servicios activos"  value={stats.services}       href={`/app/${slug}/admin/servicios`} />
+        <StatCard icon={UserCheck}       label="Empleados activos"  value={stats.employees}      href={`/app/${slug}/admin/empleados`} />
+        <StatCard icon={ClipboardList}   label="Servicios este mes" value={stats.serviciosMes}   href={`/app/${slug}/admin/historial`} badge={stats.pendingServices > 0 ? `${stats.pendingServices} pendientes` : null} />
+        <StatCard icon={Banknote}        label="Facturado este mes" value={`${stats.totalFacturado.toFixed(2)} €`} href={`/app/${slug}/admin/facturas`} isText accent />
+        <StatCard icon={TrendingDown}    label="Gastos este mes"    value={`${stats.gastosMes.toFixed(2)} €`}      href={`/app/${slug}/admin/contabilidad/gastos`} isText />
+        <StatCard icon={BarChart2}       label="Beneficio este mes" value={`${beneficioMes.toFixed(2)} €`} href={`/app/${slug}/admin/contabilidad/analytics`} isText negative={beneficioMes < 0} />
+        <StatCard icon={FileSpreadsheet} label="Nóminas"            value={stats.nominasConContrato}   href={`/app/${slug}/admin/nominas`} badge={stats.nominasConContrato > 0 ? `${stats.nominasConContrato} con contrato activo` : 'Sin contratos'} badgeGray />
+        <StatCard icon={CheckSquare}     label="Checklists"         value={stats.checklists}           href={`/app/${slug}/admin/checklists`} />
+        <StatCard icon={Palmtree}        label="Vacaciones"         value={stats.vacacionesPendientes} href={`/app/${slug}/admin/configuracion/vacaciones`} badge={stats.vacacionesPendientes > 0 ? `${stats.vacacionesPendientes} por revisar` : null} />
+        <StatCard icon={Building2}       label="Empresa"            href={`/app/${slug}/admin/configuracion/empresa`}  isLink linkText="Gestionar" />
+        <StatCard icon={Settings}        label="Configuración"      href={`/app/${slug}/admin/configuracion/reservas`} isLink linkText="Gestionar" />
       </div>
     </div>
   )

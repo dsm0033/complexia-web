@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function HorasEmpleadoPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const now = new Date()
@@ -72,9 +72,9 @@ export default async function HorasEmpleadoPage({ params }) {
       {/* Cabecera */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-          <a href="/admin/empleados" className="hover:text-gray-700">Empleados</a>
+          <a href={`/app/${slug}/admin/empleados`} className="hover:text-gray-700">Empleados</a>
           <span>/</span>
-          <a href={`/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
+          <a href={`/app/${slug}/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
           <span>/</span>
           <span>Horas</span>
         </div>
@@ -87,7 +87,7 @@ export default async function HorasEmpleadoPage({ params }) {
             </p>
           </div>
           <a
-            href={`/admin/empleados/${id}/horario`}
+            href={`/app/${slug}/admin/empleados/${id}/horario`}
             className="text-sm text-blue-600 hover:underline"
           >
             {tieneHorario ? 'Editar horario' : 'Configurar horario →'}
@@ -109,7 +109,7 @@ export default async function HorasEmpleadoPage({ params }) {
       {!tieneHorario && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 mb-6">
           Este empleado no tiene horario configurado — no se pueden calcular extras ni déficits.{' '}
-          <a href={`/admin/empleados/${id}/horario`} className="underline font-medium">Configurar ahora</a>
+          <a href={`/app/${slug}/admin/empleados/${id}/horario`} className="underline font-medium">Configurar ahora</a>
         </div>
       )}
 

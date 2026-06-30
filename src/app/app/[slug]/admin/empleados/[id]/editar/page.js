@@ -9,7 +9,7 @@ import IbanFormAdmin from '../../_components/IbanFormAdmin'
 export const metadata = { title: 'Editar empleado · Admin IMPECABLE' }
 
 export default async function EditarEmpleadoPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const { data: empleado } = await supabase
@@ -27,7 +27,7 @@ export default async function EditarEmpleadoPage({ params }) {
     <div className="space-y-6">
       <div className="mb-2">
         <Link
-          href="/admin/empleados"
+          href={`/app/${slug}/admin/empleados`}
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-3"
         >
           <ArrowLeft size={16} />
@@ -38,7 +38,7 @@ export default async function EditarEmpleadoPage({ params }) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <EmpleadoForm action={action} initialData={empleado} submitLabel="Guardar cambios" />
+        <EmpleadoForm action={action} initialData={empleado} submitLabel="Guardar cambios" slug={slug} />
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -48,7 +48,7 @@ export default async function EditarEmpleadoPage({ params }) {
             <p className="text-sm text-gray-500 mt-0.5">Días de trabajo, servicios asignados, vacaciones y festivos</p>
           </div>
           <a
-            href={`/admin/empleados/${id}/calendario`}
+            href={`/app/${slug}/admin/empleados/${id}/calendario`}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Ver calendario →
@@ -64,13 +64,13 @@ export default async function EditarEmpleadoPage({ params }) {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href={`/admin/empleados/${id}/horas`}
+              href={`/app/${slug}/admin/empleados/${id}/horas`}
               className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Ver horas
             </a>
             <a
-              href={`/admin/empleados/${id}/horario`}
+              href={`/app/${slug}/admin/empleados/${id}/horario`}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Configurar horario →
@@ -86,7 +86,7 @@ export default async function EditarEmpleadoPage({ params }) {
             <p className="text-sm text-gray-500 mt-0.5">Tipo, salario bruto, jornada, grupo de cotización e IRPF</p>
           </div>
           <a
-            href={`/admin/empleados/${id}/contrato`}
+            href={`/app/${slug}/admin/empleados/${id}/contrato`}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Gestionar contrato →
@@ -107,7 +107,7 @@ export default async function EditarEmpleadoPage({ params }) {
             <p className="text-sm text-gray-500 mt-0.5">PDFs mensuales accesibles desde el portal del empleado</p>
           </div>
           <a
-            href={`/admin/empleados/${id}/nominas`}
+            href={`/app/${slug}/admin/empleados/${id}/nominas`}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Gestionar nóminas →
@@ -122,7 +122,7 @@ export default async function EditarEmpleadoPage({ params }) {
             <p className="text-sm text-gray-500 mt-0.5">Días disponibles, solicitudes y aprobaciones</p>
           </div>
           <a
-            href={`/admin/empleados/${id}/vacaciones`}
+            href={`/app/${slug}/admin/empleados/${id}/vacaciones`}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Gestionar vacaciones →

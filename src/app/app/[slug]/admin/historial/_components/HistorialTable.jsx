@@ -24,7 +24,8 @@ const COLUMNS = [
   { key: 'recogido', label: 'Recogido', getValue: r => r.is_collected ? 1 : 0,       sortable: true },
 ]
 
-function RecordRow({ r }) {
+function RecordRow({ r, slug }) {
+  const base = `/app/${slug}/admin/historial`
   return (
     <tr key={r.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
       {[
@@ -35,18 +36,18 @@ function RecordRow({ r }) {
         `${r.price} €`,
       ].map((cell, i) => (
         <td key={i} className="px-6 py-4 text-sm text-gray-900">
-          <Link href={`/admin/historial/${r.id}/editar`} className="block w-full">{cell}</Link>
+          <Link href={`${base}/${r.id}/editar`} className="block w-full">{cell}</Link>
         </td>
       ))}
       <td className="px-6 py-4">
-        <Link href={`/admin/historial/${r.id}/editar`} className="block">
+        <Link href={`${base}/${r.id}/editar`} className="block">
           <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium capitalize ${ESTADO_STYLES[r.status] ?? 'bg-gray-100 text-gray-500'}`}>
             {r.status}
           </span>
         </Link>
       </td>
       <td className="px-6 py-4">
-        <Link href={`/admin/historial/${r.id}/editar`} className="flex items-center gap-1.5">
+        <Link href={`${base}/${r.id}/editar`} className="flex items-center gap-1.5">
           <Euro size={16} className={r.is_paid ? 'text-green-500' : 'text-gray-300'} />
           {r.is_paid && r.payment_method && (
             <span className="text-[10px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
@@ -58,7 +59,7 @@ function RecordRow({ r }) {
         </Link>
       </td>
       <td className="px-6 py-4">
-        <Link href={`/admin/historial/${r.id}/editar`} className="block">
+        <Link href={`${base}/${r.id}/editar`} className="block">
           <Car size={16} className={r.is_collected ? 'text-green-500' : 'text-gray-300'} />
         </Link>
       </td>
@@ -67,7 +68,7 @@ function RecordRow({ r }) {
           {r.is_paid && r.payment_method === 'efectivo' && !r.invoices?.length && (
             <GenerarFacturaBtn id={r.id} />
           )}
-          <Link href={`/admin/historial/${r.id}/editar`} className="text-blue-500 hover:text-blue-700 text-sm transition-colors">
+          <Link href={`${base}/${r.id}/editar`} className="text-blue-500 hover:text-blue-700 text-sm transition-colors">
             Editar
           </Link>
           <EliminarBtn action={eliminarRegistro.bind(null, r.id)} label="registro" />
@@ -77,7 +78,7 @@ function RecordRow({ r }) {
   )
 }
 
-export function HistorialTable({ registros }) {
+export function HistorialTable({ registros, slug }) {
   return (
     <SortableMonthlyTable
       data={registros}
@@ -93,7 +94,7 @@ export function HistorialTable({ registros }) {
         monthBadge: r => r.status === 'pendiente',
         badgeLabel: { singular: 'pendiente', plural: 'pendientes' },
       }}
-      renderRow={r => <RecordRow key={r.id} r={r} />}
+      renderRow={r => <RecordRow key={r.id} r={r} slug={slug} />}
       defaultSort={{ by: 'date', dir: 'asc' }}
       minWidth={750}
       hasActions

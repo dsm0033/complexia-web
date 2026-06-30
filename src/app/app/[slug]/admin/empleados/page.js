@@ -5,7 +5,7 @@ import EmpleadosTable from './_components/EmpleadosTable'
 export const metadata = { title: 'Empleados · Admin IMPECABLE' }
 
 export default async function EmpleadosPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const today = new Date().toISOString().split('T')[0]
 
@@ -40,7 +40,7 @@ export default async function EmpleadosPage() {
           <p className="text-gray-500 mt-1">{empleados?.length ?? 0} empleados registrados</p>
         </div>
         <Link
-          href="/admin/empleados/nuevo"
+          href={`/app/${slug}/admin/empleados/nuevo`}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           + Nuevo empleado
@@ -58,6 +58,7 @@ export default async function EmpleadosPage() {
             empleados={empleados}
             enTurnoIds={enTurnoIds}
             conHorarioIds={conHorarioIds}
+            slug={slug}
           />
         )}
       </div>

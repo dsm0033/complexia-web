@@ -14,7 +14,7 @@ const mesActual = () => {
 }
 
 export default async function CalendarioEmpleadoAdminPage({ params, searchParams }) {
-  const { id } = await params
+  const { slug, id } = await params
   const sp = await searchParams
   const mes = /^\d{4}-\d{2}$/.test(sp?.mes ?? '') ? sp.mes : mesActual()
 
@@ -40,9 +40,9 @@ export default async function CalendarioEmpleadoAdminPage({ params, searchParams
       {/* Cabecera */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-          <a href="/admin/empleados" className="hover:text-gray-700">Empleados</a>
+          <a href={`/app/${slug}/admin/empleados`} className="hover:text-gray-700">Empleados</a>
           <span>/</span>
-          <a href={`/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
+          <a href={`/app/${slug}/admin/empleados/${id}/editar`} className="hover:text-gray-700">{empleado.full_name}</a>
           <span>/</span>
           <span>Calendario</span>
         </div>

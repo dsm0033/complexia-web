@@ -5,7 +5,8 @@ import { crearRegistro } from '../actions'
 
 export const metadata = { title: 'Registrar servicio · Admin IMPECABLE' }
 
-export default async function NuevoRegistroPage() {
+export default async function NuevoRegistroPage({ params }) {
+  const { slug } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const [{ data: clientes }, { data: servicios }, { data: empleados }, vacacionesPorEmpleado] = await Promise.all([
@@ -33,6 +34,7 @@ export default async function NuevoRegistroPage() {
           vacacionesPorEmpleado={vacacionesPorEmpleado}
           initialData={{ date: today }}
           submitLabel="Registrar servicio"
+          slug={slug}
         />
       </div>
     </div>

@@ -5,7 +5,7 @@ import { ClientesTable } from './_components/ClientesTable'
 export const metadata = { title: 'Clientes · Admin IMPECABLE' }
 
 export default async function ClientesPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const { data: raw } = await supabase
     .from('customers')
@@ -27,7 +27,7 @@ export default async function ClientesPage() {
           <p className="text-gray-500 mt-1">{clientes.length} clientes registrados</p>
         </div>
         <Link
-          href="/admin/clientes/nuevo"
+          href={`/app/${slug}/admin/clientes/nuevo`}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           + Nuevo cliente
@@ -41,7 +41,7 @@ export default async function ClientesPage() {
             <p className="text-sm mt-1">Pulsa "Nuevo cliente" para añadir el primero</p>
           </div>
         ) : (
-          <ClientesTable clientes={clientes} />
+          <ClientesTable clientes={clientes} slug={slug} />
         )}
       </div>
     </div>

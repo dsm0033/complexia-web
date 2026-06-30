@@ -49,7 +49,7 @@ export function GastoForm({
   action,
   initialData,
   submitLabel,
-  cancelHref = '/admin/contabilidad/gastos',
+  cancelHref = '#',
   attachedFile = null,
 }) {
   const [state, formAction] = useActionState(action, null)

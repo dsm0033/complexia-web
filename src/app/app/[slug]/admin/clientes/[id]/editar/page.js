@@ -6,7 +6,7 @@ import { editarCliente } from '../../actions'
 export const metadata = { title: 'Editar cliente · Admin IMPECABLE' }
 
 export default async function EditarClientePage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const { data: cliente } = await supabase
@@ -28,7 +28,7 @@ export default async function EditarClientePage({ params }) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <ClienteForm action={action} initialData={cliente} submitLabel="Guardar cambios" />
+        <ClienteForm action={action} initialData={cliente} submitLabel="Guardar cambios" slug={slug} />
       </div>
     </div>
   )

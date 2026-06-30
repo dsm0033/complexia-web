@@ -6,7 +6,7 @@ import { HistorialTable } from './_components/HistorialTable'
 export const metadata = { title: 'Historial · Admin IMPECABLE' }
 
 export default async function HistorialPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const { data: registros } = await supabase
     .from('service_records')
@@ -28,7 +28,7 @@ export default async function HistorialPage() {
           <p className="text-gray-500 mt-1">{registros?.length ?? 0} registros</p>
         </div>
         <Link
-          href="/admin/historial/nuevo"
+          href={`/app/${slug}/admin/historial/nuevo`}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           + Registrar servicio
@@ -37,7 +37,7 @@ export default async function HistorialPage() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
         <Suspense fallback={<div className="p-12 text-center text-gray-400">Cargando...</div>}>
-          <HistorialTable registros={registros ?? []} />
+          <HistorialTable registros={registros ?? []} slug={slug} />
         </Suspense>
       </div>
     </div>

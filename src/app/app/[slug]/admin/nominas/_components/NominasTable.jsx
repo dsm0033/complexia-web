@@ -15,12 +15,12 @@ const COLUMNS = [
   { key: 'empresa',  label: 'Coste empresa', getValue: r => r.calculo.costeEmpresa,  sortable: true, headerAlign: 'right' },
 ]
 
-function NominaRow({ r, mes }) {
+function NominaRow({ r, mes, slug }) {
   const { id, full_name, contrato, calculo } = r
   return (
     <tr key={id} className="hover:bg-gray-50 transition-colors border-b border-gray-50">
       <td className="px-6 py-4">
-        <a href={`/admin/empleados/${id}/contrato`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors">
+        <a href={`/app/${slug}/admin/empleados/${id}/contrato`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors">
           {full_name}
         </a>
         <div className="flex items-center gap-2 mt-0.5">
@@ -54,7 +54,7 @@ function NominaRow({ r, mes }) {
   )
 }
 
-export function NominasTable({ empleados, mes }) {
+export function NominasTable({ empleados, mes, slug }) {
   return (
     <SortableMonthlyTable
       data={empleados}
@@ -63,7 +63,7 @@ export function NominasTable({ empleados, mes }) {
         placeholder: 'Buscar por empleado...',
         fields: r => [r.full_name],
       }}
-      renderRow={r => <NominaRow key={r.id} r={r} mes={mes} />}
+      renderRow={r => <NominaRow key={r.id} r={r} mes={mes} slug={slug} />}
       defaultSort={{ by: 'empleado', dir: 'asc' }}
       minWidth={650}
       hasActions

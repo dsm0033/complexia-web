@@ -40,7 +40,7 @@ function SubmitBtn({ label }) {
   )
 }
 
-export function ServicioForm({ action, initialData, checklists = [], submitLabel }) {
+export function ServicioForm({ action, initialData, checklists = [], submitLabel, slug }) {
   const [state, formAction] = useActionState(action, null)
 
   return (
@@ -164,7 +164,7 @@ export function ServicioForm({ action, initialData, checklists = [], submitLabel
 
       <div className="flex items-center gap-4 pt-2">
         <SubmitBtn label={submitLabel} />
-        <a href="/admin/servicios" className="text-sm text-gray-500 hover:text-gray-700">
+        <a href={`/app/${slug}/admin/servicios`} className="text-sm text-gray-500 hover:text-gray-700">
           Cancelar
         </a>
       </div>

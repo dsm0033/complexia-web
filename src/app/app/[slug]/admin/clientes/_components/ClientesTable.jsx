@@ -7,7 +7,7 @@ import { Search } from 'lucide-react'
 import { EliminarBtn } from '@/components/EliminarBtn'
 import { eliminarCliente } from '../actions'
 
-export function ClientesTable({ clientes }) {
+export function ClientesTable({ clientes, slug }) {
   const [query, setQuery] = useState('')
   const router = useRouter()
 
@@ -63,7 +63,7 @@ export function ClientesTable({ clientes }) {
               <tr
                 key={c.id}
                 className="border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
-                onClick={() => router.push(`/admin/clientes/${c.id}`)}
+                onClick={() => router.push(`/app/${slug}/admin/clientes/${c.id}`)}
               >
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">{c.full_name}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">{c.email || '—'}</td>
@@ -80,7 +80,7 @@ export function ClientesTable({ clientes }) {
                 <td className="px-6 py-4 text-right" onClick={e => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-4">
                     <Link
-                      href={`/admin/clientes/${c.id}/editar`}
+                      href={`/app/${slug}/admin/clientes/${c.id}/editar`}
                       className="text-blue-500 hover:text-blue-700 text-sm transition-colors"
                     >
                       Editar

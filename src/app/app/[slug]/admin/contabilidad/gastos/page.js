@@ -7,7 +7,7 @@ import { GastosTable } from './_components/GastosTable'
 export const metadata = { title: 'Gastos · Admin IMPECABLE' }
 
 export default async function AdminGastosPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const { data: gastos } = await supabase
     .from('expenses')
@@ -32,7 +32,7 @@ export default async function AdminGastosPage() {
             </div>
           )}
           <Link
-            href="/admin/contabilidad/gastos/nuevo"
+            href={`/app/${slug}/admin/contabilidad/gastos/nuevo`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus size={16} />
@@ -50,7 +50,7 @@ export default async function AdminGastosPage() {
           </div>
         ) : (
           <Suspense fallback={<div className="p-12 text-center text-gray-400">Cargando...</div>}>
-            <GastosTable gastos={gastos} />
+            <GastosTable gastos={gastos} slug={slug} />
           </Suspense>
         )}
       </div>

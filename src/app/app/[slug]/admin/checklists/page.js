@@ -6,7 +6,7 @@ import { EliminarBtn } from '@/components/EliminarBtn'
 export const metadata = { title: 'Checklists · Admin IMPECABLE' }
 
 export default async function ChecklistsPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const { data: checklists } = await supabase
     .from('checklists')
@@ -22,7 +22,7 @@ export default async function ChecklistsPage() {
           <p className="text-gray-500 mt-1">{checklists?.length ?? 0} checklists creados</p>
         </div>
         <Link
-          href="/admin/checklists/nuevo"
+          href={`/app/${slug}/admin/checklists/nuevo`}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           + Nuevo checklist
@@ -78,7 +78,7 @@ export default async function ChecklistsPage() {
                     </button>
                   </form>
                   <Link
-                    href={`/admin/checklists/${c.id}/editar`}
+                    href={`/app/${slug}/admin/checklists/${c.id}/editar`}
                     className="text-blue-500 hover:text-blue-700 text-sm transition-colors"
                   >
                     Editar

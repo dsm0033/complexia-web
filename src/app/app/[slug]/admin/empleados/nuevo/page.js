@@ -3,7 +3,8 @@ import { crearEmpleado } from '../actions'
 
 export const metadata = { title: 'Nuevo empleado · Admin IMPECABLE' }
 
-export default function NuevoEmpleadoPage() {
+export default async function NuevoEmpleadoPage({ params }) {
+  const { slug } = await params
   return (
     <div>
       <div className="mb-8">
@@ -12,7 +13,7 @@ export default function NuevoEmpleadoPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <EmpleadoForm action={crearEmpleado} submitLabel="Crear empleado" />
+        <EmpleadoForm action={crearEmpleado} submitLabel="Crear empleado" slug={slug} />
       </div>
     </div>
   )

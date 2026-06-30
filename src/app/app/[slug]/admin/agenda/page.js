@@ -33,7 +33,7 @@ export default async function AgendaPage({ searchParams }) {
   const vista = VISTAS.includes(params?.vista) ? params.vista : 'dia'
   const hoy = hoyISO()
 
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   // Rango de fechas a consultar según la vista
   let desde, hasta
@@ -175,7 +175,7 @@ export default async function AgendaPage({ searchParams }) {
               eventos: (eventosPorDia[d] ?? []).slice().sort((a, b) => a.inicio - b.inicio),
             }
           })
-          return <AgendaMes celdas={celdasData} />
+          return <AgendaMes celdas={celdasData} slug={slug} />
         })()}
       </div>
 

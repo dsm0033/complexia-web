@@ -8,7 +8,7 @@ import { actualizarGasto } from '../../actions'
 export const metadata = { title: 'Editar gasto · Admin IMPECABLE' }
 
 export default async function EditarGastoPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const { data: gasto } = await supabase
@@ -25,7 +25,7 @@ export default async function EditarGastoPage({ params }) {
   return (
     <div>
       <Link
-        href="/admin/contabilidad/gastos"
+        href={`/app/${slug}/admin/contabilidad/gastos`}
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-6"
       >
         <ChevronLeft size={16} />
@@ -35,7 +35,7 @@ export default async function EditarGastoPage({ params }) {
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Editar gasto</h1>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <GastoForm action={action} initialData={gasto} submitLabel="Guardar cambios" />
+        <GastoForm action={action} initialData={gasto} submitLabel="Guardar cambios" cancelHref={`/app/${slug}/admin/contabilidad/gastos`} />
       </div>
     </div>
   )

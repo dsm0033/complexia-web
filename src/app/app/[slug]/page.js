@@ -29,20 +29,30 @@ const PROCESO = [
   { step: "06", title: "Entrega", desc: "Revisión final, ambientador y entrega con el trabajo explicado." },
 ];
 
-export default async function HomePage() {
+export default async function HomePage({ params }) {
+  const { slug } = await params;
   const supabase = await createClient();
   const adminSupabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const [{ data: servicios }, { data: businessId }] = await Promise.all([
-    supabase
-      .from("services")
-      .select("id, name, description, price, duration_minutes, active, icon, highlight")
-      .order("sort_order"),
-    supabase.rpc("get_default_business_id"),
-  ]);
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("id")
+    .eq("slug", slug)
+    .eq("active", true)
+    .single();
+
+  const businessId = business?.id ?? null;
+
+  const { data: servicios } = businessId
+    ? await supabase
+        .from("services")
+        .select("id, name, description, price, duration_minutes, active, icon, highlight")
+        .eq("business_id", businessId)
+        .order("sort_order")
+    : { data: [] };
 
   const { data: settings } = businessId
     ? await adminSupabase
@@ -115,7 +125,7 @@ export default async function HomePage() {
           <div className="fade-in flex gap-4 justify-center flex-wrap"
             style={{ animationDelay: "0.5s" }}
           >
-            <Link href="/servicios"
+            <Link href="#servicios"
               className="font-sans text-sm font-semibold px-8 py-3.5 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
             >
               Servicios

@@ -16,7 +16,7 @@ function SubmitBtn({ label }) {
   )
 }
 
-export function ClienteForm({ action, initialData, submitLabel }) {
+export function ClienteForm({ action, initialData, submitLabel, slug }) {
   const [state, formAction] = useActionState(action, null)
 
   return (
@@ -69,7 +69,7 @@ export function ClienteForm({ action, initialData, submitLabel }) {
 
       <div className="flex items-center gap-4 pt-2">
         <SubmitBtn label={submitLabel} />
-        <a href="/admin/clientes" className="text-sm text-gray-500 hover:text-gray-700">
+        <a href={`/app/${slug}/admin/clientes`} className="text-sm text-gray-500 hover:text-gray-700">
           Cancelar
         </a>
       </div>

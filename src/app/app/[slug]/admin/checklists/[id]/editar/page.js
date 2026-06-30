@@ -6,7 +6,7 @@ import { editarChecklist } from '../../actions'
 export const metadata = { title: 'Editar checklist · Admin IMPECABLE' }
 
 export default async function EditarChecklistPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const { data: checklist } = await supabase
@@ -28,7 +28,7 @@ export default async function EditarChecklistPage({ params }) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <ChecklistForm action={action} initialData={checklist} submitLabel="Guardar cambios" />
+        <ChecklistForm action={action} initialData={checklist} submitLabel="Guardar cambios" slug={slug} />
       </div>
     </div>
   )

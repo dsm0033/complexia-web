@@ -6,7 +6,7 @@ import { editarServicio } from '@/app/actions/services'
 export const metadata = { title: 'Editar servicio · Admin IMPECABLE' }
 
 export default async function EditarServicioPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const [{ data: servicio }, { data: checklists }] = await Promise.all([
@@ -36,7 +36,7 @@ export default async function EditarServicioPage({ params }) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <ServicioForm action={action} initialData={servicio} checklists={checklists ?? []} submitLabel="Guardar cambios" />
+        <ServicioForm action={action} initialData={servicio} checklists={checklists ?? []} submitLabel="Guardar cambios" slug={slug} />
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { isoLocal } from '@/lib/agenda'
 
@@ -12,7 +12,8 @@ const VISTAS = [
 
 export default function VistaNav({ date, vista }) {
   const router = useRouter()
-  const go = (v, d) => router.push(`/admin/agenda?vista=${v}&date=${d}`)
+  const pathname = usePathname()
+  const go = (v, d) => router.push(`${pathname}?vista=${v}&date=${d}`)
 
   // ‹ › avanza según la vista: 1 día / 7 días / 1 mes
   const shift = n => {

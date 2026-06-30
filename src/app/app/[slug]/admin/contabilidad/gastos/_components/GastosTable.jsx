@@ -46,7 +46,7 @@ const COLUMNS = [
   {                     label: 'Pago' },
 ]
 
-function GastoRow({ g, onDeleted }) {
+function GastoRow({ g, onDeleted, slug }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -83,7 +83,7 @@ function GastoRow({ g, onDeleted }) {
       <td className="px-6 py-4 text-right">
         <div className="inline-flex items-center gap-3">
           <a
-            href={`/admin/contabilidad/gastos/${g.id}/editar`}
+            href={`/app/${slug}/admin/contabilidad/gastos/${g.id}/editar`}
             className="text-blue-500 hover:text-blue-700 transition-colors"
             title="Editar"
           >
@@ -103,7 +103,7 @@ function GastoRow({ g, onDeleted }) {
   )
 }
 
-export function GastosTable({ gastos: initialGastos }) {
+export function GastosTable({ gastos: initialGastos, slug }) {
   const [gastos, setGastos] = useState(initialGastos)
 
   return (
@@ -126,6 +126,7 @@ export function GastosTable({ gastos: initialGastos }) {
           key={g.id}
           g={g}
           onDeleted={() => setGastos(prev => prev.filter(x => x.id !== g.id))}
+          slug={slug}
         />
       )}
       defaultSort={{ by: 'fecha', dir: 'desc' }}

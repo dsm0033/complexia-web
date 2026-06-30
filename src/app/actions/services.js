@@ -13,8 +13,8 @@ export async function toggleServicio(id, active) {
     .eq('id', id)
     .eq('business_id', ctx.businessId)
 
-  revalidatePath('/admin/servicios')
-  revalidatePath('/servicios')
+  revalidatePath(`/app/${ctx.slug}/admin/servicios`)
+  revalidatePath(`/app/${ctx.slug}`)
 }
 
 const VEHICLE_KEYS = ['turismo_pequeno', 'turismo', 'suv', 'furgoneta', 'caravana']
@@ -62,9 +62,9 @@ export async function crearServicio(prevState, formData) {
 
   if (error) return { error: error.message }
 
-  revalidatePath('/admin/servicios')
-  revalidatePath('/servicios')
-  redirect('/admin/servicios')
+  revalidatePath(`/app/${ctx.slug}/admin/servicios`)
+  revalidatePath(`/app/${ctx.slug}`)
+  redirect(`/app/${ctx.slug}/admin/servicios`)
 }
 
 export async function editarServicio(id, prevState, formData) {
@@ -95,9 +95,9 @@ export async function editarServicio(id, prevState, formData) {
 
   if (error) return { error: error.message }
 
-  revalidatePath('/admin/servicios')
-  revalidatePath('/servicios')
-  redirect('/admin/servicios')
+  revalidatePath(`/app/${ctx.slug}/admin/servicios`)
+  revalidatePath(`/app/${ctx.slug}`)
+  redirect(`/app/${ctx.slug}/admin/servicios`)
 }
 
 export async function moverServicio(id, direction) {
@@ -124,8 +124,8 @@ export async function moverServicio(id, direction) {
     ctx.supabase.from('services').update({ sort_order: current.sort_order }).eq('id', swap.id),
   ])
 
-  revalidatePath('/admin/servicios')
-  revalidatePath('/servicios')
+  revalidatePath(`/app/${ctx.slug}/admin/servicios`)
+  revalidatePath(`/app/${ctx.slug}`)
 }
 
 export async function eliminarServicio(id) {
@@ -138,6 +138,6 @@ export async function eliminarServicio(id) {
     .eq('id', id)
     .eq('business_id', ctx.businessId)
 
-  revalidatePath('/admin/servicios')
-  revalidatePath('/servicios')
+  revalidatePath(`/app/${ctx.slug}/admin/servicios`)
+  revalidatePath(`/app/${ctx.slug}`)
 }

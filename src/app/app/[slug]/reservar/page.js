@@ -6,7 +6,8 @@ export const metadata = {
   title: 'Reservar · IMPECABLE',
 }
 
-export default async function ReservarPage({ searchParams }) {
+export default async function ReservarPage({ params, searchParams }) {
+  const { slug } = await params
   const { servicio: defaultServicioId } = await searchParams
   const supabase = await createClient()
   const adminSupabase = createAdminClient(
@@ -16,14 +17,23 @@ export default async function ReservarPage({ searchParams }) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: services }, { data: businessId }] = await Promise.all([
-    supabase
-      .from('services')
-      .select('id, name, description, price, duration_minutes, vehicle_pricing')
-      .eq('active', true)
-      .order('sort_order', { ascending: true }),
-    supabase.rpc('get_default_business_id'),
-  ])
+  const { data: business } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('slug', slug)
+    .eq('active', true)
+    .single()
+
+  const businessId = business?.id ?? null
+
+  const { data: services } = businessId
+    ? await supabase
+        .from('services')
+        .select('id, name, description, price, duration_minutes, vehicle_pricing')
+        .eq('business_id', businessId)
+        .eq('active', true)
+        .order('sort_order', { ascending: true })
+    : { data: [] }
 
   // Pre-rellenar datos del cliente si está autenticado
   let customerData = null
@@ -31,7 +41,7 @@ export default async function ReservarPage({ searchParams }) {
     const { data } = await supabase
       .from('customers')
       .select('full_name')
-      .eq('user_id', user.id)
+      .eq('auth_user_id', user.id)
       .maybeSingle()
     customerData = data
   }
@@ -55,6 +65,8 @@ export default async function ReservarPage({ searchParams }) {
         <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
           {services?.length > 0 ? (
             <BookingForm
+              slug={slug}
+              businessId={businessId}
               services={services}
               advanceDays={settings?.booking_advance_days ?? 60}
               discountPct={settings?.advance_payment_discount ?? 0}

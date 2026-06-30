@@ -8,7 +8,8 @@ export const metadata = {
   title: 'Reserva confirmada · IMPECABLE',
 }
 
-export default async function ConfirmadoPage({ searchParams }) {
+export default async function ConfirmadoPage({ params, searchParams }) {
+  const { slug } = await params
   const { session_id, tipo } = await searchParams
 
   const supabase = await createClient()
@@ -35,7 +36,7 @@ export default async function ConfirmadoPage({ searchParams }) {
             </a>
           </p>
           <Link
-            href={isCliente ? '/cliente' : '/'}
+            href={isCliente ? `/app/${slug}/cliente` : `/app/${slug}`}
             className="inline-block bg-dorado text-fondo px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-dorado-dim transition-colors"
           >
             {isCliente ? 'Ver mi portal' : 'Volver al inicio'}
@@ -46,7 +47,7 @@ export default async function ConfirmadoPage({ searchParams }) {
   }
 
   // ── Pago online (Stripe) ───────────────────────────────────
-  if (!session_id) redirect('/reservar')
+  if (!session_id) redirect(`/app/${slug}/reservar`)
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -54,10 +55,10 @@ export default async function ConfirmadoPage({ searchParams }) {
   try {
     session = await stripe.checkout.sessions.retrieve(session_id)
   } catch {
-    redirect('/reservar')
+    redirect(`/app/${slug}/reservar`)
   }
 
-  if (session.payment_status !== 'paid') redirect('/reservar')
+  if (session.payment_status !== 'paid') redirect(`/app/${slug}/reservar`)
 
   const lineItem = session.amount_total ? (session.amount_total / 100).toFixed(2) : null
 
@@ -84,7 +85,7 @@ export default async function ConfirmadoPage({ searchParams }) {
           </a>
         </p>
         <Link
-          href={isCliente ? '/cliente' : '/'}
+          href={isCliente ? `/app/${slug}/cliente` : `/app/${slug}`}
           className="inline-block bg-dorado text-fondo px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-dorado-dim transition-colors"
         >
           {isCliente ? 'Ver mi portal' : 'Volver al inicio'}

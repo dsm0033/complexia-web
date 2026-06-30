@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { CheckCircle2, Circle, Clock, ChevronDown, ChevronRight, Pause, Play } from 'lucide-react'
 import Link from 'next/link'
-import { actualizarProgreso, completarTrabajo, iniciarTrabajo } from '@/app/empleado/actions'
+import { actualizarProgreso, completarTrabajo, iniciarTrabajo } from '../../actions'
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60).toString().padStart(2, '0')
@@ -11,7 +11,7 @@ function formatTime(seconds) {
   return `${m}:${s}`
 }
 
-export default function ChecklistInteractivo({ recordId, items, initialProgress, duration, status, startedAt }) {
+export default function ChecklistInteractivo({ recordId, items, initialProgress, duration, status, startedAt, slug }) {
   const [checked, setChecked] = useState(() => new Set(initialProgress))
   const [seconds, setSeconds] = useState(0)
   const [running, setRunning] = useState(false)
@@ -172,7 +172,7 @@ export default function ChecklistInteractivo({ recordId, items, initialProgress,
           <p className="text-xl font-semibold text-texto">¡Trabajo completado!</p>
           <p className="text-sm text-muted mt-1">Tiempo total: {formatTime(seconds)}</p>
           <Link
-            href="/empleado"
+            href={`/app/${slug}/empleado`}
             className="inline-block mt-6 px-6 py-3 bg-borde text-dorado rounded-xl font-medium hover:bg-dorado hover:text-fondo transition-colors"
           >
             Volver a mis trabajos

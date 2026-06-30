@@ -6,7 +6,7 @@ import { EliminarBtn } from '@/components/EliminarBtn'
 export const metadata = { title: 'Servicios · Admin IMPECABLE' }
 
 export default async function ServiciosPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const { data: servicios } = await supabase
     .from('services')
@@ -22,7 +22,7 @@ export default async function ServiciosPage() {
           <p className="text-gray-500 mt-1">{servicios?.length ?? 0} servicios configurados</p>
         </div>
         <Link
-          href="/admin/servicios/nuevo"
+          href={`/app/${slug}/admin/servicios/nuevo`}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           + Nuevo servicio
@@ -94,7 +94,7 @@ export default async function ServiciosPage() {
                         </button>
                       </form>
                       <Link
-                        href={`/admin/servicios/${s.id}/editar`}
+                        href={`/app/${slug}/admin/servicios/${s.id}/editar`}
                         className="text-blue-500 hover:text-blue-700 text-sm transition-colors"
                       >
                         Editar

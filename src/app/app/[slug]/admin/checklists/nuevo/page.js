@@ -3,7 +3,8 @@ import { crearChecklist } from '../actions'
 
 export const metadata = { title: 'Nuevo checklist · Admin IMPECABLE' }
 
-export default function NuevoChecklistPage() {
+export default async function NuevoChecklistPage({ params }) {
+  const { slug } = await params
   return (
     <div>
       <div className="mb-8">
@@ -12,7 +13,7 @@ export default function NuevoChecklistPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <ChecklistForm action={crearChecklist} submitLabel="Crear checklist" />
+        <ChecklistForm action={crearChecklist} submitLabel="Crear checklist" slug={slug} />
       </div>
     </div>
   )

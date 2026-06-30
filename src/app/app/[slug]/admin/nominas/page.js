@@ -9,12 +9,12 @@ export const metadata = { title: 'Nóminas · Admin IMPECABLE' }
 const fmt = n => Number(n).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'
 
 export default async function NominasPage({ searchParams }) {
-  const params = await searchParams
+  const sp = await searchParams
   const hoy = new Date()
-  const mes = params.mes || `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`
+  const mes = sp.mes || `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`
   const year = parseInt(mes.split('-')[0])
 
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const [
     { data: empleados },
@@ -121,7 +121,7 @@ export default async function NominasPage({ searchParams }) {
             <p className="text-sm mt-1">Asigna un contrato a cada empleado desde su ficha</p>
           </div>
         ) : (
-          <NominasTable empleados={conContrato} mes={mes} />
+          <NominasTable empleados={conContrato} mes={mes} slug={slug} />
         )}
       </div>
 
@@ -135,7 +135,7 @@ export default async function NominasPage({ searchParams }) {
             {sinContrato.map(e => (
               <li key={e.id} className="flex items-center justify-between text-sm text-amber-700">
                 <span>{e.full_name}</span>
-                <a href={`/admin/empleados/${e.id}/contrato`} className="text-amber-900 font-medium hover:underline">
+                <a href={`/app/${slug}/admin/empleados/${e.id}/contrato`} className="text-amber-900 font-medium hover:underline">
                   Asignar contrato →
                 </a>
               </li>

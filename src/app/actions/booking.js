@@ -39,7 +39,8 @@ export async function crearReserva(prevState, formData) {
   // Resolver tenant por slug — el form de reserva pasa business_id como campo oculto.
   // Usamos el ID directamente (ya validado al cargar la página por slug).
   const businessId = formData.get('business_id')
-  if (!businessId) return { error: 'Error interno. Inténtalo más tarde.' }
+  const slug = formData.get('slug')
+  if (!businessId || !slug) return { error: 'Error interno. Inténtalo más tarde.' }
 
   const { data: settings } = await db
     .from('business_settings')
@@ -129,7 +130,7 @@ export async function crearReserva(prevState, formData) {
       paymentMethod,
     })
 
-    redirect('/reservar/confirmado?tipo=local')
+    redirect(`/app/${slug}/reservar/confirmado?tipo=local`)
   }
 
   // ── PAGO ONLINE (STRIPE) ───────────────────────────────────
@@ -142,8 +143,8 @@ export async function crearReserva(prevState, formData) {
     description:   productDescription,
     amountCents:   Math.round(finalPrice * 100),
     customerEmail: customer_email,
-    successUrl:    `${process.env.NEXT_PUBLIC_SITE_URL}/reservar/confirmado?session_id={CHECKOUT_SESSION_ID}`,
-    cancelUrl:     `${process.env.NEXT_PUBLIC_SITE_URL}/reservar`,
+    successUrl:    `${process.env.NEXT_PUBLIC_SITE_URL}/app/${slug}/reservar/confirmado?session_id={CHECKOUT_SESSION_ID}`,
+    cancelUrl:     `${process.env.NEXT_PUBLIC_SITE_URL}/app/${slug}/reservar`,
     metadata:      { booking_id: booking.id },
   })
 

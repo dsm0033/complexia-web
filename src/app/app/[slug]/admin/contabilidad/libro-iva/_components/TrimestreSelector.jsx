@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 const TRIMESTRES = [
   { value: 1, label: 'T1 · Ene–Mar' },
@@ -11,8 +11,9 @@ const TRIMESTRES = [
 
 export default function TrimestreSelector({ year, trimestre, years }) {
   const router = useRouter()
+  const pathname = usePathname()
   const go = (y, t) =>
-    router.push(`/admin/contabilidad/libro-iva?year=${y}&trimestre=${t}`)
+    router.push(`${pathname}?year=${y}&trimestre=${t}`)
 
   const selectClass =
     'border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500'

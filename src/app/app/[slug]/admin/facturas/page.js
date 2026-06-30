@@ -7,7 +7,7 @@ import { FacturasTable } from './_components/FacturasTable'
 export const metadata = { title: 'Facturas · Admin IMPECABLE' }
 
 export default async function AdminFacturasPage() {
-  const { supabase, businessId } = await getAdminPageCtx()
+  const { supabase, businessId, slug } = await getAdminPageCtx()
 
   const [{ data: facturas }, { data: business }] = await Promise.all([
     supabase
@@ -35,7 +35,7 @@ export default async function AdminFacturasPage() {
             <p className="mt-0.5">
               No se emitirán facturas hasta completar el <strong>NIF</strong> y el <strong>domicilio fiscal</strong> del
               negocio (obligatorios por ley).{' '}
-              <Link href="/admin/configuracion/empresa" className="underline font-medium hover:text-amber-900">
+              <Link href={`/app/${slug}/admin/configuracion/empresa`} className="underline font-medium hover:text-amber-900">
                 Completar datos de empresa →
               </Link>
             </p>

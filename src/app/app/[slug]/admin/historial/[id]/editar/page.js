@@ -9,7 +9,7 @@ import { editarRegistro } from '../../actions'
 export const metadata = { title: 'Editar registro · Admin IMPECABLE' }
 
 export default async function EditarRegistroPage({ params }) {
-  const { id } = await params
+  const { slug, id } = await params
   const { supabase, businessId } = await getAdminPageCtx()
 
   const [{ data: registro }, { data: clientes }, { data: servicios }, { data: empleados }, vacacionesPorEmpleado] =
@@ -28,7 +28,7 @@ export default async function EditarRegistroPage({ params }) {
   return (
     <div>
       <div className="mb-8">
-        <Link href="/admin/historial" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-4">
+        <Link href={`/app/${slug}/admin/historial`} className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-4">
           <ArrowLeft size={15} />
           Volver al historial
         </Link>
@@ -45,6 +45,7 @@ export default async function EditarRegistroPage({ params }) {
           vacacionesPorEmpleado={vacacionesPorEmpleado}
           initialData={registro}
           submitLabel="Guardar cambios"
+          slug={slug}
         />
       </div>
     </div>

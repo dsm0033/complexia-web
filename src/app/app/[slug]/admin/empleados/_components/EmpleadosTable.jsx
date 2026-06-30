@@ -6,7 +6,7 @@ import { Search } from 'lucide-react'
 import { toggleEmpleado, eliminarEmpleado } from '../actions'
 import { EliminarBtn } from '@/components/EliminarBtn'
 
-export default function EmpleadosTable({ empleados, enTurnoIds, conHorarioIds }) {
+export default function EmpleadosTable({ empleados, enTurnoIds, conHorarioIds, slug }) {
   const [query, setQuery] = useState('')
   const router = useRouter()
   const enTurnoSet    = new Set(enTurnoIds)
@@ -63,7 +63,7 @@ export default function EmpleadosTable({ empleados, enTurnoIds, conHorarioIds })
             {filtered.map(e => (
               <tr
                 key={e.id}
-                onClick={() => router.push(`/admin/empleados/${e.id}/editar`)}
+                onClick={() => router.push(`/app/${slug}/admin/empleados/${e.id}/editar`)}
                 className="border-b border-gray-50 hover:bg-blue-50 transition-colors cursor-pointer"
               >
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">{e.full_name}</td>
