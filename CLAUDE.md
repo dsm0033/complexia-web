@@ -8,9 +8,12 @@ Guía de trabajo para Claude en este proyecto.
 
 ## Qué es este proyecto
 
-**ComplexIA** es una plataforma SaaS multi-tenant para PYMEs del sector servicios.
+**ComplexIA** tiene dos líneas de negocio en el mismo repo:
 
-**La Impecable** (estética de vehículos) es el primer tenant (`slug = 'la-impecable'`). Antes de Junio 2026 este repo era una web de consultoría estática — ese contenido fue reemplazado en el Sprint 12.
+1. **SaaS multi-tenant** (línea principal) — plataforma para PYMEs del sector servicios. La Impecable (estética de vehículos) es el primer tenant (`slug = 'la-impecable'`).
+2. **Consultoría de IA** (apartado secundario) — servicios a medida bajo `/consultoria`. Convive con el SaaS como sección del mismo sitio.
+
+Antes de Junio 2026 este repo era solo la web de consultoría estática — el SaaS se añadió en el Sprint 12.
 
 El repo original de La Impecable (`la-impecable/`) queda como rollback de emergencia. No tocar.
 
