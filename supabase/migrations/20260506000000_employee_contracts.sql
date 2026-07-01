@@ -1,0 +1,2 @@
+-- Migración movida a 20260506010000_employee_contracts.sql
+-- Este archivo se mantiene vacío para no alterar el historial de timestamps.

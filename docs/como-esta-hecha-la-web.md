@@ -1,5 +1,12 @@
 # Cómo está hecha la web de ComplexIA
 
+> ⚠️ **Nota (1 Julio 2026):** este documento describe únicamente la parte de **consultoría** de la web
+> (landing en `/`, formulario de contacto) tal como era antes de la migración SaaS del Sprint 12. Sigue
+> siendo correcto para esa parte, pero el proyecto ahora es mucho más grande: incluye una plataforma
+> SaaS multi-tenant completa (Supabase, Stripe, paneles admin/empleado/cliente). Para el estado real y
+> completo del proyecto, ver `ARQUITECTURA.md` en esta misma carpeta. Este documento se conserva como
+> introducción sencilla a los conceptos base de Next.js/Tailwind, útil para quien empieza.
+
 ## La tecnología: Next.js
 
 Usamos **Next.js**, un framework que junta frontend y backend en el mismo proyecto. Por eso no hay dos carpetas separadas — es intencionado.

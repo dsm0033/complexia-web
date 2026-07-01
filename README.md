@@ -1,6 +1,13 @@
-# ComplexIA — Web Corporativa
+# ComplexIA
 
-Plataforma web de **ComplexIA**, consultoría de inteligencia artificial para PYMEs españolas. Ayuda a pequeñas y medianas empresas a dar el salto digital con soluciones de IA accesibles, personalizadas y orientadas a resultados.
+Plataforma **SaaS multi-tenant** para PYMEs del sector servicios (reservas, empleados, facturación,
+nóminas), con la web de consultoría de IA de ComplexIA conviviendo como landing en `/`.
+
+La Impecable (estética de vehículos) es el primer tenant (`slug = 'la-impecable'`), migrado a este
+repo en el Sprint 12 desde su repo original (`la-impecable`, ahora legacy — no se toca).
+
+**Documentación completa:** ver `docs/ARQUITECTURA.md` (estado real y actualizado), `docs/SPRINTS.md`
+y `docs/PRODUCT_BACKLOG.md`.
 
 ---
 
@@ -8,117 +15,75 @@ Plataforma web de **ComplexIA**, consultoría de inteligencia artificial para PY
 
 | Capa | Tecnología |
 |---|---|
-| Framework | Next.js 14 (App Router) |
-| Lenguaje | JavaScript / JSX |
-| Estilos | Tailwind CSS v3 con paleta verde personalizada |
-| Iconos | Heroicons v2 |
-| Email | Resend (formulario de contacto) |
-| Font | Inter (Google Fonts vía `next/font`) |
-| Deploy | Vercel (previsto) |
+| Framework | Next.js 16 (App Router) + React 19 |
+| Lenguaje | JavaScript / JSX — sin TypeScript |
+| Estilos | Tailwind CSS v4 |
+| Iconos | Lucide React (consultoría: Heroicons) |
+| Base de datos | Supabase (Postgres + Auth + RLS multi-tenant) |
+| Pagos | Stripe |
+| Email SaaS | Resend · Email consultoría (`/api/contacto`): Nodemailer/SMTP SERED |
+| Observabilidad | Sentry |
+| Tests | Vitest (`npm test`) — 80 tests unitarios en `src/lib/` |
+| Deploy | Vercel |
 
 ---
 
-## Arquitectura de carpetas
+## Estructura de carpetas
 
 ```
 complexia-web/
-├── app/                        # Rutas (Next.js App Router)
-│   ├── layout.jsx              # Root layout global
-│   ├── page.jsx                # Landing page (one-page scroll)
-│   ├── blog/
-│   │   ├── page.jsx            # Índice del blog
-│   │   └── [slug]/page.jsx     # Artículo individual
-│   ├── servicios/
-│   │   └── [slug]/page.jsx     # Página de detalle de servicio
-│   ├── casos/
-│   │   └── [slug]/page.jsx     # Caso de éxito detallado
-│   └── api/
-│       └── contacto/route.js   # Endpoint de envío de email (Resend)
-│
-├── components/
-│   ├── ui/                     # Primitivos reutilizables (Navbar, Footer, Button…)
-│   └── sections/               # Secciones de la landing (Hero, Servicios, Contacto…)
-│
-├── content/                    # Contenido estático en JSON/MDX
-│   ├── blog/
-│   ├── servicios/
-│   └── casos/
-│
-├── lib/
-│   ├── tokens.js               # Design tokens (paleta verde HSL)
-│   └── mail.js                 # Wrapper Resend
-│
-└── public/
-    └── images/                 # Assets estáticos
+├── src/
+│   ├── app/
+│   │   ├── page.jsx             # Landing (hoy: consultoría; plan: landing SaaS)
+│   │   ├── login/ · auth/ · superadmin/
+│   │   └── app/[slug]/          # Rutas del tenant (público, admin, empleado, cliente)
+│   ├── components/
+│   ├── lib/                     # Lógica pura + clientes Supabase/Stripe
+│   └── proxy.js                 # Next 16: nunca middleware.js
+├── supabase/migrations/         # Histórico de esquema SQL
+├── docs/                        # Documentación viva del proyecto
+└── vercel.json                  # Cron de recordatorios
 ```
 
----
-
-## Secciones de la landing
-
-| Sección | ID | Estado |
-|---|---|---|
-| Navbar | — | Hecho |
-| Hero + stats | `#hero` | Hecho |
-| Servicios | `#servicios` | Pendiente |
-| Metodología | `#metodologia` | Pendiente |
-| Casos de éxito | `#casos` | Pendiente |
-| Nosotros | `#nosotros` | Pendiente |
-| Contacto | `#contacto` | Pendiente |
-| Footer | — | Pendiente |
-
----
-
-## Páginas adicionales previstas
-
-- `/blog` — Artículos sobre IA para PYMEs
-- `/servicios/[slug]` — Detalle de cada servicio ofrecido
-- `/casos/[slug]` — Casos de éxito con métricas reales
-
----
-
-## Sistema de diseño
-
-Paleta monocromática verde personalizada (H=145 S=46.7%) definida en `lib/tokens.js` y registrada en `tailwind.config.js`.
-
-| Token | Uso principal |
-|---|---|
-| `green-700` | Botones primarios, enlaces activos |
-| `green-800` | Hover de botones, texto secundario |
-| `green-900` | Stats bar, fondos oscuros |
-| `green-950` | Títulos principales |
-| `green-100` | Fondos suaves, pills |
-| `green-50` | Fondo de secciones alternadas |
+Detalle completo en `docs/ARQUITECTURA.md`.
 
 ---
 
 ## Comandos
 
 ```bash
-# Instalar dependencias
 npm install
-
-# Servidor de desarrollo
-npm run dev
-
-# Build de producción
+npm run dev      # localhost:3000
 npm run build
-
-# Arrancar producción local
 npm run start
-
-# Lint
 npm run lint
+npm test          # Vitest — tests unitarios de src/lib/
+npm run test:watch
 ```
 
 ---
 
-## Formulario de contacto
-
-El formulario en `#contacto` envía un email mediante **Resend** a través de `app/api/contacto/route.js`. Requiere la variable de entorno:
+## Variables de entorno (`.env.local`)
 
 ```
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+RESEND_API_KEY=
+ANTHROPIC_API_KEY=
+CRON_SECRET=
+NEXT_PUBLIC_SENTRY_DSN=
+NEXT_PUBLIC_GA_ID=
+SMTP_PASS=           # ⚠️ falta en .env.local — necesaria para /api/contacto (formulario de consultoría)
 ```
 
-Crear un archivo `.env.local` en la raíz de `complexia-web/` con esa clave antes de usar el formulario en local.
+---
+
+## Qué NO hacer
+
+Ver `CLAUDE.md` — resumen: sin TypeScript, sin `middleware.js` (usar `src/proxy.js`), sin `LIMIT 1`
+para resolver `business_id` (siempre por `slug`), sin Heroicons en el SaaS (Lucide), sin
+`service_role` fuera de webhooks/cron/auth-callback.

@@ -1,214 +1,282 @@
-# ARQUITECTURA TÉCNICA — COMPLEXIA
-*Última actualización: 19 Mayo 2026*
+# 🏗️ ARQUITECTURA TÉCNICA — COMPLEXIA
+*Última actualización: 1 Julio 2026 — reescrito tras consolidar la documentación dispersa entre este repo y el legacy `la-impecable`*
 
-## Stack
+> Este documento sustituye a la versión anterior (19 Mayo 2026, que describía la web de consultoría pre-SaaS) y a `la-impecable/docs/ARQUITECTURA.md` (que a partir de ahora es legacy — ver [[project-saas-migracion]] en memoria). **Esta es la fuente de verdad de aquí en adelante.**
+
+---
+
+## Qué es ComplexIA ahora
+
+Dos líneas de negocio en el mismo repo:
+
+1. **SaaS multi-tenant** (línea principal) — plataforma para PYMEs del sector servicios (reservas, empleados, facturación, nóminas). La Impecable (estética de vehículos) es el primer tenant (`slug = 'la-impecable'`).
+2. **Consultoría de IA** (apartado secundario) — la web original de ComplexIA. Hoy todavía vive en `/` (Hero, Servicios, Metodología, Casos, Contacto); el plan es moverla a `/consultoria` y dejar `/` para la landing comercial del SaaS — **todavía no hecho**.
+
+Antes de Junio 2026 este repo era solo la web estática de consultoría. El SaaS se incorporó migrando **todo** el código de `la-impecable` en el Sprint 12 (ver `SPRINTS.md`).
+
+**El repo `la-impecable` (`C:\Users\escor\Documents\la-impecable`) queda como rollback de emergencia. No se reabre para trabajar** — ver memoria `feedback-repo-decision`.
+
+---
+
+## Stack (verificado en `package.json`, 1 Julio 2026)
 
 | Capa | Tecnología | Notas |
 |---|---|---|
-| Framework | Next.js 16 + React 19 | App Router, Server Components |
-| Estilos | Tailwind CSS v4 | Sin CSS-in-JS, @theme en globals.css |
-| Iconos | Heroicons v2 | `@heroicons/react` |
-| Email | Resend | Formulario de contacto |
-| Fuente | Instrument Sans | `next/font/google` (pesos 400/500/600/700) |
-| Hosting | Vercel | CI/CD desde GitHub (branch main) |
+| Frontend | Next.js 16.2.3 + React 19.2.4 | App Router, Server Components, Server Actions |
+| Estilos | Tailwind CSS v4 | `@theme` en `globals.css`, sin `tailwind.config.js` |
+| Iconos | Lucide React | Sustituyó a Heroicons v2 (usado en la web de consultoría original) |
+| Base de datos | Supabase (`@supabase/ssr` + `@supabase/supabase-js`) | Proyecto renombrado de "la-impecable" a **"SaaS ComplexIA"** el 30/06/2026. URL: `pyjtaactsyertjhphckq.supabase.co`, región West EU (Ireland) |
+| Pagos | Stripe | Checkout de reservas del tenant; Stripe Billing de suscripciones SaaS aún no implementado (F9-13) |
+| Email | Resend | Emails transaccionales (`buildEmail()` unificado). Nota: la web de consultoría usaba Nodemailer/SMTP SERED para `/api/contacto` — ese endpoint sigue existiendo y sigue usando ese canal, no Resend; son dos sistemas de email distintos conviviendo |
+| PDF | pdf-lib | Facturas y nóminas |
+| IA | `@anthropic-ai/sdk` | OCR de facturas de gastos (Claude Vision) |
+| Observabilidad | Sentry (`@sentry/nextjs`) | Proyecto "complexia/la-impecable" en Sentry, activo solo en producción |
+| Gráficos | Recharts | Analytics del panel admin |
+| Validación | Zod | Formularios públicos |
+| Tests | Vitest v2 + Playwright | **Instalados pero no conectados** — ver "Deuda de infraestructura" más abajo |
+| Fuente | Instrument Sans | `next/font/google`, pesos 400/500/600/700 |
+| Hosting | Vercel | CI/CD desde GitHub, rama `main` |
 | Lenguaje | JavaScript / JSX | Sin TypeScript |
 
 ---
 
-## Estructura de Carpetas
+## Estructura de carpetas (real, verificada en el filesystem)
 
 ```
 complexia-web/
-├── app/                        # Rutas (App Router)
-│   ├── layout.jsx              # ✅ Root layout: fuente, metadata SEO + OG, skip-link
-│   ├── page.jsx                # ✅ Landing — importa secciones en orden
-│   ├── icon.svg                # ✅ Favicon (isotipo en green-700)
-│   ├── opengraph-image.jsx     # ✅ OG image 1200×630 con next/og + Satori
-│   ├── blog/
-│   │   ├── page.jsx            # 📋 Índice del blog
-│   │   └── [slug]/page.jsx     # 📋 Artículo individual
-│   ├── servicios/
-│   │   └── [slug]/page.jsx     # 📋 Detalle de servicio
-│   ├── casos/
-│   │   └── [slug]/page.jsx     # 📋 Caso de éxito detallado
-│   ├── legal/                  # ✅ Páginas legales (placeholders "En redacción")
-│   │   ├── layout.jsx          # Wrapper con Navbar + Footer
-│   │   ├── aviso-legal/page.jsx
-│   │   ├── privacidad/page.jsx
-│   │   └── cookies/page.jsx
-│   └── api/
-│       └── contacto/route.js   # ✅ POST: valida + consentimiento RGPD + Resend
+├── src/
+│   ├── app/
+│   │   ├── layout.jsx              # Root layout
+│   │   ├── page.jsx                # Landing — HOY sigue siendo la de consultoría (Hero/Servicios/Metodologia/Casos/Contacto)
+│   │   ├── login/                  # Login centralizado multi-tenant
+│   │   ├── auth/callback/          # Callback Supabase (OAuth/magic link), resuelve tenant por slug
+│   │   ├── superadmin/             # Panel superadmin (role = superadmin)
+│   │   │   └── tenants/            # Listado de tenants + cambiar plan + activar/suspender
+│   │   ├── legal/                  # Aviso legal, privacidad, cookies (de la web de consultoría)
+│   │   ├── api/
+│   │   │   ├── contacto/           # Formulario de contacto de consultoría (Nodemailer/SMTP SERED)
+│   │   │   ├── slots/              # Disponibilidad de reservas (público)
+│   │   │   ├── facturas/download/ · nominas/download/ · nominas/[id]/download/
+│   │   │   ├── webhooks/stripe/
+│   │   │   └── cron/recordatorios/ # Existe el endpoint; el cron trigger de Vercel NO está configurado (falta vercel.json)
+│   │   ├── actions/                # auth.js, booking.js, services.js — server actions públicas
+│   │   └── app/
+│   │       └── [slug]/             # Rutas del tenant
+│   │           ├── page.jsx · servicios/ · reservar/ · sobre-nosotros/ · contacto/
+│   │           ├── aviso-legal/ · privacidad/ · cookies/
+│   │           ├── admin/          # Panel admin completo (dashboard, clientes, empleados, historial,
+│   │           │                   #   reservas, facturas, nóminas, checklists, agenda, contabilidad,
+│   │           │                   #   configuración empresa/reservas/vacaciones)
+│   │           ├── empleado/       # Portal empleado (trabajos del día, checklist, cronómetro, horas,
+│   │           │                   #   vacaciones, nóminas, calendario)
+│   │           └── cliente/        # Portal cliente (dashboard, historial, perfil)
+│   │
+│   ├── components/
+│   │   ├── ui/                     # Navbar, Footer, CookieBanner, Isotipo, GoogleAnalytics (consultoría)
+│   │   ├── sections/                # Hero, Servicios, Metodologia, Casos, Contacto (landing consultoría)
+│   │   └── *.jsx                   # Componentes del SaaS heredados de la-impecable, sueltos en la raíz
+│   │                               #   de components/ (AdminSidebar, EmpleadoNav, CalendarioEmpleado,
+│   │                               #   ChecklistSection, SortableMonthlyTable, ThemeToggle, etc.)
+│   │                               #   — no están reorganizados en subcarpetas por dominio
+│   │
+│   ├── lib/
+│   │   ├── supabase/               # client.js, server.js — falta admin.js (cliente service_role
+│   │   │                           #   con nombre propio; hoy cada archivo que lo necesita crea el suyo)
+│   │   ├── admin-context.js        # getAdminCtx() + getAdminPageCtx() + getAdminStats()
+│   │   ├── pricing.js · customers.js · booking-emails.js · invoices.js · pdf-invoice.js
+│   │   ├── payroll.js · horas.js · availability.js · bookings.js · vacaciones.js
+│   │   ├── agenda.js · calendario-empleado.js · validation.js · schemas/booking.js
+│   │   ├── stripe.js · resend.js · mail.js (Nodemailer, para /api/contacto) · email.js (buildEmail)
+│   │   ├── tokens.js               # Design tokens de la paleta verde (consultoría)
+│   │   └── *.test.js               # Tests Vitest heredados (agenda, availability, bookings, horas,
+│   │                               #   payroll, pricing) — ver "Deuda de infraestructura"
+│   │
+│   └── proxy.js                    # Next.js 16: NUNCA crear middleware.js, el archivo es proxy.js
 │
-├── components/
-│   ├── ui/                     # Primitivos reutilizables en toda la app
-│   │   ├── Navbar.jsx          # ✅ Sticky, responsive, 'use client'. Logo: Isotipo + wordmark
-│   │   ├── Footer.jsx          # ✅ 3 columnas (marca · navegación · legal). Logo: Isotipo + wordmark
-│   │   ├── Isotipo.jsx         # ✅ SVG inline del logo, fill="currentColor"
-│   │   └── Button.jsx          # 📋 Pendiente — variantes: primary / ghost
-│   └── sections/               # Secciones de la landing únicamente
-│       ├── Hero.jsx            # ✅ H1 + CTAs + stats + isotipo decorativo de fondo (xl+)
-│       ├── Servicios.jsx       # ✅ Grid 2 cols, 4 servicios
-│       ├── Metodologia.jsx     # ✅ Pasos de la consultoría
-│       ├── Casos.jsx           # ✅ Caso La Impecable + enlace al dominio
-│       └── Contacto.jsx        # ✅ Formulario + consentimiento RGPD
-│
-├── content/                    # Datos estáticos en JSON (sin CMS)
-│   ├── servicios.json          # 📋 Pendiente
-│   └── casos.json              # 📋 Pendiente
-│
-├── lib/
-│   ├── tokens.js               # ✅ Design tokens — paleta verde en HSL
-│   └── mail.js                 # ✅ sendContactEmail() con Resend
-│
-├── docs/                       # Documentación del proyecto
-│   ├── SPRINTS.md
-│   ├── PRODUCT_BACKLOG.md
-│   ├── ARQUITECTURA.md         # Este archivo
-│   ├── como-esta-hecha-la-web.md
-│   └── brand/                  # Activos e historial visual de marca (uso interno)
-│       ├── Logo-ComplexIA.png         # Guía visual original
-│       ├── isotipo.svg                # Versión final del isotipo
-│       ├── wordmark-tagline.png       # Mockup wordmark (Gemini)
-│       ├── prompts-graficos.md        # Prompts para regenerar activos
-│       └── iteraciones/               # PNGs intermedios descartados
-│
-└── public/
-    └── images/
+├── public/
+├── docs/                           # Esta carpeta — fuente de verdad de la documentación
+├── jsconfig.json                   # Alias @/ → ./src/*
+├── eslint.config.mjs
+├── next.config.mjs
+└── package.json
+```
+
+**`supabase/migrations/` — RESUELTO (1 Julio 2026):** las 60 migraciones de `la-impecable` se copiaron a este repo, con dos fixes de reproducibilidad aplicados sobre la copia (hallazgo A3 de `AUDITORIA_31052026.md`): timestamp duplicado `20260506000000` renombrado, y `DROP POLICY IF EXISTS` añadido antes de la recreación de `"cliente lee su historial"`. También se copió `supabase/config.toml` (con `project_id` ajustado). Sigue pendiente **verificar con `supabase db reset` real** — no se pudo probar en esta sesión porque no hay Supabase CLI instalada en esta máquina.
+
+---
+
+## Alias `@/`
+
+Apunta a `./src/*` (configurado en `jsconfig.json`).
+
+```js
+import { createServerClient } from '@/lib/supabase/server'
+import { getAdminPageCtx } from '@/lib/admin-context'
 ```
 
 ---
 
-## Rutas de la Aplicación
+## Rutas de la aplicación
 
 | Ruta | Acceso | Descripción |
 |---|---|---|
-| / | Público | Landing page (scroll único) |
-| /servicios/[slug] | Público | Detalle de servicio (pendiente) |
-| /casos/[slug] | Público | Caso de éxito detallado (pendiente) |
-| /blog | Público | Índice del blog (pendiente) |
-| /blog/[slug] | Público | Artículo individual (pendiente) |
-| /legal/aviso-legal | Público | Aviso legal (placeholder "En redacción") |
-| /legal/privacidad | Público | Política de privacidad (placeholder) |
-| /legal/cookies | Público | Política de cookies (placeholder) |
-| /api/contacto | API interna | POST: valida + consentimiento RGPD + envía email |
+| `complexia.es/` | Público | Landing — hoy la de consultoría; el plan es que sea la landing SaaS (pendiente) |
+| `complexia.es/login` | Público | Login centralizado, redirige por rol tras autenticar |
+| `complexia.es/registro` | — | **No existe todavía** (F9-09/F9-10) — el proxy ya la reserva como ruta de plataforma |
+| `complexia.es/superadmin` | Superadmin | Panel de gestión de tenants |
+| `complexia.es/legal/*` | Público | Aviso legal, privacidad, cookies (de la consultoría) |
+| `complexia.es/app/[slug]/` | Público | Home del tenant |
+| `complexia.es/app/[slug]/servicios` \| `/reservar` \| `/sobre-nosotros` \| `/contacto` | Público | Páginas públicas del tenant |
+| `complexia.es/app/[slug]/admin/*` | Admin del tenant | Panel completo (ver estructura de carpetas) |
+| `complexia.es/app/[slug]/empleado/*` | Empleado del tenant | Portal empleado |
+| `complexia.es/app/[slug]/cliente/*` | Cliente del tenant | Portal cliente |
+| `laimpecable.es/*` | — | **Dominio NO conectado todavía** en el proyecto Vercel de `complexia-web`. Cuando se conecte, `src/proxy.js` reescribe internamente `laimpecable.es/admin` → `/app/la-impecable/admin` (código ya listo, falta el paso de Vercel) |
 
 ---
 
-## Secciones de la Landing — Orden
+## Resolución de tenant — regla crítica
 
-```
-<Navbar />            ✅ hecho
-<main>
-  <Hero />            ✅ H1, subtítulo, CTAs, stats bar
-  <Servicios />       ✅ id="servicios"
-  <Metodologia />     ✅ id="metodologia"
-  <Casos />           ✅ id="casos" — caso La Impecable con enlace al dominio
-  <Contacto />        ✅ id="contacto" — formulario + consentimiento RGPD
-</main>
-<Footer />            ✅ marca + navegación + información legal
+**Nunca usar `LIMIT 1` para obtener el `business_id`.** Siempre resolver desde el slug de la URL:
+
+```js
+// ❌ MAL — rompe con más de un tenant (bug que existía en la-impecable pre-SaaS)
+const { data } = await supabase.from('businesses').select('id').limit(1).single()
+
+// ✅ BIEN
+const { slug } = await params
+const { data: business } = await supabase
+  .from('businesses')
+  .select('id')
+  .eq('slug', slug)
+  .single()
 ```
 
-> La sección Nosotros fue descartada. Queda un enlace muerto a `#nosotros` en `Navbar.jsx` pendiente de limpiar.
+Este bug ya fue corregido durante la migración (Sprint 12, Bloque 0) en las 7 rutas públicas y en `auth/callback` que lo tenían hardwired.
 
 ---
 
-## Sistema de Diseño
+## Patrón de auth (server components)
 
-### Paleta verde (H=145 S=46.7%) — definida en globals.css con @theme
+```js
+import { createServerClient } from '@/lib/supabase/server'
+
+const supabase = await createServerClient()
+const { data: { user } } = await supabase.auth.getUser()
+if (!user) redirect('/login')
+
+const { data: profile } = await supabase
+  .from('profiles')
+  .select('role, business_id')
+  .eq('id', user.id)
+  .single()
+```
+
+En páginas dentro de `/app/[slug]/admin/**`, usar el helper cacheado:
+
+```js
+const { supabase, profile, businessId } = await getAdminPageCtx()
+```
+
+En server actions (no en server components): `getAdminCtx()` — devuelve `null` si no es admin, la action responde `{ error: 'No autorizado' }`.
+
+**`service_role` solo en:** webhooks, cron, `/auth/callback`, endpoints públicos (`/api/slots`, formularios anónimos). En el resto, sesión SSR + RLS.
+
+---
+
+## Proxy de rutas
+
+El archivo correcto es `src/proxy.js`. **Next.js 16 no usa `middleware.js`** — es una convención de este proyecto, no crearlo.
+
+Lógica actual (verificada en el código):
+1. Si el `host` de la petición es un dominio personalizado de tenant (`CUSTOM_DOMAINS`, hoy solo `laimpecable.es`), reescribe internamente a `/app/[slug]/...` salvo que sea una ruta de plataforma (`/superadmin`, `/registro`, `/auth/`, `/login`, `/api/`).
+2. Protege `/app/[slug]/{admin,empleado,cliente}` y `/superadmin` exigiendo sesión Supabase.
+3. Si hay sesión y se visita `/login`, redirige al panel correspondiente según la cookie `user-role`/`user-slug`.
+
+---
+
+## Modelo de base de datos
+
+Mismo esquema que tenía `la-impecable` (proyecto Supabase compartido, renombrado a "SaaS ComplexIA"). ~21 tablas. Las relevantes para multi-tenant:
+
+```
+businesses    → negocio (multi-tenant). + columnas SaaS: slug, plan, active, trial_ends_at, features (jsonb)
+profiles      → usuario con role (admin/employee/client/superadmin) y business_id
+```
+
+Resto de tablas (customers, services, checklists, bookings, service_records, invoices, employee_contracts,
+payslips, expenses, business_settings, business_hours, blocked_dates, vacation_*, contribution_groups,
+ss_rates, irpf_brackets, payroll_settings) — sin cambios respecto al esquema pre-SaaS. **RLS activado en
+todas, filtrando por `business_id`.**
+
+**⚠️ Este repo no tiene el histórico de migraciones SQL** (ver deuda de infraestructura). El esquema vive
+aplicado directamente en el proyecto Supabase compartido; para consultar cómo se llegó a él hay que mirar
+`la-impecable/supabase/migrations/` (60 archivos, legacy, solo lectura).
+
+---
+
+## Identidad de marca — dos capas distintas
+
+1. **Marca ComplexIA (consultoría + plataforma SaaS en general)** — paleta verde personalizada (H=145 S=46.7%), Isotipo en `components/ui/Isotipo.jsx`, wordmark como texto. Ver detalle completo en la sección "Sistema de diseño" más abajo.
+2. **Marca por tenant** — cada negocio (ej. La Impecable) tiene su propia identidad (dorado `#C9A84C` sobre fondo oscuro para La Impecable) aplicada dentro de `/app/[slug]/**`. Hoy esto vive hardcodeado en el CSS heredado; la tabla `business_branding` (F9-06, personalización de marca por negocio) **no existe todavía** — es backlog.
+
+### Sistema de diseño de la marca ComplexIA (landing/consultoría)
 
 | Clase Tailwind | HSL | Uso principal |
 |---|---|---|
 | `green-950` | hsl(145, 46.7%, 10%) | Títulos principales |
 | `green-900` | hsl(145, 46.7%, 15%) | Fondos oscuros (stats bar) |
 | `green-800` | hsl(145, 46.7%, 22%) | Texto secundario, hover |
-| `green-700` | hsl(145, 46.7%, 33.1%) | **Color de marca** — botones, enlaces |
+| `green-700` | hsl(145, 46.7%, 33.1%) | Color de marca — botones, enlaces |
 | `green-300` | hsl(145, 46.7%, 70%) | Texto sobre fondos oscuros |
 | `green-100` | hsl(145, 46.7%, 90%) | Fondos de pills, bordes |
 | `green-50` | hsl(145, 46.7%, 97%) | Fondos de secciones alternas |
 
-### Tipografía
-- **Instrument Sans** — única fuente, cargada con `next/font/google` como variable CSS `--font-instrument-sans`
-- Pesos disponibles: 400, 500, 600, 700
-- Configurada en `@theme` como `--font-sans`
-
-### Espaciado y layout
-- Contenedor: `max-w-7xl mx-auto`
-- Padding horizontal: `px-4 sm:px-6 lg:px-8`
-
-### Identidad de marca (isotipo + wordmark)
-
-| Sitio | Cómo se renderiza |
-|---|---|
-| Favicon (pestaña navegador) | `app/icon.svg` — SVG monocromo en `#2E7B4D` |
-| Navbar | `<Isotipo>` `h-9` en `text-green-700` + wordmark texto "ComplexIA" envuelto en un único `<span>` |
-| Footer | `<Isotipo>` `h-9` en `text-green-400` + wordmark texto sobre `bg-green-950` |
-| Hero | `<Isotipo>` `h-[450px]` en `text-green-100` como decoración de fondo a la derecha (solo `xl+`) |
-
-El componente `components/ui/Isotipo.jsx` usa `fill="currentColor"` para que el color se controle desde el padre con clases Tailwind (`text-green-*`).
-
-El wordmark se mantiene como **texto puro** (no SVG) para conservar SEO y accesibilidad — Google indexa "ComplexIA" como string.
+Isotipo (`components/ui/Isotipo.jsx`, `fill="currentColor"`) en Navbar (`text-green-700`), Footer
+(`text-green-400` sobre `bg-green-950`), y como decoración de fondo en Hero (`text-green-100`, solo `xl+`).
+El wordmark "ComplexIA" es texto puro (no SVG) por SEO.
 
 ---
 
-## Open Graph image (compartir en redes)
+## Reglas inamovibles
 
-`app/opengraph-image.jsx` la genera dinámicamente con **next/og** (motor Satori):
-
-- Tamaño 1200×630, fondo `green-950`, wordmark a la izquierda con "IA" destacado en `#88CCA5`, tagline en mayúsculas espaciadas.
-- Las fuentes se cargan desde Google Fonts en **TTF** — Satori no soporta WOFF2, así que `fetch` al CSS de Google **sin User-Agent moderno** para que devuelva TTF.
-- `app/layout.jsx` define `metadataBase: new URL('https://complexia.es')` y un bloque `openGraph` con `siteName`, `locale: es_ES`. Next.js asocia automáticamente la imagen generada.
-
----
-
-## Flujo del Formulario de Contacto
-
-```
-Usuario rellena Contacto.jsx ('use client')
-      ↓
-Marca el checkbox de consentimiento RGPD (botón Enviar deshabilitado si no)
-      ↓
-fetch POST /api/contacto  (incluye consentimiento: true)
-      ↓
-app/api/contacto/route.js — valida campos + rechaza 400 si consentimiento !== true
-      ↓
-lib/mail.js — sendContactEmail() con Resend SDK
-      ↓
-Email llega a la bandeja de ComplexIA
-```
-
-Variable de entorno necesaria: `RESEND_API_KEY` (en `.env.local` para local, en Vercel para producción).
-La política de privacidad enlazada desde el checkbox vive en `/legal/privacidad` (placeholder hasta redactar el texto definitivo).
+1. **IVA:** base = precio ÷ 1.21 — nunca precio × 0.21
+2. **Multi-tenant desde el día 1:** todas las tablas con `business_id`; nunca `LIMIT 1`, siempre por `slug`
+3. **`service_role` solo en:** webhooks, cron, `/auth/callback`, endpoints públicos — el resto sesión SSR + RLS
+4. **Next.js 16:** NO crear `middleware.js` — usar `src/proxy.js`
+5. **Emails del SaaS:** usar siempre `buildEmail()` de `src/lib/email.js` — nunca HTML hardcodeado. (El formulario de contacto de consultoría usa `lib/mail.js` con Nodemailer, es un sistema aparte)
+6. **Iconos:** Lucide React — no Heroicons
+7. **Sin TypeScript, sin CSS-in-JS, sin librerías de UI externas** (Radix, shadcn) sin acordarlo primero
+8. **Migraciones SQL:** cada cambio de esquema debe documentarse con timestamp — pero ver deuda de infraestructura, hoy no hay carpeta `supabase/migrations/` en este repo
 
 ---
 
-## Convenciones
+## Deuda de infraestructura — estado (1 Julio 2026)
 
-### Componentes
-- Un componente por archivo, PascalCase, extensión `.jsx`
-- `'use client'` solo cuando usa hooks o eventos del browser
-- Secciones → `components/sections/` | Primitivos → `components/ui/`
-
-### Estilos
-- Solo clases Tailwind — ni CSS inline ni módulos CSS
-- Solo la paleta verde personalizada — no usar colores Tailwind por defecto
-
-### Importaciones
-- Alias `@/` apunta a la raíz de `complexia-web/`
-- Orden: librerías externas → componentes internos → lib
-
----
-
-## Reglas Inamovibles
-
-1. **Sin TypeScript** — el proyecto es JSX puro
-2. **Sin librerías UI externas** — no Radix, no shadcn, construir a mano
-3. **Sin CSS-in-JS** — solo Tailwind
-4. **Sin animaciones con Framer Motion** — hasta que esté acordado
-5. **No abstraer prematuramente** — tres secciones similares no necesitan un componente genérico
+| Gap | Estado | Detalle |
+|---|---|---|
+| **`supabase/migrations/`** | ✅ RESUELTO (1 Jul) | 60 migraciones copiadas + 2 fixes de reproducibilidad (A3) + `supabase/config.toml`. Pendiente validar con `supabase db reset` real (CLI no instalada en esta sesión) — **⚠️ CUIDADO al validar: el proyecto Supabase vinculado ("SaaS ComplexIA") es la base de datos de PRODUCCIÓN real de La Impecable, solo renombrada — no es una copia de pruebas. `supabase db reset` / `db push` contra él borraría datos reales. Cualquier validación de migraciones debe hacerse contra un proyecto Supabase nuevo/desechable (`supabase db reset --local` con Docker, o un proyecto shadow), nunca contra el vinculado.** |
+| **`vercel.json` / cron recordatorios** | ✅ RESUELTO (1 Jul) | Creado con el cron `/api/cron/recordatorios` a las 7:00 UTC, igual que en la-impecable. `CRON_SECRET` confirmado presente en `.env.local`. **Falta:** confirmar `CRON_SECRET` en Vercel → Environment Variables (producción) y hacer el próximo deploy para que el cron se active — Vercel solo lee `vercel.json` en el deploy |
+| **Test runner (Vitest)** | ✅ RESUELTO (1 Jul) | `vitest.config.mjs` creado (con resolución del alias `@/`), script `test`/`test:watch` en `package.json`. Los 80 tests heredados pasan (`npm test`). Pre-commit hook recreado en `.git/hooks/pre-commit` (no versionado, no venía con la migración) |
+| **`lib/supabase/admin.js`** | 📋 Sin resolver, confirmado cosmético | El `CLAUDE.md` interno documenta esta ruta, pero el archivo no existe. **Verificado (1 Jul 2026, `grep -rn "lib/supabase/admin" src/`): nada lo importa** — no bloquea el build, es solo un hueco en la documentación interna |
+| **`SMTP_PASS` ausente en `.env.local`** | 📋 Nuevo (1 Jul 2026) | Necesaria para `/api/contacto` (Nodemailer, formulario de consultoría). El resto de variables (Supabase/Stripe/Resend/Sentry/Anthropic/Cron) sí están — verificado con `npm run build` y `npm run dev` reales, ambos pasan |
+| **Tests E2E (Playwright)** | 📋 Sin resolver | `@playwright/test` está en `package.json` pero no hay `playwright.config.js` ni carpeta `e2e/` en este repo — los smoke tests de la-impecable no se portaron. No estaba en el alcance de "conectar Vitest"; queda como tarea aparte si se quiere |
+| **`docs/SPRINTS.md`/`PRODUCT_BACKLOG.md` desincronizados con el código** | ✅ RESUELTO (1 Jul) | Ver los archivos actualizados en esta carpeta |
 
 ---
 
 ## CI/CD
 
-La rama `main` se despliega automáticamente en Vercel.
-Variables de entorno de producción configuradas en el panel de Vercel.
+La rama `main` se despliega automáticamente en Vercel. Variables de entorno de producción configuradas en el panel de Vercel — incluye ahora también las de Supabase/Stripe/Resend/Sentry/Anthropic heredadas de la-impecable (copiadas a `.env.local` durante la migración, Sprint 12 Bloque 0).
+
+---
+
+## Documentos relacionados en esta carpeta
+
+- `SAAS_FASE9.md` — diseño técnico completo de la Fase 9 (decisiones de tenant, superadmin, backlog F9-05 a F9-20)
+- `SPRINTS.md` / `PRODUCT_BACKLOG.md` — historial y backlog consolidado
+- `ANALISIS_PROYECTO.md` — inventario exhaustivo de lo construido, comparativa con competidores, adaptabilidad a otros sectores
+- `AUDITORIA_31052026.md` — auditoría de seguridad/calidad (varios hallazgos siguen abiertos, ver checklist al final)
+- `AGENDA.md`, `CALENDARIO_EMPLEADO.md` — guías de uso de features ya construidas
+- `STACK_TECNOLOGICO.md` — explicación en lenguaje llano del stack, para referencia rápida
+- `BOE_MONITOR.md` — sistema de alertas fiscales (⚠️ el GitHub Action todavía vive en el repo legacy, no portado)
+- `guia-correo-sered-vercel.md`, `guia-despliegue-sered-vercel.md`, `guia-formulario-contacto.md` — infraestructura de la web de consultoría (dominio, DNS, email), siguen vigentes sin cambios
