@@ -22,7 +22,7 @@ Antes de Junio 2026 este repo era solo la web estática de consultoría. El SaaS
 
 | Capa | Tecnología | Notas |
 |---|---|---|
-| Frontend | Next.js 16.2.3 + React 19.2.4 | App Router, Server Components, Server Actions |
+| Frontend | Next.js 16.2.9 + React 19.2.4 | App Router, Server Components, Server Actions. Subido de 16.2.3 → 16.2.9 el 1 Jul 2026 (B2 de `AUDITORIA_01072026_PREDESPLIEGUE.md` — la subida de seguridad del 31/05 no había sobrevivido a la migración) |
 | Estilos | Tailwind CSS v4 | `@theme` en `globals.css`, sin `tailwind.config.js` |
 | Iconos | Lucide React | Sustituyó a Heroicons v2 (usado en la web de consultoría original) |
 | Base de datos | Supabase (`@supabase/ssr` + `@supabase/supabase-js`) | Proyecto renombrado de "la-impecable" a **"SaaS ComplexIA"** el 30/06/2026. URL: `pyjtaactsyertjhphckq.supabase.co`, región West EU (Ireland) |
@@ -217,7 +217,7 @@ aplicado directamente en el proyecto Supabase compartido; para consultar cómo s
 ## Identidad de marca — dos capas distintas
 
 1. **Marca ComplexIA (consultoría + plataforma SaaS en general)** — paleta verde personalizada (H=145 S=46.7%), Isotipo en `components/ui/Isotipo.jsx`, wordmark como texto. Ver detalle completo en la sección "Sistema de diseño" más abajo.
-2. **Marca por tenant** — cada negocio (ej. La Impecable) tiene su propia identidad (dorado `#C9A84C` sobre fondo oscuro para La Impecable) aplicada dentro de `/app/[slug]/**`. Hoy esto vive hardcodeado en el CSS heredado; la tabla `business_branding` (F9-06, personalización de marca por negocio) **no existe todavía** — es backlog.
+2. **Marca por tenant** — cada negocio (ej. La Impecable) tiene su propia identidad (dorado `#C9A84C` sobre fondo oscuro para La Impecable) aplicada dentro de `/app/[slug]/**`. Desde el 1 Jul 2026 vive en dos piezas: (a) sección "TEMA DEL TENANT" en `src/app/globals.css` (tokens dorado/fondo/tarjeta + modo oscuro + overrides admin/empleado, escopados bajo `.tenant-theme` para no tocar la marca ComplexIA) y (b) `src/app/app/[slug]/layout.js`, que carga las fuentes del tenant (Playfair Display / DM Sans / Pinyon Script), monta `ThemeProvider` (next-themes) y el Navbar/Footer públicos. Sigue siendo la identidad de La Impecable hardcodeada — la tabla `business_branding` (F9-06, personalización por negocio) **no existe todavía**, es backlog.
 
 ### Sistema de diseño de la marca ComplexIA (landing/consultoría)
 

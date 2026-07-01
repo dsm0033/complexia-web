@@ -210,6 +210,27 @@ Teléfono obligatorio, sistema de clientes recurrentes (`buscarOCrearCliente` po
 - Confirmar que el webhook de Stripe apunta a este proyecto, no al legacy.
 - Confirmar en Vercel → Settings → Cron Jobs que el cron de recordatorios (`vercel.json`) aparece activo.
 
+### BLOQUE 1.5 — Cierre de bloqueantes de la auditoría pre-despliegue · ✅ COMPLETADO (1 Julio 2026, tarde)
+
+Cierre de B1 y B2 de `AUDITORIA_01072026_PREDESPLIEGUE.md`. Al investigar B1 se descubrió que el alcance real era mayor: la migración no solo dejó la página slice en `/servicios` — dejó atrás **toda la capa de presentación del tenant** (tokens CSS del tema, fuentes de marca, y Navbar/Footer, que existían como componentes pero nada los montaba; `next-themes` ni siquiera estaba en `package.json`). `laimpecable.es` llevaba desde el deploy sirviendo las páginas públicas sin tema ni navegación.
+
+| Tarea | Estado |
+|---|---|
+| B2 — `next` 16.2.3 → 16.2.9 + `eslint-config-next` (reaplica la subida de seguridad del 31/05) | ✅ |
+| `npm audit fix` — corrige 4 CVEs de `nodemailer` (CRLF injection y otros) y `@babel/core` | ✅ |
+| `next-themes` instalado (dependencia que faltó en la migración — ThemeProvider la importa) | ✅ |
+| Tema del tenant portado a `globals.css` (tokens + dark mode + overrides admin/empleado), escopado bajo `.tenant-theme` | ✅ |
+| `src/app/app/[slug]/layout.js` creado — fuentes Playfair/DM Sans/Pinyon + ThemeProvider + Navbar + Footer | ✅ |
+| Navbar/Footer slug-aware (rutas `/app/[slug]/...`; se ocultan en portales bajo ambos dominios) | ✅ |
+| B1 — `/servicios` reescrita con el diseño real (sin `Business ID` ni texto de debug); usa cliente SSR anon para `businesses`/`services` (policies verificadas en migraciones), service_role solo para `business_settings` (TODO M2) | ✅ |
+| Verificación: 80/80 tests, build limpio, HTTP real en dev (servicios/home/reservar/sobre-nosotros 200, admin 307, landing ComplexIA intacta, clases del tema generadas por Tailwind) | ✅ |
+
+**Deuda descubierta y NO abordada (registrada, no olvidar):**
+- `@heroicons/react` no se puede quitar aún: lo usan los 6 componentes de la landing de consultoría (`sections/`, `ui/`) — migrarlos a Lucide es tarea aparte.
+- Analytics y CookieBanner del tenant siguen huérfanos (nada los monta); en producción los tenant pages muestran el CookieBanner + GA de ComplexIA (montados en el root layout). Revisar qué consent/medición corresponde a cada dominio.
+- Vulnerabilidades restantes de `npm audit`: `nodemailer` <9 (1 high, fix es breaking → evaluar subir a v9), `postcss` anidado dentro de `next` (moderate, sin fix hasta que Next lo actualice), `esbuild`/`vite` vía Vitest 2 (solo dev).
+- La página de detalle `/servicios/[id]` del legacy no está migrada — los nombres de servicio ya no enlazan a ella.
+
 ### BLOQUE 2 — Autoprovisionamiento · 📋 PENDIENTE — siguiente foco de trabajo
 
 | Tarea | Estado |
