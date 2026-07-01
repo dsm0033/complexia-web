@@ -51,3 +51,176 @@ body {
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* ═══════════════════════════════════════════════════
+   🎨 TEMA DEL TENANT (heredado de la-impecable)
+   ═══════════════════════════════════════════════════
+   Tokens y estilos de las rutas /app/[slug]/**.
+   Las variables viven en :root/.dark (inertes fuera del
+   tenant: ninguna clase de ComplexIA las consume) y los
+   estilos con efecto global van escopados bajo
+   .tenant-theme, el wrapper que monta app/[slug]/layout.js.
+   ═══════════════════════════════════════════════════ */
+
+/* ── Paleta HSL — fuente única de color ── */
+
+/* Modo claro (por defecto) */
+:root {
+  --hsl-dorado:      44 54% 46%;
+  --hsl-dorado-dim:  44 54% 38%;
+  --hsl-fondo:       40 30% 97%;
+  --hsl-tarjeta:     0 0% 100%;
+  --hsl-tarjeta-osc: 40 20% 94%;
+  --hsl-tarjeta-alt: 40 15% 92%;
+  --hsl-texto:       220 25% 12%;
+  --hsl-muted:       220 10% 48%;
+  --hsl-sutil:       220 8% 62%;
+  --hsl-borde:       40 15% 85%;
+
+  --dorado:      hsl(44, 54%, 46%);
+  --dorado-dim:  hsl(44, 54%, 38%);
+  --fondo:       hsl(40, 30%, 97%);
+  --tarjeta:     hsl(0, 0%, 100%);
+  --tarjeta-osc: hsl(40, 20%, 94%);
+  --tarjeta-alt: hsl(40, 15%, 92%);
+  --texto:       hsl(220, 25%, 12%);
+  --muted:       hsl(220, 10%, 48%);
+  --sutil:       hsl(220, 8%, 62%);
+  --borde:       hsl(40, 15%, 85%);
+}
+
+/* Modo oscuro */
+.dark {
+  --hsl-dorado:      44 54% 54%;
+  --hsl-dorado-dim:  44 44% 44%;
+  --hsl-fondo:       220 33% 6%;
+  --hsl-tarjeta:     220 27% 9%;
+  --hsl-tarjeta-osc: 220 33% 5%;
+  --hsl-tarjeta-alt: 215 30% 11%;
+  --hsl-texto:       40 13% 89%;
+  --hsl-muted:       210 16% 61%;
+  --hsl-sutil:       210 17% 42%;
+  --hsl-borde:       215 30% 17%;
+
+  --dorado:      hsl(44, 54%, 54%);
+  --dorado-dim:  hsl(44, 44%, 44%);
+  --fondo:       hsl(220, 33%, 6%);
+  --tarjeta:     hsl(220, 27%, 9%);
+  --tarjeta-osc: hsl(220, 33%, 5%);
+  --tarjeta-alt: hsl(215, 30%, 11%);
+  --texto:       hsl(40, 13%, 89%);
+  --muted:       hsl(210, 16%, 61%);
+  --sutil:       hsl(210, 17%, 42%);
+  --borde:       hsl(215, 30%, 17%);
+}
+
+@theme inline {
+  --color-dorado:      var(--dorado);
+  --color-dorado-dim:  var(--dorado-dim);
+  --color-fondo:       var(--fondo);
+  --color-tarjeta:     var(--tarjeta);
+  --color-tarjeta-osc: var(--tarjeta-osc);
+  --color-tarjeta-alt: var(--tarjeta-alt);
+  --color-texto:       var(--texto);
+  --color-muted:       var(--muted);
+  --color-sutil:       var(--sutil);
+  --color-borde:       var(--borde);
+}
+
+/* ── Estilos base del tenant (escopados) ── */
+
+body:has(.tenant-theme) {
+  background: hsl(var(--hsl-fondo));
+  color: hsl(var(--hsl-texto));
+}
+
+/* El panel admin siempre usa fondo claro independientemente del tema */
+body:has(.admin-layout) {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+/* El portal del empleado siempre en modo claro */
+html.dark body:has(.empleado-layout) {
+  --dorado:      hsl(44, 54%, 46%);
+  --dorado-dim:  hsl(44, 54%, 38%);
+  --fondo:       hsl(40, 30%, 97%);
+  --tarjeta:     hsl(0, 0%, 100%);
+  --tarjeta-osc: hsl(40, 20%, 94%);
+  --tarjeta-alt: hsl(40, 15%, 92%);
+  --texto:       hsl(220, 25%, 12%);
+  --muted:       hsl(220, 10%, 48%);
+  --sutil:       hsl(220, 8%, 62%);
+  --borde:       hsl(40, 15%, 85%);
+  background:    hsl(40, 30%, 97%);
+  color:         hsl(220, 25%, 12%);
+}
+
+/* Texto seleccionado: fondo dorado (solo dentro del tenant) */
+.tenant-theme ::selection {
+  background: hsl(var(--hsl-dorado));
+  color: hsl(var(--hsl-fondo));
+}
+
+/* Scrollbar personalizada (solo Chrome/Edge, solo tenant) */
+body:has(.tenant-theme)::-webkit-scrollbar {
+  width: 6px;
+}
+body:has(.tenant-theme)::-webkit-scrollbar-track {
+  background: hsl(var(--hsl-fondo));
+}
+body:has(.tenant-theme)::-webkit-scrollbar-thumb {
+  background: hsl(var(--hsl-sutil));
+  border-radius: 3px;
+}
+
+/* ── Fuentes del tenant ──
+   Las variables --font-playfair/--font-dm-sans/--font-great-vibes
+   las inyecta app/[slug]/layout.js con next/font, solo en rutas
+   del tenant. Los overrides van escopados para no pisar la
+   tipografía Instrument Sans de ComplexIA. */
+
+.tenant-theme {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+.tenant-theme .font-serif {
+  font-family: var(--font-playfair), serif;
+}
+
+.tenant-theme .font-sans {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+.tenant-theme .font-script {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+/* ── Animaciones (heredadas de la-impecable) ── */
+
+/* Entrada con desvanecimiento hacia arriba */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.7s ease forwards;
+  opacity: 0;
+}
+
+/* Pulso suave (para el indicador de scroll) */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease infinite;
+}

@@ -7,7 +7,7 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 const PRIVATE_PATHS = ['/admin', '/empleado', '/cliente']
 
 const NAV_LINKS = [
-  { href: '/', label: 'Inicio' },
+  { href: '', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/sobre-nosotros', label: 'Sobre nosotros' },
   { href: '/contacto', label: 'Contacto' },
@@ -18,12 +18,17 @@ const INFO_LINKS = [
   { href: '/aviso-legal', label: 'Aviso legal' },
   { href: '/privacidad', label: 'Política de privacidad' },
   { href: '/cookies', label: 'Política de cookies' },
-  { href: '/login', label: 'Acceso clientes y empleados' },
 ]
 
-export default function Footer() {
+export default function Footer({ slug }) {
   const pathname = usePathname()
-  if (PRIVATE_PATHS.some(p => pathname.startsWith(p))) return null
+
+  // Prefijo /app/[slug] en enlaces internos — misma convención que Navbar.
+  const base = `/app/${slug}`
+
+  // El pathname puede venir con prefijo (complexia.es) o sin él (laimpecable.es)
+  const rel = pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname
+  if (PRIVATE_PATHS.some(p => rel.startsWith(p))) return null
 
   return (
     <footer className="bg-fondo border-t border-borde">
@@ -65,8 +70,8 @@ export default function Footer() {
           </p>
           <ul className="flex flex-col gap-3">
             {NAV_LINKS.map(({ href, label }) => (
-              <li key={href}>
-                <Link href={href} className="font-sans text-sm text-muted hover:text-texto transition-colors">
+              <li key={label}>
+                <Link href={`${base}${href}`} className="font-sans text-sm text-muted hover:text-texto transition-colors">
                   {label}
                 </Link>
               </li>
@@ -82,11 +87,17 @@ export default function Footer() {
           <ul className="flex flex-col gap-3">
             {INFO_LINKS.map(({ href, label }) => (
               <li key={href}>
-                <Link href={href} className="font-sans text-sm text-muted hover:text-texto transition-colors">
+                <Link href={`${base}${href}`} className="font-sans text-sm text-muted hover:text-texto transition-colors">
                   {label}
                 </Link>
               </li>
             ))}
+            {/* /login es ruta de plataforma — sin prefijo de tenant */}
+            <li>
+              <Link href="/login" className="font-sans text-sm text-muted hover:text-texto transition-colors">
+                Acceso clientes y empleados
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

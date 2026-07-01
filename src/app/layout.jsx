@@ -30,7 +30,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={instrumentSans.variable}>
+    // suppressHydrationWarning: next-themes (tema del tenant) añade la clase
+    // dark/light a <html> antes de hidratar — sin esto React avisa en consola
+    <html lang="es" className={instrumentSans.variable} suppressHydrationWarning>
       <body className="antialiased">
         <a href="#main-content" className="skip-link">
           Saltar al contenido principal

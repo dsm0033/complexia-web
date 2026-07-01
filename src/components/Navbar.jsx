@@ -13,7 +13,7 @@ const NAV_LINKS = [
 
 const PORTAL_ROUTES = ['/admin', '/empleado', '/cliente', '/login']
 
-export default function Navbar() {
+export default function Navbar({ slug }) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,7 +24,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (PORTAL_ROUTES.some(r => pathname.startsWith(r))) return null
+  // Los enlaces internos llevan siempre el prefijo /app/[slug]
+  // (convención del repo — funciona también bajo laimpecable.es,
+  // el proxy no reescribe rutas que ya empiezan por /app/).
+  const base = `/app/${slug}`
+
+  // Ocultarse en portales: el pathname puede venir con prefijo
+  // (/app/slug/admin en complexia.es) o sin él (/admin en laimpecable.es)
+  const rel = pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname
+  if (PORTAL_ROUTES.some(r => rel.startsWith(r))) return null
 
   return (
     <div>
@@ -40,7 +48,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link
-            href="/"
+            href={base}
             className="font-serif font-black text-dorado text-xl tracking-wide hover:text-dorado-dim transition-colors relative inline-block"
           >
             <span className="font-script absolute text-texto" style={{ fontSize: "0.85em", top: "50%", transform: "translateY(-50%) rotate(-30deg)", left: "-1.1em" }}>
@@ -54,12 +62,13 @@ export default function Navbar() {
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
-                href={href}
+                href={`${base}${href}`}
                 className="font-sans text-sm font-medium text-muted hover:text-dorado transition-colors tracking-wide outline-none"
               >
                 {label}
               </Link>
             ))}
+            {/* /login es ruta de plataforma — sin prefijo de tenant */}
             <Link
               href="/login"
               className="font-sans text-sm font-medium text-muted hover:text-dorado transition-colors tracking-wide outline-none"
@@ -68,7 +77,7 @@ export default function Navbar() {
             </Link>
             <ThemeToggle />
             <Link
-              href="/reservar"
+              href={`${base}/reservar`}
               className="font-sans text-sm font-semibold px-5 py-2 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
             >
               Reservar
@@ -94,7 +103,7 @@ export default function Navbar() {
           {NAV_LINKS.map(({ href, label }) => (
             <div key={href} className="w-full">
               <Link
-                href={href}
+                href={`${base}${href}`}
                 onClick={() => setMenuOpen(false)}
                 className="block w-full text-center py-6 font-sans font-medium text-muted hover:text-dorado transition-colors tracking-wide outline-none"
                 style={{ fontSize: "24px" }}
@@ -114,7 +123,7 @@ export default function Navbar() {
               Entrar
             </Link>
             <Link
-              href="/reservar"
+              href={`${base}/reservar`}
               onClick={() => setMenuOpen(false)}
               className="inline-flex font-sans text-base font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
             >
