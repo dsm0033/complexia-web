@@ -38,6 +38,19 @@ const pinyonScript = Pinyon_Script({
   display: 'swap',
 })
 
+// Icono del tenant vía metadata apuntando a /public/tenants/[slug]/.
+// OJO: no usar la file convention icon.png dentro de [slug] — compila en
+// local pero rompe el build en Vercel ("Invariant: failed to find source
+// route /app/[slug]/icon.png", deploy del 1 Jul 2026).
+export async function generateMetadata({ params }) {
+  const { slug } = await params
+  return {
+    icons: {
+      icon: `/tenants/${slug}/icon.png`,
+    },
+  }
+}
+
 export default async function TenantLayout({ children, params }) {
   const { slug } = await params
 
