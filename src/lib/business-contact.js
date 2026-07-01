@@ -37,3 +37,16 @@ export function mapsEmbedUrl(address) {
   if (!address) return null
   return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed&hl=es&z=16`
 }
+
+/**
+ * Compone la dirección completa del negocio:
+ * "C. Palmilla, 28, 11540 Sanlúcar de Barrameda, Cádiz".
+ * Tolera campos ausentes (si solo hay `address`, devuelve `address`),
+ * así los llamadores que aún no seleccionan las columnas nuevas no rompen.
+ */
+export function fullAddress(business) {
+  if (!business) return null
+  const cpCity = [business.postal_code, business.city].filter(Boolean).join(' ')
+  const parts = [business.address, cpCity, business.province].filter(Boolean)
+  return parts.length ? parts.join(', ') : null
+}

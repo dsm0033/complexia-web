@@ -3,6 +3,7 @@
  * Se puede llamar desde cualquier action sin duplicar lógica.
  */
 import { resend, emailFrom } from '@/lib/resend'
+import { fullAddress } from '@/lib/business-contact'
 
 /**
  * escapeHtml — neutraliza caracteres HTML en texto controlado por el usuario
@@ -48,7 +49,7 @@ export async function enviarEmailVacacion({ supabase, businessId, requestId, sta
       .single(),
     supabase
       .from('businesses')
-      .select('name, address, phone, email')
+      .select('name, address, postal_code, city, province, phone, email')
       .eq('id', businessId)
       .single(),
   ])
@@ -90,7 +91,8 @@ export async function enviarEmailVacacion({ supabase, businessId, requestId, sta
  * @param {object} [opts.business]  - Datos del negocio para el pie
  */
 export function buildEmail({ title, intro, rows = [], outro, business = {} }) {
-  const { name = 'Impecable', address = '', phone = '', email = '' } = business
+  const { name = 'Impecable', phone = '', email = '' } = business
+  const address = fullAddress(business) ?? ''
 
   // Las celdas de rows son datos (nunca markup): se escapan siempre.
   const rowsHtml = rows.map(([label, value]) => `

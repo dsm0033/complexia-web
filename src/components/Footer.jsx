@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Phone, Mail, MapPin } from 'lucide-react'
-import { telHref } from '@/lib/business-contact'
+import { telHref, fullAddress } from '@/lib/business-contact'
 
 const PRIVATE_PATHS = ['/admin', '/empleado', '/cliente']
 
@@ -46,10 +46,10 @@ export default function Footer({ slug, business }) {
             </p>
           )}
           <ul className="flex flex-col gap-3">
-            {business?.address && (
+            {fullAddress(business) && (
               <li className="flex items-center gap-2 text-sm text-muted">
                 <MapPin size={15} className="text-dorado shrink-0" strokeWidth={2} />
-                {business.address}
+                {fullAddress(business)}
               </li>
             )}
             {business?.phone && (

@@ -41,7 +41,7 @@ export async function enviarFacturaPorEmail(invoiceId) {
 
   const { data: business } = await supabase
     .from('businesses')
-    .select('name, nif, tagline, address, email')
+    .select('name, nif, tagline, address, postal_code, city, province, email')
     .eq('id', businessId)
     .single()
 

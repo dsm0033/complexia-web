@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPin, Clock, Mail, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { waHref, mapsEmbedUrl } from "@/lib/business-contact";
+import { waHref, mapsEmbedUrl, fullAddress } from "@/lib/business-contact";
 import CopyButton from "@/components/CopyButton";
 
 export async function generateMetadata({ params }) {
@@ -29,21 +29,22 @@ export default async function ContactoPage({ params }) {
   const supabase = await createClient();
   const { data: business } = await supabase
     .from("businesses")
-    .select("name, address, email, phone")
+    .select("name, address, postal_code, city, province, email, phone")
     .eq("slug", slug)
     .eq("active", true)
     .single();
 
   if (!business) notFound();
 
+  const address = fullAddress(business);
   const waLink = waHref(business.phone, "Hola, me gustaría obtener más información.");
-  const mapsEmbed = mapsEmbedUrl(business.address);
+  const mapsEmbed = mapsEmbedUrl(address);
 
   const info = [
-    business.address && {
+    address && {
       Icon: MapPin,
       label: "Dirección",
-      value: business.address,
+      value: address,
     },
     // TODO: leer de business_hours en vez de texto fijo (pendiente de formateo por días)
     {
@@ -143,7 +144,7 @@ export default async function ContactoPage({ params }) {
               Escribir por WhatsApp
             </a>
           )}
-          {business.address && <CopyButton text={business.address} />}
+          {address && <CopyButton text={address} />}
         </div>
 
         {/* Mapa */}

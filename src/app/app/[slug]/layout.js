@@ -61,7 +61,7 @@ export default async function TenantLayout({ children, params }) {
   const supabase = await createClient()
   const { data: business } = await supabase
     .from('businesses')
-    .select('name, tagline, address, email, phone')
+    .select('name, tagline, address, postal_code, city, province, email, phone')
     .eq('slug', slug)
     .eq('active', true)
     .single()

@@ -106,7 +106,7 @@ export async function GET(request) {
   // Datos de la empresa del negocio al que pertenece este servicio/reserva
   const { data: business } = await admin
     .from('businesses')
-    .select('id, name, nif, tagline, address, email')
+    .select('id, name, nif, tagline, address, postal_code, city, province, email')
     .eq('id', businessId)
     .single()
 

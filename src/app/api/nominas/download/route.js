@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import { calcularNomina } from '@/lib/payroll'
+import { fullAddress } from '@/lib/business-contact'
 
 const C_DARK   = rgb(0.08, 0.08, 0.08)
 const C_GRAY   = rgb(0.45, 0.45, 0.45)
@@ -97,7 +98,7 @@ async function generarPDF({ empleado, contrato, calculo, ssRates, grupoDesc, mes
     txt(`N.Afil.SS: ${contrato.ss_affiliation}`, c2, y, { size: 8, color: C_GRAY })
   y -= 11
 
-  const contactoEmpresa = [business.address, business.email].filter(Boolean).join('  ·  ')
+  const contactoEmpresa = [fullAddress(business), business.email].filter(Boolean).join('  ·  ')
   if (contactoEmpresa) txt(contactoEmpresa, M, y, { size: 7, color: C_GRAY })
   const catLabel = s(contrato.category || empleado.position || '')
   if (catLabel) txt(`Categoria: ${catLabel}`, c2, y, { size: 8, color: C_GRAY })
@@ -253,7 +254,7 @@ async function generarPDF({ empleado, contrato, calculo, ssRates, grupoDesc, mes
 
   // ── PIE ───────────────────────────────────────────────────────────────────
   line(M, 55, width - M, 55)
-  const piePartes = [business.name, business.nif ? `NIF: ${business.nif}` : null, business.address, business.email].filter(Boolean)
+  const piePartes = [business.name, business.nif ? `NIF: ${business.nif}` : null, fullAddress(business), business.email].filter(Boolean)
   txt(piePartes.join('  ·  '), M, 40, { size: 7, color: C_GRAY })
 
   return doc.save()
@@ -306,7 +307,7 @@ export async function GET(request) {
     supabase.from('ss_rates').select('concept, worker_rate, company_rate').eq('year', year),
     supabase.from('irpf_brackets').select('min_income, max_income, rate').eq('year', year),
     supabase.from('payroll_settings').select('key, value').eq('year', year),
-    supabase.from('businesses').select('name, nif, ccc, tagline, address, email').eq('id', profile.business_id).single(),
+    supabase.from('businesses').select('name, nif, ccc, tagline, address, postal_code, city, province, email').eq('id', profile.business_id).single(),
   ])
 
   if (!empleado || !contrato)

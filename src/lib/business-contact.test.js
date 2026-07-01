@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalizePhoneDigits, telHref, waHref, mapsEmbedUrl } from './business-contact'
+import { normalizePhoneDigits, telHref, waHref, mapsEmbedUrl, fullAddress } from './business-contact'
 
 describe('normalizePhoneDigits', () => {
   it('añade prefijo 34 a números españoles de 9 cifras', () => {
@@ -46,6 +46,30 @@ describe('waHref', () => {
 
   it('devuelve null sin teléfono', () => {
     expect(waHref(null, 'Hola')).toBeNull()
+  })
+})
+
+describe('fullAddress', () => {
+  it('compone dirección completa con CP, ciudad y provincia', () => {
+    expect(fullAddress({
+      address: 'C. Palmilla, 28',
+      postal_code: '11540',
+      city: 'Sanlúcar de Barrameda',
+      province: 'Cádiz',
+    })).toBe('C. Palmilla, 28, 11540 Sanlúcar de Barrameda, Cádiz')
+  })
+
+  it('tolera campos ausentes', () => {
+    expect(fullAddress({ address: 'C. Palmilla, 28' })).toBe('C. Palmilla, 28')
+    expect(fullAddress({ address: 'C. Palmilla, 28', city: 'Sanlúcar' }))
+      .toBe('C. Palmilla, 28, Sanlúcar')
+    expect(fullAddress({ city: 'Sanlúcar', province: 'Cádiz' }))
+      .toBe('Sanlúcar, Cádiz')
+  })
+
+  it('devuelve null sin ningún dato', () => {
+    expect(fullAddress(null)).toBeNull()
+    expect(fullAddress({})).toBeNull()
   })
 })
 

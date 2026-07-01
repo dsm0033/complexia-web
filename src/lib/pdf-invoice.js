@@ -1,4 +1,5 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+import { fullAddress } from '@/lib/business-contact'
 
 const COLOR_DARK   = rgb(0.1,  0.1,  0.1)
 const COLOR_GRAY   = rgb(0.45, 0.45, 0.45)
@@ -112,7 +113,7 @@ export async function generateInvoicePDF({ invoice, paymentMethod, business }) {
   page.drawLine({ start: { x: 40, y: 60 }, end: { x: width - 40, y: 60 }, thickness: 0.5, color: rgb(0.85, 0.85, 0.85) })
   const pieParts = [business.name, business.nif ? `NIF: ${business.nif}` : null].filter(Boolean)
   page.drawText(pieParts.join(' · '), { x: 40, y: 44, size: 8, font: fontRegular, color: COLOR_GRAY })
-  const pieParts2 = [business.address, business.email].filter(Boolean)
+  const pieParts2 = [fullAddress(business), business.email].filter(Boolean)
   if (pieParts2.length) {
     page.drawText(pieParts2.join(' · '), { x: 40, y: 30, size: 8, font: fontRegular, color: COLOR_GRAY })
   }

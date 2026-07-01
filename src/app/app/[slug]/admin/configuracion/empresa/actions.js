@@ -15,6 +15,9 @@ export async function guardarDatosEmpresa(prevState, formData) {
       ccc:     formData.get('ccc')?.trim()     || null,
       tagline: formData.get('tagline')?.trim() || null,
       address: formData.get('address')?.trim() || null,
+      postal_code: formData.get('postal_code')?.trim() || null,
+      city:        formData.get('city')?.trim()        || null,
+      province:    formData.get('province')?.trim()    || null,
       email:   formData.get('email')?.trim()   || null,
       phone:   formData.get('phone')?.trim()   || null,
     })

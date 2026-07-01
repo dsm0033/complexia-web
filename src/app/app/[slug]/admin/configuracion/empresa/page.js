@@ -9,7 +9,7 @@ export default async function EmpresaPage() {
 
   const { data: business } = await supabase
     .from('businesses')
-    .select('name, nif, ccc, tagline, address, email, phone')
+    .select('name, nif, ccc, tagline, address, postal_code, city, province, email, phone')
     .eq('id', businessId)
     .single()
 

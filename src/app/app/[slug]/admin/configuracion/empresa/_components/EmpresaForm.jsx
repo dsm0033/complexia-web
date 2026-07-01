@@ -54,7 +54,12 @@ export default function EmpresaForm({ action, data }) {
       <Field label="Eslogan" name="tagline" defaultValue={data?.tagline} placeholder="Cuidado Profesional del Vehículo" hint="Aparece bajo el nombre en las facturas y nóminas." />
       <Field label="NIF / CIF" name="nif" defaultValue={data?.nif} placeholder="B-12345678" hint="Número de Identificación Fiscal de la empresa." />
       <Field label="CCC" name="ccc" defaultValue={data?.ccc} placeholder="28 1234567890" hint="Código Cuenta de Cotización de la Seguridad Social. Aparece en las nóminas." />
-      <Field label="Dirección" name="address" defaultValue={data?.address} placeholder="C/ Ejemplo 1, 28001 Madrid" />
+      <Field label="Dirección" name="address" defaultValue={data?.address} placeholder="C/ Ejemplo, 1" hint="Calle y número. El código postal, la ciudad y la provincia van en sus propios campos." />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Field label="Código postal" name="postal_code" defaultValue={data?.postal_code} placeholder="11540" />
+        <Field label="Ciudad" name="city" defaultValue={data?.city} placeholder="Sanlúcar de Barrameda" />
+        <Field label="Provincia" name="province" defaultValue={data?.province} placeholder="Cádiz" />
+      </div>
       <Field label="Email" name="email" type="email" defaultValue={data?.email} placeholder="info@tuempresa.es" />
       <Field label="Teléfono" name="phone" defaultValue={data?.phone} placeholder="600 000 000" />
 
