@@ -19,6 +19,15 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import ServiceCard from "@/components/ServiceCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 
+export const metadata = {
+  title: "La Impecable — Cuidado Profesional del Vehículo",
+  description:
+    "Lavado, tapicería y detailing profesional en Sanlúcar de Barrameda. Cada detalle tratado con precisión y rigor.",
+  alternates: {
+    canonical: "https://laimpecable.es",
+  },
+};
+
 // Datos del proceso de trabajo (las 6 fases)
 const PROCESO = [
   { step: "01", title: "Recepción", desc: "Inspeccionamos y documentamos el estado de tu vehículo antes de empezar." },
