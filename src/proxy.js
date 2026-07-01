@@ -27,6 +27,16 @@ export async function proxy(request) {
   // reescribir internamente /xxx → /app/[slug]/xxx.
   // El usuario sigue viendo su dominio; Next.js sirve la ruta del tenant.
   if (tenantSlugFromHost) {
+    // Favicon por tenant: el <link rel="icon"> del root layout apunta a
+    // /favicon.ico (el de ComplexIA). En dominios personalizados servimos
+    // el del tenant desde /public/tenants/[slug]/favicon.ico.
+    // Cada tenant con dominio propio debe tener su archivo ahí.
+    if (path === '/favicon.ico') {
+      const rewritten = request.nextUrl.clone()
+      rewritten.pathname = `/tenants/${tenantSlugFromHost}/favicon.ico`
+      return NextResponse.rewrite(rewritten)
+    }
+
     const isPlatform = PLATFORM_PATHS.some(p => path.startsWith(p))
     const alreadyRewritten = path.startsWith('/app/')
 
@@ -87,8 +97,33 @@ export async function proxy(request) {
 
   // ── 5. Con sesión intentando entrar al login → panel del usuario ──────────
   if (isLoginPath && user) {
-    const role = request.cookies.get('user-role')?.value
-    const slug = request.cookies.get('user-slug')?.value
+    let role = request.cookies.get('user-role')?.value
+    let slug = request.cookies.get('user-slug')?.value
+
+    // Fallback a BD: la sesión de Supabase persiste entre reinicios del
+    // navegador, pero user-role/user-slug son cookies de sesión (sin maxAge)
+    // y pueden haber expirado. Sin esto, el usuario con sesión viva acababa
+    // redirigido a '/' — el botón "Entrar" parecía no hacer nada.
+    if (!role) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role, business_id')
+        .eq('id', user.id)
+        .single()
+
+      // Sin perfil resoluble: dejar ver el login para re-autenticarse
+      if (!profile?.role) return response
+
+      role = profile.role
+      if (!slug && profile.business_id) {
+        const { data: business } = await supabase
+          .from('businesses')
+          .select('slug')
+          .eq('id', profile.business_id)
+          .single()
+        slug = business?.slug
+      }
+    }
 
     let dest
     if (role === 'superadmin') {
@@ -98,7 +133,9 @@ export async function proxy(request) {
            : role === 'employee' ? `/app/${slug}/empleado`
            :                       `/app/${slug}/cliente`
     } else {
-      dest = '/'
+      // Sesión sin tenant conocido: mejor mostrar el login que devolver
+      // a la home en silencio
+      return response
     }
     return NextResponse.redirect(new URL(dest, request.nextUrl))
   }
@@ -107,5 +144,7 @@ export async function proxy(request) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon\\.ico|.*\\..*).*)'],
+  // /favicon.ico entra explícitamente para poder servir el del tenant
+  // en dominios personalizados (ver sección 1)
+  matcher: ['/((?!_next/static|_next/image|favicon\\.ico|.*\\..*).*)', '/favicon.ico'],
 }
