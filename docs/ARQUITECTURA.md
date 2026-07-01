@@ -130,7 +130,7 @@ import { getAdminPageCtx } from '@/lib/admin-context'
 | `complexia.es/app/[slug]/admin/*` | Admin del tenant | Panel completo (ver estructura de carpetas) |
 | `complexia.es/app/[slug]/empleado/*` | Empleado del tenant | Portal empleado |
 | `complexia.es/app/[slug]/cliente/*` | Cliente del tenant | Portal cliente |
-| `laimpecable.es/*` | — | **Dominio NO conectado todavía** en el proyecto Vercel de `complexia-web`. Cuando se conecte, `src/proxy.js` reescribe internamente `laimpecable.es/admin` → `/app/la-impecable/admin` (código ya listo, falta el paso de Vercel) |
+| `laimpecable.es/*` | Público / Admin / Empleado / Cliente | **✅ Dominio conectado (1 Jul 2026)** — movido desde el proyecto Vercel legacy `la-impecable` al proyecto `complexia-web` (junto con `www.laimpecable.es`, que redirige 308 al dominio pelado). `src/proxy.js` reescribe internamente `laimpecable.es/admin` → `/app/la-impecable/admin`. Verificado por HTTP en producción real: home, `/reservar`, login y portales devuelven 200 con datos reales de Supabase |
 
 ---
 
@@ -255,10 +255,12 @@ El wordmark "ComplexIA" es texto puro (no SVG) por SEO.
 | Gap | Estado | Detalle |
 |---|---|---|
 | **`supabase/migrations/`** | ✅ RESUELTO (1 Jul) | 60 migraciones copiadas + 2 fixes de reproducibilidad (A3) + `supabase/config.toml`. Pendiente validar con `supabase db reset` real (CLI no instalada en esta sesión) — **⚠️ CUIDADO al validar: el proyecto Supabase vinculado ("SaaS ComplexIA") es la base de datos de PRODUCCIÓN real de La Impecable, solo renombrada — no es una copia de pruebas. `supabase db reset` / `db push` contra él borraría datos reales. Cualquier validación de migraciones debe hacerse contra un proyecto Supabase nuevo/desechable (`supabase db reset --local` con Docker, o un proyecto shadow), nunca contra el vinculado.** |
-| **`vercel.json` / cron recordatorios** | ✅ RESUELTO (1 Jul) | Creado con el cron `/api/cron/recordatorios` a las 7:00 UTC, igual que en la-impecable. `CRON_SECRET` confirmado presente en `.env.local`. **Falta:** confirmar `CRON_SECRET` en Vercel → Environment Variables (producción) y hacer el próximo deploy para que el cron se active — Vercel solo lee `vercel.json` en el deploy |
+| **`vercel.json` / cron recordatorios** | ✅ RESUELTO (1 Jul) | Creado con el cron `/api/cron/recordatorios` a las 7:00 UTC, igual que en la-impecable. `CRON_SECRET` confirmado en Vercel → Environment Variables (Production) y deploy hecho con `vercel.json` presente. **Pendiente de verificación (no bloqueante):** no se ha comprobado explícitamente en Vercel → Settings → Cron Jobs que aparezca activo, ni se ha visto una ejecución real |
 | **Test runner (Vitest)** | ✅ RESUELTO (1 Jul) | `vitest.config.mjs` creado (con resolución del alias `@/`), script `test`/`test:watch` en `package.json`. Los 80 tests heredados pasan (`npm test`). Pre-commit hook recreado en `.git/hooks/pre-commit` (no versionado, no venía con la migración) |
 | **`lib/supabase/admin.js`** | 📋 Sin resolver, confirmado cosmético | El `CLAUDE.md` interno documenta esta ruta, pero el archivo no existe. **Verificado (1 Jul 2026, `grep -rn "lib/supabase/admin" src/`): nada lo importa** — no bloquea el build, es solo un hueco en la documentación interna |
-| **`SMTP_PASS` ausente en `.env.local`** | 📋 Nuevo (1 Jul 2026) | Necesaria para `/api/contacto` (Nodemailer, formulario de consultoría). El resto de variables (Supabase/Stripe/Resend/Sentry/Anthropic/Cron) sí están — verificado con `npm run build` y `npm run dev` reales, ambos pasan |
+| **`SMTP_PASS` / env vars en Vercel Production** | ✅ RESUELTO (1 Jul, sesión de activación) | Las 12 variables de Production (Supabase, Stripe, Resend, Sentry, GA, Anthropic, Cron, SMTP_PASS) confirmadas/añadidas vía `vercel env add`. Antes de esta sesión solo existía `SMTP_PASS` en Vercel (de 42 días antes); el resto faltaba y causaba 500 reales en `/login` y `/app/[slug]`. `ANTHROPIC_API_KEY` era un placeholder (`sk-ant-...`) — sustituida por una key real nueva (alimenta el OCR de facturas en `admin/contabilidad/gastos`). De paso se corrigió `src/lib/mail.js` (Nodemailer se instanciaba a nivel de módulo, mismo riesgo que ya dio problemas con Resend) |
+| **Dominio `laimpecable.es` no conectado** | ✅ RESUELTO (1 Jul, sesión de activación) | Movido desde el proyecto Vercel legacy `la-impecable` al proyecto `complexia-web` (junto con `www.laimpecable.es`). Deploy a producción hecho y verificado por HTTP: home/reservar/login/portales devuelven 200 con datos reales. De paso se corrigió la home del tenant (`src/app/app/[slug]/page.js`), que no tenía metadata propia y heredaba el `<title>` de la landing de ComplexIA |
+| **Webhook de Stripe apuntando al proyecto correcto** | 📋 Sin verificar | No se ha comprobado en el dashboard de Stripe si la URL del webhook apunta a `complexia-web`/`laimpecable.es` o sigue en el deploy legacy. Revisar antes de dar por cerrada la migración de pagos |
 | **Tests E2E (Playwright)** | 📋 Sin resolver | `@playwright/test` está en `package.json` pero no hay `playwright.config.js` ni carpeta `e2e/` en este repo — los smoke tests de la-impecable no se portaron. No estaba en el alcance de "conectar Vitest"; queda como tarea aparte si se quiere |
 | **`docs/SPRINTS.md`/`PRODUCT_BACKLOG.md` desincronizados con el código** | ✅ RESUELTO (1 Jul) | Ver los archivos actualizados en esta carpeta |
 
@@ -266,7 +268,7 @@ El wordmark "ComplexIA" es texto puro (no SVG) por SEO.
 
 ## CI/CD
 
-La rama `main` se despliega automáticamente en Vercel. Variables de entorno de producción configuradas en el panel de Vercel — incluye ahora también las de Supabase/Stripe/Resend/Sentry/Anthropic heredadas de la-impecable (copiadas a `.env.local` durante la migración, Sprint 12 Bloque 0).
+La rama `main` se despliega automáticamente en Vercel (confirmado 1 Jul 2026: un `git push` a `main` disparó el deploy sin intervención manual). Variables de entorno de Production **confirmadas puestas** en el panel de Vercel (1 Jul 2026): Supabase, Stripe, Resend, Sentry, GA, Anthropic (key real, no el placeholder heredado), Cron y SMTP.
 
 ---
 

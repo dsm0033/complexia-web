@@ -7,7 +7,7 @@
 > La copia en `la-impecable/docs/PRODUCT_BACKLOG.md` queda legacy, no se actualiza más.
 
 ## Estado del proyecto
-- **Web en vivo:** complexia.es (consultoría, en `/`) — `laimpecable.es` apunta hoy al deploy legacy; pendiente conectarlo a este repo (ver `SPRINTS.md` Sprint 12 Bloque 1)
+- **Web en vivo:** complexia.es (consultoría, en `/`) y `laimpecable.es` (SaaS, primer tenant) — ambas sirviendo desde este repo, verificado en producción real el 1 Julio 2026 (ver `SPRINTS.md` Sprint 12 Bloque 1, completado)
 - **Repositorio activo:** github.com/dsm0033/complexia-web
 - **Repositorio legacy (no tocar):** github.com/dsm0033/la-impecable
 - **Stack:** Next.js 16 + React 19 + Tailwind v4 + Supabase + Stripe + Resend + Vercel

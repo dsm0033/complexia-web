@@ -200,11 +200,17 @@ Teléfono obligatorio, sistema de clientes recurrentes (`buscarOCrearCliente` po
 | Eliminar rutas hardcodeadas (56 archivos: href, redirect, revalidatePath, Stripe URLs) | ✅ | `35cf416` |
 | `/superadmin` migrado | ✅ | (dentro de b1348a4) |
 | Fix build: `@anthropic-ai/sdk` y `pdf-lib` faltaban | ✅ | `d05c77e` |
-| **Conectar `laimpecable.es` como dominio personalizado en Vercel de complexia-web** | **📋 PENDIENTE** | — |
+| Conectar `laimpecable.es` como dominio personalizado en Vercel de complexia-web | ✅ (1 Jul, sesión de activación) | — |
+| Env vars de Production completas en Vercel (Supabase/Stripe/Resend/Sentry/Anthropic/Cron/SMTP) | ✅ (1 Jul, sesión de activación) | — |
+| Deploy a producción + verificación por HTTP real (`/login`, `/app/la-impecable` responden 200 con datos reales) | ✅ (1 Jul, sesión de activación) | `cd4df79`, `1c82271` |
 
-**⚠️ Mientras el último punto no se haga, todo este bloque no sirve tráfico real** — La Impecable en producción sigue en su deploy legacy hasta que se conecte el dominio.
+**✅ BLOQUE 1 completado del todo** — La Impecable en producción ya sirve desde `complexia-web`, no desde el deploy legacy. Verificado por HTTP en vivo el 1 Julio 2026.
 
-### BLOQUE 2 — Autoprovisionamiento · 📋 PENDIENTE
+**Pendiente de verificar (no bloqueante, antes de dar el Bloque 1 por 100% cerrado):**
+- Confirmar que el webhook de Stripe apunta a este proyecto, no al legacy.
+- Confirmar en Vercel → Settings → Cron Jobs que el cron de recordatorios (`vercel.json`) aparece activo.
+
+### BLOQUE 2 — Autoprovisionamiento · 📋 PENDIENTE — siguiente foco de trabajo
 
 | Tarea | Estado |
 |---|---|
