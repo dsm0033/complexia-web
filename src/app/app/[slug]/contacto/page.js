@@ -1,48 +1,70 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { MapPin, Clock, Mail, MessageCircle } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { waHref, mapsEmbedUrl } from "@/lib/business-contact";
 import CopyButton from "@/components/CopyButton";
 
-export const metadata = {
-  title: "Contacto",
-  description:
-    "Contacta con Impecable en Sanlúcar de Barrameda. Horario, dirección, email y WhatsApp. Te respondemos en menos de 24 horas.",
-  alternates: {
-    canonical: "https://laimpecable.es/contacto",
-  },
-};
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("name")
+    .eq("slug", slug)
+    .eq("active", true)
+    .single();
 
-const ADDRESS = "C. Palmilla, 28, 11540 Sanlúcar de Barrameda, Cádiz";
-const WA_LINK =
-  "https://wa.me/34607445305?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n.";
-const MAPS_EMBED =
-  "https://www.google.com/maps?q=C.+Palmilla,+28,+11540+Sanl%C3%BAcar+de+Barrameda,+C%C3%A1diz&output=embed&hl=es&z=16";
+  return {
+    title: `Contacto | ${business?.name ?? "Contacto"}`,
+    description: `Contacta con ${business?.name ?? "nosotros"}. Horario, dirección, email y WhatsApp. Te respondemos en menos de 24 horas.`,
+  };
+}
 
-const INFO = [
-  {
-    Icon: MapPin,
-    label: "Dirección",
-    value: ADDRESS,
-  },
-  {
-    Icon: Clock,
-    label: "Horario",
-    value: "Lunes a viernes de 9:30 a 13:30 h",
-  },
-  {
-    Icon: Mail,
-    label: "Email",
-    value: "info@laimpecable.es",
-    href: "mailto:info@laimpecable.es",
-  },
-  {
-    Icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+34 607 445 305",
-    href: WA_LINK,
-  },
-];
+export default async function ContactoPage({ params }) {
+  const { slug } = await params;
+  const base = `/app/${slug}`;
 
-export default function ContactoPage() {
+  // Datos de contacto de Configuración → Empresa (nunca hardcodeados)
+  const supabase = await createClient();
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("name, address, email, phone")
+    .eq("slug", slug)
+    .eq("active", true)
+    .single();
+
+  if (!business) notFound();
+
+  const waLink = waHref(business.phone, "Hola, me gustaría obtener más información.");
+  const mapsEmbed = mapsEmbedUrl(business.address);
+
+  const info = [
+    business.address && {
+      Icon: MapPin,
+      label: "Dirección",
+      value: business.address,
+    },
+    // TODO: leer de business_hours en vez de texto fijo (pendiente de formateo por días)
+    {
+      Icon: Clock,
+      label: "Horario",
+      value: "Lunes a viernes de 9:30 a 13:30 h",
+    },
+    business.email && {
+      Icon: Mail,
+      label: "Email",
+      value: business.email,
+      href: `mailto:${business.email}`,
+    },
+    business.phone && {
+      Icon: MessageCircle,
+      label: "WhatsApp",
+      value: business.phone,
+      href: waLink,
+    },
+  ].filter(Boolean);
+
   return (
     <div className="min-h-screen bg-fondo">
 
@@ -57,7 +79,7 @@ export default function ContactoPage() {
         />
         <div className="relative z-10">
           <Link
-            href="/"
+            href={base}
             className="inline-flex items-center gap-2 font-sans text-xs font-semibold tracking-[3px] uppercase text-dorado mb-8 hover:text-dorado-dim transition-colors"
           >
             ← Volver
@@ -83,7 +105,7 @@ export default function ContactoPage() {
 
         {/* Tarjeta de datos de contacto */}
         <div className="bg-tarjeta border border-borde rounded-2xl p-7 space-y-6">
-          {INFO.map(({ Icon, label, value, href }) => (
+          {info.map(({ Icon, label, value, href }) => (
             <div key={label} className="flex items-start gap-4">
               <div className="inline-flex items-center justify-center p-[10px] rounded-[10px] bg-dorado/10 shrink-0">
                 <Icon size={22} color="#C9A84C" strokeWidth={2} />
@@ -111,38 +133,35 @@ export default function ContactoPage() {
 
         {/* Botones de acción */}
         <div className="flex gap-4 flex-wrap">
-          <a
-            href={WA_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-sans text-sm font-semibold px-8 py-3.5 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
-          >
-            Escribir por WhatsApp
-          </a>
-          <CopyButton text={ADDRESS} />
+          {waLink && (
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-sans text-sm font-semibold px-8 py-3.5 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+            >
+              Escribir por WhatsApp
+            </a>
+          )}
+          {business.address && <CopyButton text={business.address} />}
         </div>
 
         {/* Mapa */}
-        <div className="rounded-2xl overflow-hidden border border-borde">
-          <iframe
-            src={MAPS_EMBED}
-            width="100%"
-            height="380"
-            style={{ border: 0, display: "block" }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Ubicación de Impecable en Sanlúcar de Barrameda"
-          />
-        </div>
+        {mapsEmbed && (
+          <div className="rounded-2xl overflow-hidden border border-borde">
+            <iframe
+              src={mapsEmbed}
+              width="100%"
+              height="380"
+              style={{ border: 0, display: "block" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={`Ubicación de ${business.name}`}
+            />
+          </div>
+        )}
       </div>
-
-      {/* Footer */}
-      <footer className="text-center px-6 py-8 border-t border-borde">
-        <p className="font-sans text-xs text-sutil">
-          © 2026 Impecable · Cuidado Profesional del Vehículo · Sanlúcar de Barrameda, Cádiz
-        </p>
-      </footer>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { waHref } from '@/lib/business-contact'
 import FAQSection from '@/components/FAQSection'
 import { ArrowRight, Droplets, Armchair, Sparkles, Gem, Lightbulb, Wind, Wrench, Car, Shield, Star, Brush, Zap, Settings } from 'lucide-react'
 
@@ -10,13 +11,6 @@ const ICONS = { Droplets, Armchair, Sparkles, Gem, Lightbulb, Wind, Wrench, Car,
 function ServiceIcon({ name }) {
   const Icon = ICONS[name] ?? Wrench
   return <Icon size={28} color="#C9A84C" strokeWidth={1.5} />
-}
-
-const WA_NUMBER = '34607445305'
-
-function waLink(serviceName) {
-  const text = encodeURIComponent(`Hola, quiero reservar el servicio de ${serviceName}.`)
-  return `https://wa.me/${WA_NUMBER}?text=${text}`
 }
 
 export async function generateMetadata({ params }) {
@@ -45,7 +39,7 @@ export default async function ServiciosPage({ params }) {
   // Resolver tenant por slug — nunca LIMIT 1
   const { data: business } = await supabase
     .from('businesses')
-    .select('id, name')
+    .select('id, name, phone')
     .eq('slug', slug)
     .eq('active', true)
     .single()
@@ -104,7 +98,7 @@ export default async function ServiciosPage({ params }) {
           >
             Todos nuestros tratamientos, con precio y tiempo estimado.
             <br />
-            Reserva online o directamente por WhatsApp.
+            {business.phone ? 'Reserva online o directamente por WhatsApp.' : 'Reserva online en un minuto.'}
           </p>
         </div>
       </div>
@@ -189,14 +183,16 @@ export default async function ServiciosPage({ params }) {
                       Reservar
                       <ArrowRight size={14} />
                     </Link>
-                    <a
-                      href={waLink(service.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 font-sans text-sm font-semibold px-6 py-3 border border-dorado text-dorado rounded-full tracking-wide hover:bg-dorado/10 transition-colors whitespace-nowrap"
-                    >
-                      WhatsApp
-                    </a>
+                    {business.phone && (
+                      <a
+                        href={waHref(business.phone, `Hola, quiero reservar el servicio de ${service.name}.`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 font-sans text-sm font-semibold px-6 py-3 border border-dorado text-dorado rounded-full tracking-wide hover:bg-dorado/10 transition-colors whitespace-nowrap"
+                      >
+                        WhatsApp
+                      </a>
+                    )}
                   </>
                 ) : (
                   <span className="inline-flex items-center gap-2 font-sans text-sm font-semibold px-6 py-3 bg-borde text-sutil rounded-full tracking-wide whitespace-nowrap cursor-not-allowed">
@@ -213,28 +209,30 @@ export default async function ServiciosPage({ params }) {
       <FAQSection />
 
       {/* CTA */}
-      <div
-        className="text-center px-6 py-16 border-t border-borde"
-        style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--hsl-dorado) / 0.15))" }}
-      >
-        <h2
-          className="font-serif font-black text-texto mb-4"
-          style={{ fontSize: "clamp(24px, 5vw, 36px)" }}
+      {business.phone && (
+        <div
+          className="text-center px-6 py-16 border-t border-borde"
+          style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--hsl-dorado) / 0.15))" }}
         >
-          ¿Tienes alguna duda?
-        </h2>
-        <p className="font-sans text-[15px] text-muted mb-8">
-          Escríbenos sin compromiso y te respondemos en menos de 24 horas.
-        </p>
-        <a
-          href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, tengo una pregunta sobre vuestros servicios.')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
-        >
-          Escribir por WhatsApp
-        </a>
-      </div>
+          <h2
+            className="font-serif font-black text-texto mb-4"
+            style={{ fontSize: "clamp(24px, 5vw, 36px)" }}
+          >
+            ¿Tienes alguna duda?
+          </h2>
+          <p className="font-sans text-[15px] text-muted mb-8">
+            Escríbenos sin compromiso y te respondemos en menos de 24 horas.
+          </p>
+          <a
+            href={waHref(business.phone, 'Hola, tengo una pregunta sobre vuestros servicios.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+          >
+            Escribir por WhatsApp
+          </a>
+        </div>
+      )}
     </div>
   )
 }

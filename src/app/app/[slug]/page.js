@@ -16,6 +16,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { telHref, waHref } from "@/lib/business-contact";
 import ServiceCard from "@/components/ServiceCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 
@@ -48,12 +49,15 @@ export default async function HomePage({ params }) {
 
   const { data: business } = await supabase
     .from("businesses")
-    .select("id")
+    .select("id, phone")
     .eq("slug", slug)
     .eq("active", true)
     .single();
 
   const businessId = business?.id ?? null;
+  // Teléfono desde Configuración → Empresa (nunca hardcodeado)
+  const phoneHref = telHref(business?.phone);
+  const whatsappHref = waHref(business?.phone);
 
   const { data: servicios } = businessId
     ? await supabase
@@ -139,12 +143,13 @@ export default async function HomePage({ params }) {
             >
               Servicios
             </Link>
-            {/* ⚠️ DIEGO: Cambia el número de teléfono aquí */}
-            <a href="tel:+34607445305"
-              className="font-sans text-sm font-semibold px-8 py-3.5 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
-            >
-              Llamar ahora
-            </a>
+            {phoneHref && (
+              <a href={phoneHref}
+                className="font-sans text-sm font-semibold px-8 py-3.5 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+              >
+                Llamar ahora
+              </a>
+            )}
           </div>
         </div>
 
@@ -256,15 +261,23 @@ export default async function HomePage({ params }) {
         <p className="font-sans text-[15px] text-muted mb-8">
           Sanlúcar de Barrameda · Cita previa
         </p>
-        {/* ⚠️ DIEGO: Cambia el número de WhatsApp aquí */}
-        <a
-          href="https://wa.me/34607445305"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
-        >
-          Reservar por WhatsApp
-        </a>
+        {whatsappHref ? (
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+          >
+            Reservar por WhatsApp
+          </a>
+        ) : (
+          <Link
+            href={`/app/${slug}/reservar`}
+            className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+          >
+            Reservar cita
+          </Link>
+        )}
       </div>
 
     </div>

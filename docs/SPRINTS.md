@@ -231,6 +231,18 @@ Cierre de B1 y B2 de `AUDITORIA_01072026_PREDESPLIEGUE.md`. Al investigar B1 se 
 - Vulnerabilidades restantes de `npm audit`: `nodemailer` <9 (1 high, fix es breaking → evaluar subir a v9), `postcss` anidado dentro de `next` (moderate, sin fix hasta que Next lo actualice), `esbuild`/`vite` vía Vitest 2 (solo dev).
 - La página de detalle `/servicios/[id]` del legacy no está migrada — los nombres de servicio ya no enlazan a ella.
 
+### BLOQUE 1.6 — Post-deploy: favicon, botón Entrar y contacto dinámico · ✅ COMPLETADO (1 Julio 2026, noche)
+
+Tres arreglos surgidos al verificar producción con el usuario:
+
+| Tarea | Estado |
+|---|---|
+| Favicon por tenant: `laimpecable.es` mostraba el de ComplexIA. `generateMetadata` en el layout del tenant → `/public/tenants/[slug]/icon.png` + rewrite de `/favicon.ico` por hostname en `proxy.js` (matcher ampliado). ⚠️ La file convention `icon.png` dentro de `[slug]` compila en local pero **rompe el build de Vercel** ("Invariant: failed to find source route") — no reintentar | ✅ |
+| Botón "Entrar" no hacía nada con sesión Supabase viva: `user-role`/`user-slug` son cookies de sesión (sin maxAge) y el proxy redirigía `/login` → `/` en silencio. Ahora fallback a BD (profiles + businesses.slug) y, si no hay perfil resoluble, muestra el login | ✅ |
+| Datos de contacto dinámicos: teléfono/email/dirección/tagline salían hardcodeados del legacy (el usuario cambió su teléfono en el panel y la web seguía con el viejo). Nuevo `lib/business-contact.js` (tel/WhatsApp/mapa desde `businesses`, con 11 tests → 91 total). Footer, home, servicios, contacto y sobre-nosotros leen de BD; los botones WhatsApp/Llamar se ocultan si no hay teléfono | ✅ |
+
+**Deuda restante de contacto hardcodeado (no abordada, para F9-06/F9-07):** páginas legales del tenant (aviso-legal/privacidad/cookies — dirección, email y NIF en texto legal), emails de soporte en portal cliente (`cliente/`, `perfil`, `reservar/confirmado`), textos del `FAQSection`, wordmark "IMPECABLE" en Navbar, `DEFAULT_FROM_EMAIL` en `lib/resend.js`, y el horario de la página de contacto (leer de `business_hours`).
+
 ### BLOQUE 2 — Autoprovisionamiento · 📋 PENDIENTE — siguiente foco de trabajo
 
 | Tarea | Estado |

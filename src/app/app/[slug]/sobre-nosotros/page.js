@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Award, Eye, Handshake, BadgeCheck } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { waHref } from "@/lib/business-contact";
 
 export const metadata = {
   title: "Sobre nosotros",
@@ -28,10 +30,21 @@ const PILARES = [
   },
 ];
 
-const WA_LINK =
-  "https://wa.me/34607445305?text=Hola%2C%20quiero%20reservar%20una%20cita.";
+export default async function SobreNosotrosPage({ params }) {
+  const { slug } = await params;
+  const base = `/app/${slug}`;
 
-export default function SobreNosotrosPage() {
+  // Teléfono de Configuración → Empresa (nunca hardcodeado)
+  const supabase = await createClient();
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("phone")
+    .eq("slug", slug)
+    .eq("active", true)
+    .single();
+
+  const waLink = waHref(business?.phone, "Hola, quiero reservar una cita.");
+
   return (
     <div className="min-h-screen bg-fondo">
 
@@ -46,7 +59,7 @@ export default function SobreNosotrosPage() {
         />
         <div className="relative z-10">
           <Link
-            href="/"
+            href={base}
             className="inline-flex items-center gap-2 font-sans text-xs font-semibold tracking-[3px] uppercase text-dorado mb-8 hover:text-dorado-dim transition-colors"
           >
             ← Volver
@@ -161,26 +174,35 @@ export default function SobreNosotrosPage() {
           >
             ¿Listo para probarnos?
           </h2>
-          <p className="font-sans text-[15px] text-muted mb-8">
-            Reserva tu cita por WhatsApp y lo comprobas tú mismo.
-          </p>
-          <a
-            href={WA_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
-          >
-            Reservar por WhatsApp
-          </a>
+          {waLink ? (
+            <>
+              <p className="font-sans text-[15px] text-muted mb-8">
+                Reserva tu cita por WhatsApp y lo compruebas tú mismo.
+              </p>
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+              >
+                Reservar por WhatsApp
+              </a>
+            </>
+          ) : (
+            <>
+              <p className="font-sans text-[15px] text-muted mb-8">
+                Reserva tu cita online y lo compruebas tú mismo.
+              </p>
+              <Link
+                href={`${base}/reservar`}
+                className="inline-flex items-center gap-2 font-sans text-[15px] font-semibold px-10 py-4 bg-dorado text-fondo rounded-full tracking-wide hover:bg-dorado-dim transition-colors"
+              >
+                Reservar cita
+              </Link>
+            </>
+          )}
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="text-center px-6 py-8 border-t border-borde">
-        <p className="font-sans text-xs text-sutil">
-          © 2026 Impecable · Cuidado Profesional del Vehículo · Sanlúcar de Barrameda, Cádiz
-        </p>
-      </footer>
     </div>
   );
 }

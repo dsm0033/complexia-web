@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { telHref } from '@/lib/business-contact'
 
 const PRIVATE_PATHS = ['/admin', '/empleado', '/cliente']
 
@@ -20,7 +21,7 @@ const INFO_LINKS = [
   { href: '/cookies', label: 'Política de cookies' },
 ]
 
-export default function Footer({ slug }) {
+export default function Footer({ slug, business }) {
   const pathname = usePathname()
 
   // Prefijo /app/[slug] en enlaces internos — misma convención que Navbar.
@@ -34,32 +35,39 @@ export default function Footer({ slug }) {
     <footer className="bg-fondo border-t border-borde">
       <div className="max-w-[1100px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
 
-        {/* Columna 1 — Marca y contacto */}
+        {/* Columna 1 — Marca y contacto (datos de Configuración → Empresa) */}
         <div>
-          <p className="font-serif font-black text-dorado text-xl tracking-wide mb-2">
-            IMPECABLE
+          <p className="font-serif font-black text-dorado text-xl tracking-wide mb-2 uppercase">
+            {business?.name ?? ''}
           </p>
-          <p className="font-sans text-sm text-muted leading-relaxed mb-6">
-            Cuidado Profesional del Vehículo.<br />
-            Cada detalle tratado con precisión y rigor.
-          </p>
+          {business?.tagline && (
+            <p className="font-sans text-sm text-muted leading-relaxed mb-6">
+              {business.tagline}
+            </p>
+          )}
           <ul className="flex flex-col gap-3">
-            <li className="flex items-center gap-2 text-sm text-muted">
-              <MapPin size={15} className="text-dorado shrink-0" strokeWidth={2} />
-              C. Palmilla, 28 · Sanlúcar de Barrameda
-            </li>
-            <li>
-              <a href="tel:+34607445305" className="flex items-center gap-2 text-sm text-muted hover:text-dorado transition-colors">
-                <Phone size={15} className="text-dorado shrink-0" strokeWidth={2} />
-                +34 607 445 305
-              </a>
-            </li>
-            <li>
-              <a href="mailto:info@laimpecable.es" className="flex items-center gap-2 text-sm text-muted hover:text-dorado transition-colors">
-                <Mail size={15} className="text-dorado shrink-0" strokeWidth={2} />
-                info@laimpecable.es
-              </a>
-            </li>
+            {business?.address && (
+              <li className="flex items-center gap-2 text-sm text-muted">
+                <MapPin size={15} className="text-dorado shrink-0" strokeWidth={2} />
+                {business.address}
+              </li>
+            )}
+            {business?.phone && (
+              <li>
+                <a href={telHref(business.phone)} className="flex items-center gap-2 text-sm text-muted hover:text-dorado transition-colors">
+                  <Phone size={15} className="text-dorado shrink-0" strokeWidth={2} />
+                  {business.phone}
+                </a>
+              </li>
+            )}
+            {business?.email && (
+              <li>
+                <a href={`mailto:${business.email}`} className="flex items-center gap-2 text-sm text-muted hover:text-dorado transition-colors">
+                  <Mail size={15} className="text-dorado shrink-0" strokeWidth={2} />
+                  {business.email}
+                </a>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -105,7 +113,8 @@ export default function Footer({ slug }) {
       {/* Barra inferior */}
       <div className="border-t border-borde px-6 py-5">
         <p className="font-sans text-xs text-sutil text-center">
-          © {new Date().getFullYear()} Impecable · Cuidado Profesional del Vehículo · Sanlúcar de Barrameda, Cádiz
+          © {new Date().getFullYear()} {business?.name ?? ''}
+          {business?.tagline ? ` · ${business.tagline}` : ''}
         </p>
       </div>
     </footer>

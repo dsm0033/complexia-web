@@ -13,6 +13,7 @@
 // ============================================
 
 import { Playfair_Display, DM_Sans, Pinyon_Script } from 'next/font/google'
+import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ThemeProvider from '@/components/ThemeProvider'
@@ -54,6 +55,17 @@ export async function generateMetadata({ params }) {
 export default async function TenantLayout({ children, params }) {
   const { slug } = await params
 
+  // Datos de contacto que el admin edita en Configuración → Empresa.
+  // Cliente SSR (anon con RLS): la policy "público resuelve tenant activo"
+  // permite leer estas columnas del negocio activo.
+  const supabase = await createClient()
+  const { data: business } = await supabase
+    .from('businesses')
+    .select('name, tagline, address, email, phone')
+    .eq('slug', slug)
+    .eq('active', true)
+    .single()
+
   return (
     <ThemeProvider>
       <div
@@ -61,7 +73,7 @@ export default async function TenantLayout({ children, params }) {
       >
         <Navbar slug={slug} />
         {children}
-        <Footer slug={slug} />
+        <Footer slug={slug} business={business} />
       </div>
     </ThemeProvider>
   )
