@@ -1,15 +1,5 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  host: 'mail.complexia.es',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'contacto@complexia.es',
-    pass: process.env.SMTP_PASS,
-  },
-});
-
 // Escapa caracteres especiales para evitar inyección de HTML en el email recibido.
 function escapeHtml(str = '') {
   return String(str)
@@ -21,6 +11,16 @@ function escapeHtml(str = '') {
 }
 
 export async function sendContactEmail({ nombre, email, empresa, mensaje }) {
+  const transporter = nodemailer.createTransport({
+    host: 'mail.complexia.es',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'contacto@complexia.es',
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
   // El cuerpo de texto va en plano (no se interpreta como HTML).
   // El cuerpo HTML usa las versiones escapadas para no ejecutar marcado del visitante.
   const safe = {
